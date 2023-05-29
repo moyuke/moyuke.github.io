@@ -6,15 +6,15 @@
   
   <title>C++ Project Norm | Moyuke&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="File design： ├── main.cpp├── Database.h	&#x2F;&#x2F; declaration├── Database.cpp	&#x2F;&#x2F; defination├── Player.h	&#x2F;&#x2F; superclass├── Player.cpp├── humanPlayer.h├── humanPlayer.cpp├── Makef">
+  <meta name="description" content="File design：├── main.cpp ├── Database.h	&#x2F;&#x2F; declaration ├── Database.cpp	&#x2F;&#x2F; defination ├── tuple.h		&#x2F;&#x2F; type ├── tuple.cpp ├── Player.h	&#x2F;&#x2F; superclass ├── Player.cpp ├── humanPlayer.h	&#x2F;&#x2F; subclass ├── hum">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++ Project Norm">
 <meta property="og:url" content="http://example.com/2023/05/30/C++%E5%B7%A5%E7%A8%8B%E8%A7%84%E8%8C%83/index.html">
 <meta property="og:site_name" content="Moyuke&#39;s blog">
-<meta property="og:description" content="File design： ├── main.cpp├── Database.h	&#x2F;&#x2F; declaration├── Database.cpp	&#x2F;&#x2F; defination├── Player.h	&#x2F;&#x2F; superclass├── Player.cpp├── humanPlayer.h├── humanPlayer.cpp├── Makef">
+<meta property="og:description" content="File design：├── main.cpp ├── Database.h	&#x2F;&#x2F; declaration ├── Database.cpp	&#x2F;&#x2F; defination ├── tuple.h		&#x2F;&#x2F; type ├── tuple.cpp ├── Player.h	&#x2F;&#x2F; superclass ├── Player.cpp ├── humanPlayer.h	&#x2F;&#x2F; subclass ├── hum">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-05-29T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-05-29T20:26:13.025Z">
+<meta property="article:modified_time" content="2023-05-29T20:54:02.034Z">
 <meta property="article:author" content="LesterYu">
 <meta property="article:tag" content="Study">
 <meta name="twitter:card" content="summary">
@@ -98,13 +98,34 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <ul>
-<li><p>File design：</p>
-<p>├── main.cpp<br>├── Database.h	&#x2F;&#x2F; declaration<br>├── Database.cpp	&#x2F;&#x2F; defination<br>├── Player.h	&#x2F;&#x2F; superclass<br>├── Player.cpp<br>├── humanPlayer.h<br>├── humanPlayer.cpp<br>├── Makefile<br>├── make.bat	&#x2F;&#x2F; the batch file<br>├── READNE.md</p>
+        <h2 id="File-design："><a href="#File-design：" class="headerlink" title="File design："></a>File design：</h2><pre><code>├── main.cpp
+├── Database.h	// declaration
+├── Database.cpp	// defination
+├── tuple.h		// type
+├── tuple.cpp
+├── Player.h	// superclass
+├── Player.cpp
+├── humanPlayer.h	// subclass
+├── humanPlayer.cpp
+├── Makefile
+├── make.bat	// the batch file
+├── READNE.md
+</code></pre>
+<h2 id="Declaration-h"><a href="#Declaration-h" class="headerlink" title="Declaration (.h)"></a>Declaration (.h)</h2><blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _DATABASE_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _DATABASE_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;tuple.h&quot;</span> <span class="comment">// 只需调用声明</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;humanPlayer.h&quot;</span> <span class="comment">// 只需调用实际用到的子类</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;set&gt;</span></span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Database</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::set&lt;tuple&gt; records;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Database</span>();</span><br><span class="line">    <span class="built_in">Database</span>(std::string filename);</span><br><span class="line">    ~<span class="built_in">Database</span>();</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<ul>
+<li><p>ifndef：</p>
+<p>防止嵌套调用时出现反复调用的情况。</p>
 </li>
-<li></li>
 </ul>
-
+<h2 id="类型定义"><a href="#类型定义" class="headerlink" title="类型定义"></a>类型定义</h2><h2 id="继承类应用"><a href="#继承类应用" class="headerlink" title="继承类应用"></a>继承类应用</h2><h2 id="文件读写"><a href="#文件读写" class="headerlink" title="文件读写"></a>文件读写</h2><ul>
+<li><p><code>argc</code> 和 <code>argv</code></p>
+</li>
+<li><p><code>istream</code>，<code>ostream</code>和<code>fstream</code></p>
+</li>
+</ul>
+<h2 id="Makefile使用"><a href="#Makefile使用" class="headerlink" title="Makefile使用"></a>Makefile使用</h2><h2 id="batch文件"><a href="#batch文件" class="headerlink" title="batch文件"></a>batch文件</h2>
       
     </div>
     <footer class="article-footer">
