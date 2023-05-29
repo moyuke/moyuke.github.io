@@ -4,15 +4,124 @@
   <meta charset="utf-8">
   
   
-  <title>Moyuke&#39;s blog</title>
+  <title>LaTeX Formula | Moyuke&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Moyuke&#39;s blog">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="上标、下标与组合 上标符号，符号：^，如： 下标符号，符号：_，如： 组合符号，符号：&amp;#123;&amp;#125;，如：  汉字、字体与格式 汉字形式，符号：\mbox&amp;#123;&amp;#125;，如： 字体控制，符号：\displaystyle，如： 下划线符号，符号：\underline，如： 标签，符号\tag&amp;#123;数字&amp;#125;，如： 上大括号，符号：\overbrace&amp;#123;算式&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LaTeX Formula">
+<meta property="og:url" content="http://example.com/2023/05/29/LaTeX%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F/index.html">
 <meta property="og:site_name" content="Moyuke&#39;s blog">
+<meta property="og:description" content="上标、下标与组合 上标符号，符号：^，如： 下标符号，符号：_，如： 组合符号，符号：&amp;#123;&amp;#125;，如：  汉字、字体与格式 汉字形式，符号：\mbox&amp;#123;&amp;#125;，如： 字体控制，符号：\displaystyle，如： 下划线符号，符号：\underline，如： 标签，符号\tag&amp;#123;数字&amp;#125;，如： 上大括号，符号：\overbrace&amp;#123;算式&amp;">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%5E4">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x_1">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%7B16%7D_%7B8%7DO%7B2+%7D_%7B2%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=V_%7B%5Cmbox%7B%E5%88%9D%E5%A7%8B%7D%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cdisplaystyle%20%5Cfrac%7Bx+y%7D%7By+z%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cunderline%7Bx+y%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Ctag%7B11%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Coverbrace%7Ba+b+c+d%7D%5E%7B2.0%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=a+%5Cunderbrace%7Bb+c%7D_%7B1.0%7D+d">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cvec%7Bx%7D%5Cstackrel%7B%5Cmathrm%7Bdef%7D%7D%7B=%7D%7Bx_1,%5Cdots,x_n%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cqquad%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cquad%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5C%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20:%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20,%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=xy">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20!%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%EF%BC%88%EF%BC%89%5Cbig(%5Cbig)%20%5CBig(%5CBig)%20%5Cbigg(%5Cbigg)%20%5CBigg(%5CBigg)">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Bx+y%5D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%7Bx+y%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cleft(x%5Cright)">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cleft(x%7Byz%7D%5Cright)">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%7Bn+1%20%5Cchoose%20k%7D=%7Bn%20%5Cchoose%20k%7D+%7Bn%20%5Cchoose%20k-1%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Csum_%7Bk_0,k_1,%5Cldots%3E0%20%5Catop%20k_0+k_1+%5Ccdots=n%7DA_%7Bk_0%7DA_%7Bk_1%7D%5Ccdots">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x+y=z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x-y=z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cpm%20y=z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cmp%20y=z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Ctimes%20y=z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Ccdot%20y=z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cast%20y=z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cdiv%20y=z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x/y=z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cfrac%7Bx+y%7D%7By+z%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%7Bx+y%7D%20%5Cover%20%7By+z%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%7Cx+y%7C">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Coverline%7Bxyz%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Csqrt%20x">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Csqrt%5B3%5D%7Bx+y%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Clog(x)">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Clim%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cdisplaystyle%20%5Clim%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Csum%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cdisplaystyle%20%5Csum%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cint%5E%7B%5Cinfty%7D_%7B0%7D%7Bxdx%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cdisplaystyle%20%5Cint%5E%7B%5Cinfty%7D_%7B0%7D%7Bxdx%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cfrac%7B%5Cpartial%20x%7D%7B%5Cpartial%20y%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cleft%5B%20%5Cbegin%7Bmatrix%7D%201%20&2%20&%5Ccdots%20&4%5C5%20&6%20&%5Ccdots%20&8%5C%5Cvdots%20&%5Cvdots%20&%5Cddots%20&%5Cvdots%5C13%20&14%20&%5Ccdots%20&16%5Cend%7Bmatrix%7D%20%5Cright%5D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x+y=z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x+y%3Ez">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x+y%3Cz">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x+y%20%5Cgeq%20z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x+y%20%5Cleq%20z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x+y%20%5Cneq%20z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x+y%20%5Cngeq%20z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x+y%20%5Cnot%5Cgeq%20z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x+y%20%5Cnleq%20z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x+y%20%5Cnot%5Cleq%20z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x+y%20%5Capprox%20z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x+y%20%5Cequiv%20z">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cin%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cnotin%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cnot%5Cin%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Csubset%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Csupset%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Csubseteq%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Csubsetneq%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Csupseteq%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Csupsetneq%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cnot%5Csubset%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cnot%5Csupset%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Ccup%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Ccap%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Csetminus%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cbigodot%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cbigotimes%20y">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cemptyset">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cinfty">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cimath">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cjmath">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Chat%7Ba%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Ccheck%7Ba%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cbreve%7Ba%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Ctilde%7Ba%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cbar%7Ba%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cvec%7Ba%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cacute%7Ba%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cgrave%7Ba%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cmathring%7Ba%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cdot%7Ba%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cddot%7Ba%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cuparrow">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5CUparrow">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cdownarrow">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5CDownarrow">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cleftarrow">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5CLeftarrow">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Crightarrow">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5CRightarrow">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=1,2,%5Cldots,n">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x_1%5E2%20+%20x_2%5E2%20+%20%5Ccdots%20+%20x_n%5E2">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cvdots">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cddots">
+<meta property="article:published_time" content="2023-05-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-05-29T20:04:49.980Z">
 <meta property="article:author" content="LesterYu">
+<meta property="article:tag" content="Study">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://math.jianshu.com/math?formula=x%5E4">
   
     <link rel="alternate" href="/atom.xml" title="Moyuke's blog" type="application/atom+xml">
   
@@ -71,9 +180,7 @@
 </header>
 
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-LaTeX数学公式" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+        <section id="main"><article id="post-LaTeX数学公式" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2023/05/29/LaTeX%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F/" class="article-date">
   <time class="dt-published" datetime="2023-05-28T16:00:00.000Z" itemprop="datePublished">2023-05-29</time>
@@ -86,8 +193,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2023/05/29/LaTeX%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F/">LaTeX Formula</a>
+    <h1 class="p-name article-title" itemprop="headline name">
+      LaTeX Formula
     </h1>
   
 
@@ -384,149 +491,19 @@
     </footer>
   </div>
   
-</article>
-
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2023/05/28/hello-world/" class="article-date">
-  <time class="dt-published" datetime="2023-05-28T14:16:37.335Z" itemprop="datePublished">2023-05-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2023/05/28/hello-world/">Hello World</a>
-    </h1>
+    <a href="/2023/05/28/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/05/28/hello-world/" data-id="cli7ie9l70000nku2bek71fa2" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-
-  
-    <article id="post-makedown学习笔记" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2023/05/28/makedown%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="article-date">
-  <time class="dt-published" datetime="2023-05-27T16:00:00.000Z" itemprop="datePublished">2023-05-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2023/05/28/makedown%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">Makedown Node</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h1><h2 id="Subtitle"><a href="#Subtitle" class="headerlink" title="Subtitle"></a>Subtitle</h2><ul>
-<li><p>字体：</p>
-<ul>
-<li><p><em>斜体</em>，<strong>粗体</strong>，<em><strong>粗斜体</strong></em></p>
-</li>
-<li><p><code>高光</code>，<del>删除线</del>，<u>下划线</u></p>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<ul>
-<li><p>插入：</p>
-<ul>
-<li><p>代码：</p>
-<ul>
-<li><p>段落插入：<code>print()</code></p>
-</li>
-<li><p>代码块：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;Hello world!&quot;</span> &lt;&lt; endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>公式：</p>
-<ul>
-<li><p>段落插入：$\mathbf{F}<em>n &#x3D; \mathbf{F}</em>{n-1}^2$</p>
-</li>
-<li><p>公式块：<br>$$<br>\mathbf{V}_1 \times \mathbf{V}_2 &#x3D;  \begin{vmatrix}<br>\mathbf{i} &amp; \mathbf{j} &amp; \mathbf{k} \<br>\frac{\partial X}{\partial u} &amp;  \frac{\partial Y}{\partial u} &amp; 0 \<br>\frac{\partial X}{\partial v} &amp;  \frac{\partial Y}{\partial v} &amp; 0 \<br>\end{vmatrix}<br>$$</p>
-</li>
-</ul>
-</li>
-<li><p>图片：</p>
-</li>
-</ul>
-<blockquote>
-<img src="https://cdn.luogu.com.cn/upload/image_hosting/tz9gnswb.png" alt="洛谷图床" style="zoom: 50%;" />
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">网络：</span><br><span class="line">![洛谷图床](https://cdn.luogu.com.cn/upload/image_hosting/tz9gnswb.png)</span><br><span class="line">本地：</span><br><span class="line">![一果流汗](C:\Users\86133\Desktop\SMILE\一果流汗.jpg)</span><br><span class="line">缩放：</span><br><span class="line">&lt;img src=&quot;C:\Users\86133\Desktop\SMILE\一果流汗.jpg&quot; alt=&quot;一果流汗&quot; style=&quot;zoom:50%;&quot; /&gt;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<ul>
-<li>链接：<ul>
-<li><a target="_blank" rel="noopener" href="https://www.baidu.com/">Baidu</a></li>
-</ul>
-</li>
-</ul>
-<hr>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/05/28/makedown%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" data-id="cli983vbq0000pgu2b98e0q9x" data-title="Makedown Node" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Study/" rel="tag">Study</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
 
 
 </section>
