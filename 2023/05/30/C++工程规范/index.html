@@ -14,7 +14,7 @@
 <meta property="og:description" content="File design： 123456789101112├── main.cpp├── database.h &#x2F;&#x2F; declaration├── database.cpp &#x2F;&#x2F; defination├── tuple.h &#x2F;&#x2F; type├── tuple.cpp├── writer.h &#x2F;&#x2F; superclass├── writer.cpp├── adiwriter.h &#x2F;&#x2F; subclass├─">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-05-29T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-05-29T22:25:37.857Z">
+<meta property="article:modified_time" content="2023-05-29T23:04:43.203Z">
 <meta property="article:author" content="LesterYu">
 <meta property="article:tag" content="Study">
 <meta name="twitter:card" content="summary">
@@ -133,7 +133,7 @@
 </ul>
 <h2 id="读写"><a href="#读写" class="headerlink" title="读写"></a>读写</h2><ul>
 <li><code>argc</code> 和 <code>argv</code>：命令行参数<ul>
-<li>第一个参数argc，用于参数计数，其值等于命令行中参数的个数；第二个参数argv，用于参数向量，是一个指向字符串数组的指针。</li>
+<li>第一个参数<code>argc</code>，用于参数计数，其值等于命令行中参数的个数；第二个参数<code>argv</code>，用于参数向量，是一个指向字符串数组的指针。</li>
 </ul>
 </li>
 </ul>
@@ -160,7 +160,7 @@
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Declare compiler variable</span></span><br><span class="line">CXX=g++</span><br><span class="line"><span class="comment"># Declare compilation options</span></span><br><span class="line">CXXFLAGS=-Wall -g --std=c++11</span><br><span class="line"><span class="comment"># Declare linking options</span></span><br><span class="line">LDFLAGS=</span><br><span class="line"><span class="comment"># Declare source code files</span></span><br><span class="line">SRCS=main.cpp tuple.cpp writer.cpp adiwriter.cpp database.cpp</span><br><span class="line"><span class="comment"># Convert source code files to a list of object files</span></span><br><span class="line">OBJS=$(SRCS:.cpp=.o)</span><br><span class="line"><span class="comment"># Declare executable name</span></span><br><span class="line">TARGET=adif</span><br><span class="line"><span class="comment"># Default target</span></span><br><span class="line"><span class="section">all: <span class="variable">$(TARGET)</span></span></span><br><span class="line"><span class="comment"># Dependencies</span></span><br><span class="line"><span class="variable">$(TARGET)</span>: <span class="variable">$(OBJS)</span></span><br><span class="line">	<span class="variable">$(CXX)</span> <span class="variable">$(LDFLAGS)</span> -o <span class="variable">$(TARGET)</span> <span class="variable">$(OBJS)</span></span><br><span class="line"><span class="comment"># Automatically generate dependencies</span></span><br><span class="line"><span class="section">.depend: <span class="variable">$(SRCS)</span></span></span><br><span class="line">	rm -f ./.depend</span><br><span class="line">	<span class="variable">$(CXX)</span> <span class="variable">$(CXXFLAGS)</span> -MM <span class="variable">$^</span> &gt; ./.depend</span><br><span class="line"><span class="comment"># Include dependencies</span></span><br><span class="line"><span class="keyword">-include</span> .depend</span><br><span class="line"><span class="comment"># Clean</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm -f <span class="variable">$(OBJS)</span> <span class="variable">$(TARGET)</span> .depend</span><br></pre></td></tr></table></figure>
 </blockquote>
 <h2 id="batch文件"><a href="#batch文件" class="headerlink" title="batch文件"></a>batch文件</h2><ul>
-<li><p>make.bat</p>
+<li><p><code>make.bat</code></p>
 <ul>
 <li>窗口交互型</li>
 <li>没有Makefile，用于编译与生成可执行文件Main</li>
@@ -169,12 +169,12 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">g++ -c main.cpp -std=c++11 -o main.o</span><br><span class="line">g++ -c database.cpp -std=c++11 -o database.o</span><br><span class="line">...</span><br><span class="line">g++ -o Main main.o Maze.o Player.o</span><br></pre></td></tr></table></figure>
 </blockquote>
 </li>
-<li><p>test.bat</p>
+<li><p><code>test.bat</code></p>
 <ul>
 <li>指令测试型</li>
 <li>有Makefile，用于调用Makefile编译以及输入命令测试。</li>
 <li>echo为回显在屏幕上的内容</li>
-<li>没有echo的为输入的指令，mingw32-make调用Makefile</li>
+<li>没有echo的为输入的指令，<code>mingw32-make</code>调用Makefile</li>
 <li>pause后，需按任意键才会输入下一条指令</li>
 </ul>
 <blockquote>
@@ -196,6 +196,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2023/05/30/oop%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
   
   
     <a href="/2023/05/29/makedown%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" id="article-nav-older" class="article-nav-link-wrap">
@@ -239,7 +248,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
     </div>
   </div>
 
@@ -250,6 +259,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2023/05/30/oop%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">(no title)</a>
+          </li>
         
           <li>
             <a href="/2023/05/30/C++%E5%B7%A5%E7%A8%8B%E8%A7%84%E8%8C%83/">C++ Project Norm</a>
@@ -264,7 +277,7 @@
           </li>
         
           <li>
-            <a href="/2023/05/28/hello-world/">Hello World</a>
+            <a href="/2023/05/29/ADS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">ADS Note</a>
           </li>
         
       </ul>
