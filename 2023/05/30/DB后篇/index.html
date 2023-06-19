@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>DB后篇 | Moyuke&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="物理存储 分类：  易失存储 volatile storage   非易失存储 non-volatile storage     NVM（non-volatile memory）: 掉电不丢  primary storage: Fastest media but volatile (cache, main memory).  secondary storage: next level in hie">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DB后篇">
+<meta property="og:url" content="http://example.com/2023/05/30/DB%E5%90%8E%E7%AF%87/index.html">
+<meta property="og:site_name" content="Moyuke&#39;s blog">
+<meta property="og:description" content="物理存储 分类：  易失存储 volatile storage   非易失存储 non-volatile storage     NVM（non-volatile memory）: 掉电不丢  primary storage: Fastest media but volatile (cache, main memory).  secondary storage: next level in hie">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607021440123.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607024602936.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607024919201.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607025337181.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607031402403.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607032222398.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607033306769.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607035017615.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610160436673.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610160508100.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610160725335.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610160742907.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610160938171.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610161015946.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610161325306.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610171021418.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610171558671.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610175401820.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610175540871.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230619143817724.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230612001751736.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230612003553870.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230612004605830.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230612004618669.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230612004920316.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618161811420.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618161824886.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618161847075.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618163335699.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618163544585.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618164207925.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618164914151.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618165335108.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618170934436.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618205150053.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230619142752872.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305241431386.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305271116161.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305271119807.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305271131380.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305271134503.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305271145166.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305271200739.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305271202229.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305271205746.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305271209973.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618231747119.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305271221452.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305272301381.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305272324702.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305272342760.png">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618231630105.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305272344670.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305281657110.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305281658817.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305281700752.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305281703232.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305281827907.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305281827478.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305281832208.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305281840366.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305281847247.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305281849252.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291009580.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291012763.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291018652.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291021774.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291023857.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291023857.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291026595.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291040618.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291040457.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291051997.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291058741.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291105161.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291112088.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291115680.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291117308.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291122839.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291126165.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202305291130425.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306022302642.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306022304628.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306051019848.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306051024853.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306051006510.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306051009473.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306051028924.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306051030757.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306051035648.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306051043773.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306051109304.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306051115479.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306051121990.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306062011016.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306051140017.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306062026763.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306062033999.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306062035862.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306062047538.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306062051214.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306062100918.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306121002428.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306121013745.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306121021188.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306121024663.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306121846448.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306121858750.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306121859013.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306121916858.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306121918751.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306121925529.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306121928688.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306121935921.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306121951678.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306121955805.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306122017889.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306122025645.png">
+<meta property="og:image" content="http://cdn.hobbitqia.cc/202306122028882.png">
+<meta property="article:published_time" content="2023-05-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-19T08:37:12.968Z">
+<meta property="article:author" content="LesterYu">
+<meta property="article:tag" content="Study">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607021440123.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Moyuke's blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Moyuke&#39;s blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-DB后篇" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/05/30/DB%E5%90%8E%E7%AF%87/" class="article-date">
+  <time class="dt-published" datetime="2023-05-29T16:00:00.000Z" itemprop="datePublished">2023-05-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      DB后篇
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="物理存储"><a href="#物理存储" class="headerlink" title="物理存储"></a>物理存储</h2><ul>
+<li><p>分类：</p>
+<ul>
+<li><p>易失存储 volatile storage </p>
+</li>
+<li><p>非易失存储 non-volatile storage </p>
+</li>
+<li><p><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607021440123.png" alt="image-20230607021440123"></p>
+</li>
+<li><p>NVM（non-volatile memory）: 掉电不丢</p>
+</li>
+<li><p><strong>primary storage</strong>: Fastest media but volatile (cache, main memory).</p>
+</li>
+<li><p><strong>secondary storage</strong>: next level in hierarchy, non-volatile, moderately fast access time</p>
+<p>also called <strong>on-line storage</strong> </p>
+<p>E.g. flash memory, magnetic disks</p>
+</li>
+<li><p><strong>tertiary storage:</strong> lowest level in hierarchy, non-volatile, slow access time</p>
+<p>also called <strong>off-line storage</strong> </p>
+<p>E.g. magnetic tape, optical storage</p>
+</li>
+</ul>
+</li>
+<li><p>磁盘 magnetic disks</p>
+<ul>
+<li><p>tracks(磁道)  sectors(扇区)</p>
+</li>
+<li><p>Access Time 访问时间，毫秒级</p>
+<ul>
+<li>Seek Time 寻道时间：找到对应磁道</li>
+<li>Rotational latency 旋转延迟：转到对应扇区</li>
+</ul>
+</li>
+<li><p>Data-transfer rate 数据传输率</p>
+</li>
+<li><p><em>数据库传输以block为单位</em> </p>
+</li>
+<li><p>访问模式：</p>
+<ul>
+<li><p>Sequential access pattern(顺序访问模式)<br>Successive requests are for successive disk blocks<br>Disk seek required only for first block</p>
+</li>
+<li><p>Random access pattern（随机访问模式）<br>Each access requires a seek<br><em>Transfer rates are low since a lot of time is wasted in seeks</em> </p>
+<p><em>尽量转化为顺序访问模式</em> </p>
+</li>
+<li><p>I&#x2F;O operations per second (IOPS ，每秒I&#x2F;O操作数)</p>
+<ul>
+<li>衡量磁盘访问速度</li>
+<li>Number of random block reads that a disk can support per second<br>50 to 200 IOPS on current generation magnetic disks</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Mean time to failure (MTTF，平均故障时间)</p>
+<ul>
+<li>衡量磁盘可靠性</li>
+<li>the average time the disk is expected to run continuously without any failure</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>磁盘块访问的优化</p>
+<ul>
+<li><p>Buffering 缓存: in-memory buffer to cache disk blocks</p>
+</li>
+<li><p>Read-ahead(Prefetch): Read extra blocks from a track in anticipation that they will be requested soon</p>
+</li>
+<li><p><strong>Disk-arm-scheduling</strong> algorithms re-order block requests so that disk arm movement is minimized </p>
+</li>
+<li><p>File organization：将碎片化的文件重新整理<br>Allocate blocks of a file in as contiguous a manner as possible<br>Allocation in units of extents(盘区）</p>
+</li>
+<li><p>Nonvolatile write buffers （非易失性写缓存）</p>
+<p>speed up disk writes by writing blocks to a non-volatile RAM buffer immediately</p>
+</li>
+<li><p>Log disk（日志磁盘）</p>
+<p>a disk devoted to writing a sequential log of block updates<br>Used exactly like nonvolatile RAM</p>
+</li>
+</ul>
+</li>
+<li><p>Flash Storage</p>
+<ul>
+<li>NAND flash<ul>
+<li>Page can only be written once<br>Must be erased to allow rewrite</li>
+</ul>
+</li>
+<li>SSD(Solid State Disks) <ul>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607024602936.png" alt="image-20230607024602936"></li>
+<li>SSD比磁盘快百倍，磁盘能耗高（机械运动）更新为即席写入</li>
+</ul>
+</li>
+<li>Flash storage 中的地址映射漂移，已达成磨损均衡（wear leveling)</li>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607024919201.png" alt="image-20230607024919201"></li>
+<li>对于大数据，热数据（常访问）放在SSD，冷数据放在磁盘里</li>
+</ul>
+</li>
+<li><p>NVM，又称Storage Class Memory</p>
+<ul>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607025337181.png" alt="image-20230607025337181"></li>
+<li>Persistence可以看出是否易失</li>
+<li>NVM和SSD与硬盘不同，用字节寻址</li>
+</ul>
+</li>
+<li><p>随堂测试：</p>
+<ul>
+<li><p>Which physical storage media is non-volatile?</p>
+<p>多选题 (1 分) </p>
+<p> A.cache</p>
+<p> B.main memory</p>
+<p> C.flash memory</p>
+<p> D.magnetic disk</p>
+<p> E.SSD(State Solid Disk)</p>
+<p> F.magnetic tapes</p>
+<p> G.optical disk</p>
+<p>正确答案: C D E F G</p>
+</li>
+<li><p>Which physical storage medias belong to the secondary storage? </p>
+<p>多选题 (1 分)</p>
+<p> A.cache</p>
+<p> B.main memory </p>
+<p> C.flash memory</p>
+<p> D.SSD(Solid State Disk)</p>
+<p> E.magnetic disk</p>
+<p> F.magnetic tapes</p>
+<p> G.optical disk</p>
+<p>正确答案: C D E</p>
+</li>
+<li><p>Which term represents the time that the disk controller takes to reposition the disk arm over the correct track.</p>
+<p>单选题 (1 分)</p>
+<p> A.access time</p>
+<p> B.seek time</p>
+<p> C.rotational latency</p>
+<p> D.data-transfer rate </p>
+<p>正确答案: B</p>
+</li>
+<li><p>What is the right approach to  optimizing  data access of disks?</p>
+<p>多选题 (1 分)</p>
+<p> A.Buffering</p>
+<p> B.Read-ahead</p>
+<p> C.defragment the file system</p>
+<p> D.Non-volatile write buffers</p>
+<p> E.Log disk</p>
+<p>正确答案: A B C D E</p>
+</li>
+<li><p>MTTF means    1   (注意：每个单词首字母大写).</p>
+<p>填空题 (1 分) (请按题目中的空缺顺序依次填写答案)</p>
+<p>正确答案: Mean Time To Failure</p>
+</li>
+<li><p>IOPS  means     1   (注意：每个单词首字母大写).</p>
+<p>填空题 (1 分) (请按题目中的空缺顺序依次填写答案)</p>
+<p>正确答案: I&#x2F;O Operations Per Second</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="数据存储结构"><a href="#数据存储结构" class="headerlink" title="数据存储结构"></a>数据存储结构</h2><ul>
+<li><p>数据库文件存在磁盘里，文件由记录(record)组成，record由各个字段(field)组成</p>
+</li>
+<li><p>定长记录(Fixed-Length Record)，可以计算每个block可以放多少记录</p>
+<ul>
+<li>存record i：若长n byte，从n*(i-1) byte开始</li>
+<li>删除：不移动 record，记为空记录<ul>
+<li>空记录设指针指下一个空的record</li>
+<li>头部加上header指向第一条空记录</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>不定长记录(Variable-Length Record)</p>
+<ul>
+<li>原因：有不定长字符串，有空字段</li>
+<li>方法：不定长的全放后面，用(offset,length)记录位置和长度</li>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607031402403.png" alt="image-20230607031402403"></li>
+<li>Null bitmap：有几个属性就有几位，0表示非空，1表示空</li>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607032222398.png" alt="image-20230607032222398"></li>
+<li>插入：指针+长度存记录位置，在free space从后往前插入</li>
+<li>删除：相对地址，block_num + index</li>
+</ul>
+</li>
+<li><p>Record组织规则：</p>
+<ul>
+<li>堆：<ul>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607033306769.png" alt="image-20230607033306769"></li>
+<li>维护空闲块的map，记录空闲程度：7即7&#x2F;8的空闲</li>
+</ul>
+</li>
+<li>顺序 Sequential<ul>
+<li>插入：插到中间会导致后面的记录全体后移，因此直接放在最后，通过指针串联<ul>
+<li>每个一段时间按顺序重整（克服碎片化）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>B+树</li>
+<li>哈希</li>
+</ul>
+</li>
+<li><p>存放方式：</p>
+<ul>
+<li>按行存放</li>
+<li>按列存放：cache命中率高</li>
+</ul>
+</li>
+<li><p>缓存管理 Buffer manager</p>
+<ul>
+<li>缓存替换：<ul>
+<li>LRU策略（Least Recently Used）最近最少用到</li>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230607035017615.png" alt="image-20230607035017615"></li>
+<li>在for循环等场景，LRU可能是一种坏策略</li>
+</ul>
+</li>
+<li>若访问的block不在缓存，读出到缓冲区</li>
+<li>访问请求时，钉在(pin)缓冲区，请求为读时加共享锁，写时加exclusive lock</li>
+</ul>
+</li>
+<li><p>随堂测试：</p>
+<ul>
+<li><p>What is contained in the header of slotted page? </p>
+<p>多选题 (1 分)</p>
+<p> A.number of record entries</p>
+<p> B.end location of free space in the block</p>
+<p> C.location of each record</p>
+<p> D.size of each record</p>
+<p> E.primary key of each record</p>
+<p>正确答案: A B C D</p>
+</li>
+<li><p>What kind file organization is suitable for applications that require sequential processing of the entire file? </p>
+<p>单选题 (1 分)</p>
+<p> A.heap file organization</p>
+<p> B.sequential file organization</p>
+<p> C.multitable clustering file organization</p>
+<p> D.hash file organization</p>
+<p>正确答案: B</p>
+</li>
+<li><p>Which statement is incorrect?</p>
+<p>多选题 (1 分)</p>
+<p> A.For heap file organization, records can be placed anywhere in the file where there is free space.</p>
+<p> B.Database system seeks to minimize the number of block transfers between the disk and memory. </p>
+<p> C.If the needed block is not in the buffer, the buffer manager will replace some other block, if required, to make space for the new block.</p>
+<p> D.LRU is the most suitable replacement strategy for buffer manager in any cases.</p>
+<p>正确答案: D</p>
+</li>
+<li><p>For the buffer manager, there are following assumptions:</p>
+<p>• There are 4 buffer pages.</p>
+<p>• Initially the buffer is empty occupied.</p>
+<p>• The data access sequence is 1,2,3,4,5,4,3,2,1,3,5</p>
+<p>According to the LRU replacement strategy, there are    1    times replacements occurred,  and the data item    2    is the least recently used after completing the above data access sequence.</p>
+<p>填空题 (1 分) (请按题目中的空缺顺序依次填写答案)</p>
+<p>正确答案:</p>
+<p>1：3</p>
+<p>2：2</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="索引Indexing"><a href="#索引Indexing" class="headerlink" title="索引Indexing"></a>索引Indexing</h2><ul>
+<li><p>Form：search key - pointer</p>
+</li>
+<li><p>Query type</p>
+<ul>
+<li><p>Point query: records with a specified value in the attribute</p>
+</li>
+<li><p>Range query: records with an attribute value falling in a specified range of values.</p>
+</li>
+</ul>
+</li>
+<li><p>Primary index 主索引</p>
+<ul>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610160436673.png" alt="image-20230610160436673"></li>
+<li>candidate key唯一情况下用起来方便</li>
+</ul>
+</li>
+<li><p>Secondary Indices</p>
+<ul>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610160508100.png" alt="image-20230610160508100"></li>
+<li>不唯一，中间的指针指向多个目标</li>
+<li></li>
+</ul>
+</li>
+<li><p>Dense index：Index record appears for every search-key value in the file. </p>
+<ul>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610160725335.png" alt="image-20230610160725335"></li>
+</ul>
+</li>
+<li><p>Sparse index：contains index records for only some search-key values.</p>
+<ul>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610160742907.png" alt="image-20230610160742907"></li>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610160938171.png" alt="image-20230610160938171"></li>
+</ul>
+</li>
+<li><p>Multilevel Index（多级索引）</p>
+<ul>
+<li>索引的索引</li>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610161015946.png" alt="image-20230610161015946"></li>
+</ul>
+</li>
+<li><p>B+ Tree Index</p>
+<ul>
+<li>每个节点都和block大小一样</li>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610161325306.png" alt="image-20230610161325306"></li>
+<li>叶子结点就是末级索引，之间用指针相连，使连续</li>
+<li>高度：$ log_{n}(k)&lt;&#x3D; height &lt;&#x3D;log_{n&#x2F;2}(k&#x2F;2)+1 $，向上取整（根节点最小两叉）</li>
+<li>大小：最大：半满，最小：全满</li>
+<li>和ADS不同：每个节点容量相等，非叶子和叶子一样（ADS里非叶子最多阶数-1）<ul>
+<li>也就是说中间结点的分叉数比叶子结点值数多1</li>
+</ul>
+</li>
+<li>作用：叉数多，层数少，减少seek&amp;block transfer次数</li>
+</ul>
+</li>
+<li><p>估计 height &amp; size</p>
+<ul>
+<li><p>person( pid char(18) primary key,  </p>
+<p>​			name char(8), </p>
+<p>​			age smallint,<br>​             address char(40)); </p>
+<p>Block size : 4K<br>1000000 persons</p>
+</li>
+<li><p>Records per block &#x3D;  4096&#x2F;(18+8+2+40) &#x3D;60.235&#x3D;60</p>
+<ul>
+<li>record 大小根据各个属性类型算</li>
+</ul>
+</li>
+<li><p>blocks for storing 1M persons&#x3D; 1000000&#x2F;60 &#x3D;16667</p>
+<ul>
+<li>计算block数</li>
+</ul>
+</li>
+<li><p>B+ tree n(fan-out)  &#x3D; (4096-4)&#x2F;(18+4) +1 &#x3D; 187</p>
+<ul>
+<li><p>B+树一个节点就是一个block，存放M个值和M+1个指针</p>
+<p>即使是叶子结点，也多出一个指向下一个叶子的指针</p>
+<p>指针比值多一个，所以先-4，后+1</p>
+</li>
+<li><p>一个索引项&#x3D;索引值+指针(假设4byte)&#x3D;18+4</p>
+</li>
+<li><p>最大187叉，最少 n&#x2F;2 &#x3D; 94叉</p>
+</li>
+<li><p>能索引多少值</p>
+<ul>
+<li><p>2 levels:  min&#x3D;2<code>*</code>93 &#x3D; 186            max&#x3D; 187’<code>*</code>186 &#x3D; 34,782</p>
+</li>
+<li><p>3 levels:  min&#x3D;2<code>*</code>94<code>*</code>93 &#x3D; 17484        max&#x3D;187<code>*</code>187<code>*</code>186 &#x3D; 6,504,234</p>
+</li>
+<li><p>4 levels:  min&#x3D;2<code>*</code>94<code>*</code>94<code>*</code>93 &#x3D; 1,643,496</p>
+<p>​			   max&#x3D;187<code>*</code>187<code>*</code>187<code>*</code>186 &#x3D; 1,216,291,758</p>
+</li>
+</ul>
+</li>
+<li><p>易得这个B+树为3层</p>
+</li>
+</ul>
+</li>
+<li><p>size：</p>
+<ul>
+<li>最小（全满）100000&#x2F;186+100000&#x2F;186&#x2F;187+1</li>
+<li>最大（半满）100000&#x2F;93+100000&#x2F;93&#x2F;94+1</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Bottom-up B+ Tree Build</p>
+<ul>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610171021418.png" alt="image-20230610171021418"></li>
+<li>fanout &#x3D; 4，则阶数为3</li>
+<li>先排序，按序分块，然后向上构建</li>
+<li>构建上图B+树 cost：1 seek + 9 block transfer</li>
+<li>插入大量值&#x2F;合并树可以直接把叶子merge并排序，然后重建</li>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610171558671.png" alt="image-20230610171558671"></li>
+<li>原树的叶子读取：1 seek+6 block transfer</li>
+</ul>
+</li>
+<li><p>Indexing in Main Memory</p>
+<ul>
+<li>Random access in memory <ul>
+<li>Much cheaper than on disk&#x2F;flash, but still expensive compared to cache read</li>
+<li>Binary search for a key value within a large B+-tree node results in many <strong>cache misses</strong></li>
+<li>Data structures that make best use of cache preferable – <strong>cache conscious</strong></li>
+</ul>
+</li>
+<li>Cache miss<ul>
+<li>HD以block为单位读到buffer，buffer以64byte(例)为单位读到cache，大节点就会读不全，查找索引值过程中读取的cache只有小部分有用，没找到-&gt;产生miss</li>
+<li>降低miss：<ul>
+<li>小节点：B+ trees with small nodes that fit in cache line are preferable to reduce cache misses</li>
+<li>指针和search key分开排</li>
+<li>建立一个“路标”（一棵小树）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Key idea:  <ul>
+<li>use large node size to optimize disk access, </li>
+<li>but structure data within a node using a tree with small node size, instead of using an array, to optimize cache access.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>LSM tree(Log Structured Merge) 写优化的树结构</p>
+<ul>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610175401820.png" alt="image-20230610175401820"></li>
+<li>Benefits of LSM approach<br>Inserts are done using only sequential I&#x2F;O operations 随机写-&gt;顺序写<br>Leaves are full, avoiding space wastage<br>Reduced number of I&#x2F;O operations per record inserted as compared to normal B+-tree (up to some size)</li>
+<li>Drawback of LSM approach<br>Queries have to search multiple trees<br>Entire content of each level copied multiple times</li>
+</ul>
+</li>
+<li><p>LSM-Stepped Merge Index</p>
+<ul>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230610175540871.png" alt="image-20230610175540871"></li>
+<li>内存满了直接写到下一层来，disk中这一层满了再merge写到下一层</li>
+<li>删除：插入删除标记</li>
+<li>更新：删除+插入</li>
+</ul>
+</li>
+<li><p>Buffer Tree</p>
+<ul>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230619143817724.png" alt="image-20230619143817724"></li>
+</ul>
+</li>
+<li><p>随堂测试</p>
+<ul>
+<li><p>1.Indexing mechanisms are used to speed up access  to desired data.</p>
+<p>判断题 (1 分)</p>
+<p> A.Yes</p>
+<p> B.No</p>
+<p>正确答案: A</p>
+</li>
+<li><p>2.Range query returns records with an attribute value falling in a specified range of values.</p>
+<p>判断题 (1 分)</p>
+<p> A.Yes</p>
+<p> B.No</p>
+<p>正确答案: A</p>
+</li>
+<li><p>3.Secondary index is an index whose search key specifies an order same as the sequential order of the file. </p>
+<p>判断题 (1 分)</p>
+<p> A.Yes</p>
+<p> B.NO</p>
+<p>正确答案: B</p>
+</li>
+<li><p>4.In an dense index, index record appears for every search-key value in the file. </p>
+<p> 判断题 (1 分)</p>
+<p> A.Yes</p>
+<p> B.No</p>
+<p>正确答案: A</p>
+</li>
+<li><p>5.In a B+-tree , all paths from root to leaf are of the same length.</p>
+<p> 判断题 (1 分)</p>
+<p> A.Yes</p>
+<p> B.No</p>
+<p>正确答案: A</p>
+</li>
+<li><p>6.If the root of a B+-tree is not a leaf, it has at least 2 children.</p>
+<p> 判断题 (1 分)</p>
+<p> A.Yes </p>
+<p> B.No</p>
+<p>正确答案: A</p>
+</li>
+<li><p>7.In databases, a node of a B+-tree is generally the same size as a disk block.</p>
+<p> 判断题 (1 分)</p>
+<p> A.Yes</p>
+<p> B.No</p>
+<p>正确答案: A</p>
+</li>
+<li><p>8.The leaf nodes of a B+-tree file organization store records, instead of pointers to records.</p>
+<p> 判断题 (1 分)</p>
+<p> A.Yes</p>
+<p> B.No</p>
+<p>正确答案: A</p>
+</li>
+<li><p>9.Benefits of LSM approach:</p>
+<p> 多选题 (1 分)</p>
+<p> A.Inserts are done using only sequential I&#x2F;O operations</p>
+<p> B.Leave nodes are full, avoiding space wastage</p>
+<p> C.Reduced number of I&#x2F;O operations per record inserted as compared to normal B+-tree.</p>
+<p> D.Queries have to search multiple trees</p>
+<p> E.Entire content of each level copied multiple times</p>
+<p>正确答案: A B C</p>
+</li>
+<li><p>10.Bitmap indices are useful for queries on multiple attributes,not particularly useful for single attribute queries.</p>
+<p>判断题 (1 分)</p>
+<p> A.Yes</p>
+<p> B. No</p>
+<p>正确答案: A</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Query-Processing"><a href="#Query-Processing" class="headerlink" title="Query Processing"></a>Query Processing</h2><ul>
+<li><p>Basic Steps in Query Processing</p>
+<ul>
+<li>Parsing and translation<br>translate the query into its internal form.  This is then translated into relational algebra.<br>Parser checks syntax, verifies relations</li>
+<li>Optimization<br>Amongst all equivalent evaluation plans choose the one with lowest cost. </li>
+<li>Evaluation<br>The query-execution engine takes a query-evaluation plan, executes that plan, and returns the answers to the query.</li>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230612001751736.png" alt="image-20230612001751736" style="zoom:33%;" /></li>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230612003553870.png" alt="image-20230612003553870"></li>
+<li>选择运算尽量先做（往下推）</li>
+</ul>
+</li>
+<li><p>衡量Query</p>
+<ul>
+<li><p>$ t_s $：number of seek</p>
+</li>
+<li><p>$ t_t $：number of block transfer(read &amp; write)</p>
+</li>
+<li><p>Cost for b block transfers plus S seeks</p>
+<p>b *  $ t_t $ + S * $ t_s $</p>
+</li>
+<li><p><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230612004605830.png" alt="image-20230612004605830"></p>
+</li>
+<li><p><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230612004618669.png" alt="image-20230612004618669"></p>
+</li>
+<li><p><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230612004920316.png" alt="image-20230612004920316"></p>
+</li>
+</ul>
+</li>
+<li><p>对select的条件进行排序：外部排序</p>
+<ul>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618161811420.png" alt="image-20230618161811420"></li>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618161824886.png" alt="image-20230618161824886"></li>
+<li>性能：</li>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618161847075.png" alt="image-20230618161847075"></li>
+<li>$ (b_r&#x2F;M) $ 为归并段数，$ log_{M-1}(b_r&#x2F;M) $ 为轮次，2br为每次的传输消耗，最后一次+br，如果要写回磁盘就+2br。</li>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618163335699.png" alt="image-20230618163335699"></li>
+<li>外部排序（External Merge Sort） 中，给一个段run分配bb 块（而不是1块）作为缓冲，可以减少每轮合并（merge）的seek次数，但也可能增加merge的轮数。对于确定的关系大小br 和确定的内存块数M，理论上应该有一个最佳的bb取值，使得算法代价最小。</li>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618163544585.png" alt="image-20230618163544585"></li>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618164207925.png" alt="image-20230618164207925"></li>
+</ul>
+</li>
+<li><p>Join Operation</p>
+<ul>
+<li><p>Nested-loop join</p>
+<ul>
+<li>两重循环</li>
+<li>代价：<ul>
+<li>nr * bs + br   block transfers</li>
+<li>nr + br  seeks</li>
+<li>nr是记录数，block中含有多个记录</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Block nested-loop join</p>
+<ul>
+<li><p><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618164914151.png" alt="image-20230618164914151"></p>
+</li>
+<li><p>代价：</p>
+<ul>
+<li>Worst case estimate:  br * bs + br  block transfers + 2 * br  seeks<br>Each block in the inner relation s is read once for each block in the outer relation</li>
+<li>Best case: br + bs block transfers + 2 seeks.（内存足够大，每个表只要进入内存一次）</li>
+<li>小关系作为外关系更好</li>
+</ul>
+</li>
+<li><p><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618165335108.png" alt="image-20230618165335108"></p>
+</li>
+<li><p>内存有M块的情况：留1块作为output的缓存，外关系给M-2块，内关系反正每次要seek，只给1块。</p>
+</li>
+</ul>
+</li>
+<li><p>Indexed nested-loop join</p>
+<ul>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618170934436.png" alt="image-20230618170934436"></li>
+<li>多块就是br&#x2F;(M-2)</li>
+<li>外关系小(nr小)的时候选这种方法</li>
+</ul>
+</li>
+<li><p>Merge-join</p>
+<ul>
+<li>两个关系已经有序</li>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618205150053.png" alt="image-20230618205150053"></li>
+</ul>
+</li>
+<li><p>Hash-join</p>
+</li>
+<li><p><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230619142752872.png" alt="image-20230619142752872"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="Query-Optimization¶"><a href="#Query-Optimization¶" class="headerlink" title="Query Optimization¶"></a>Query Optimization<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db12/#query-optimization">¶</a></h1><details class="abstract" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(0, 176, 255); border-image: initial; border-radius: 0.1rem; box-shadow: none; color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(0, 176, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Abstract</summary><ul style="box-sizing: border-box; margin-bottom: 0.6rem; margin-top: 1em; list-style-type: disc; padding: 0px; margin-left: 0.625em; display: flow-root; font-size: 0.75rem;"><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0px; margin-left: 1.25em;"></li></ul></details>
+
+<h2 id="Introduction¶"><a href="#Introduction¶" class="headerlink" title="Introduction¶"></a>Introduction<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db12/#introduction">¶</a></h2><ul>
+<li>Steps in cost-based query optimization<ul>
+<li>Generate logically equivalent expressions using equivalence rules</li>
+<li>Annotate resultant expressions in alternative ways to get alternative query plans</li>
+<li>Choose the cheapest plan based on estimated cost</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://cdn.hobbitqia.cc/202305241431386.png" alt="img"></p>
+<p>Alternative ways of evaluating a given query</p>
+<ul>
+<li>Equivalent expressions<br>逻辑优化：关系代数表达式（尽量先做选择，投影）</li>
+<li>Different algorithms for each operation<br>物理层面：每个算子选择不同的算法</li>
+</ul>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Example</summary><p style="box-sizing: border-box;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202305271116161.png" width="60%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202305271119807.png" width="60%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box; margin-bottom: 0.6rem;"></p></details>
+
+<p>Estimation of plan cost based on:</p>
+<ul>
+<li><em>Statistical information about relations</em>. Examples: number of tuples, number of distinct values for an attribute</li>
+<li><em>Statistics estimation for intermediate results</em>（Cardinality Estimation） to compute cost of complex expressions<br>估计中间结果的大小<br>现在有基于深度学习的估计方法</li>
+<li><em>Cost formulae for algorithms</em>, computed using statistics</li>
+</ul>
+<p>关系数据库里可以用查看执行计划。</p>
+<p><img src="http://cdn.hobbitqia.cc/202305271131380.png" alt="img"></p>
+<h2 id="Generating-Equivalent-Expressions¶"><a href="#Generating-Equivalent-Expressions¶" class="headerlink" title="Generating Equivalent Expressions¶"></a>Generating Equivalent Expressions<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db12/#generating-equivalent-expressions">¶</a></h2><p>Two relational algebra expressions are said to be <strong>equivalent</strong> if the two expressions generate the same set of tuples on every legal database instance<br>形式上不一样，但是结果（输出）是一样的，产生了相同的集合。</p>
+<h3 id="Equivalence-Rules¶"><a href="#Equivalence-Rules¶" class="headerlink" title="Equivalence Rules¶"></a>Equivalence Rules<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db12/#equivalence-rules">¶</a></h3><ul>
+<li><p>selection</p>
+<p><img src="http://cdn.hobbitqia.cc/202305271134503.png" alt="img"></p>
+<ol>
+<li>可以把算子拆分<br>如果某些属性有索引，那么可以先拆分，在索引 select 之后再执行其他算子，否则不如不拆分。</li>
+<li>算子可交换<br>先执行有索引的算子。</li>
+<li>投影的属性可以只保留最后一次的</li>
+<li>选择算子可以和合并结合</li>
+</ol>
+</li>
+<li><p>join</p>
+<p><img src="http://cdn.hobbitqia.cc/202305271145166.png" alt="img"></p>
+<p>自然连接是结合的（先连接中间结果小的）</p>
+<p><img src="http://cdn.hobbitqia.cc/202305271200739.png" alt="img"></p>
+<p>如果选择算子只和一个关系有关，那么我们可以先执行选择。（选择算子要早进行，推到叶子上）</p>
+</li>
+<li><p>projection</p>
+<p><img src="http://cdn.hobbitqia.cc/202305271202229.png" alt="img"></p>
+<p>同理投影也要早做。<br>如果连接要用到投影后不保留的属性，我们在第一次投影时要把连接用的属性也保留下来。</p>
+</li>
+<li><p>set operation</p>
+<p><img src="http://cdn.hobbitqia.cc/202305271205746.png" alt="img"></p>
+<p>这里的减法，减数关系就不用做选择了（减去多的总是没问题的）对交集也适用</p>
+</li>
+<li><p>other</p>
+<p><img src="http://cdn.hobbitqia.cc/202305271209973.png" alt="img"></p>
+</li>
+</ul>
+<h3 id="Enumeration-of-Equivalent-Expressions¶"><a href="#Enumeration-of-Equivalent-Expressions¶" class="headerlink" title="Enumeration of Equivalent Expressions¶"></a>Enumeration of Equivalent Expressions<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db12/#enumeration-of-equivalent-expressions">¶</a></h3><ul>
+<li>Repeat<ul>
+<li>apply all applicable <em>equivalence rules</em> on every subexpression of every equivalent expression found so far</li>
+<li>add newly generated expressions to the set of equivalent expressions</li>
+</ul>
+</li>
+<li>Until no new equivalent expressions are generated above</li>
+</ul>
+<p>可以这样找到所有的等价表达式。</p>
+<p>但是实际中我们基于一些经验规则进行启发式的优化</p>
+<h2 id="Statistics-for-Cost-Estimation¶"><a href="#Statistics-for-Cost-Estimation¶" class="headerlink" title="Statistics for Cost Estimation¶"></a>Statistics for Cost Estimation<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db12/#statistics-for-cost-estimation">¶</a></h2><p>代价估算需要统计信息</p>
+<ul>
+<li><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618231747119.png" alt="image-20230618231747119"></li>
+<li>Histograms</li>
+</ul>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">attribute age of relation person</summary><p style="box-sizing: border-box;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202305271221452.png" width="60%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box; margin-bottom: 0.6rem;"></p></details>
+
+<h3 id="Selection-Size-Estimation¶"><a href="#Selection-Size-Estimation¶" class="headerlink" title="Selection Size Estimation¶"></a>Selection Size Estimation<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db12/#selection-size-estimation">¶</a></h3><p>中间结果</p>
+<ul>
+<li>��&#x3D;�(�)<em>σ**A</em>&#x3D;<em>v</em>(<em>r</em>)<br>��&#x2F;�(�,�)<em>n**r</em>​&#x2F;<em>V</em>(<em>A</em>,<em>r</em>) : number of records that will satisfy the selection.<br>这样的估算基于值是平均分布的<br>如果要找的是一个 key, 那么 size estimate&#x3D;1</li>
+<li>��≤�(�)<em>σ**A</em>≤<em>v</em>(<em>r</em>)<ul>
+<li>Let �<em>c</em> denote the estimated number of tuples satisfying the condition.</li>
+<li>�&#x3D;0<em>c</em>&#x3D;0 if �&lt;min⁡(�,�)<em>v</em>&lt;min(<em>A</em>,<em>r</em>)<br>v 比属性 A 的最小值还要小</li>
+<li>�&#x3D;��⋅�−min⁡(�,�)max⁡(�,�)−min⁡�(�,�)<em>c</em>&#x3D;<em>n**r</em>⋅max(<em>A</em>,<em>r</em>)−min<em>A</em>(<em>A</em>,<em>r</em>)<em>v</em>−min(<em>A</em>,<em>r</em>)</li>
+<li>In absence of statistical information c is assumed to be ��&#x2F;2<em>n**r</em>&#x2F;2 (没有最大、最小统计信息时).</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://cdn.hobbitqia.cc/202305272301381.png" alt="img"></p>
+<p>概率论。<br>注意这些公式的要求是条件是相互独立的。</p>
+<h3 id="Joins¶"><a href="#Joins¶" class="headerlink" title="Joins¶"></a>Joins<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db12/#joins">¶</a></h3><p>The Cartesian product �×�<em>r</em>×<em>s</em> contains ��⋅��<em>n**r</em>⋅<em>n**s</em> tuples; each tuple occupies ��+��<em>s**r</em>+<em>s**s</em> bytes.</p>
+<ul>
+<li><p>�∩�&#x3D;∅<em>R</em>∩<em>S</em>&#x3D;∅<br>没有公共属性，等价于 �×�<em>r</em>×<em>s</em></p>
+</li>
+<li><p>�∩�<em>R</em>∩<em>S</em> is a key for �<em>R</em>, then a tuple of �<em>s</em> will join with at most one tuple from �<em>r</em></p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: var(--md-admonition-fg-color); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Example</summary><p style="box-sizing: border-box; margin: 0.5em 0px;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202305272324702.png" width="60%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box; margin: 0.5em 0px 0.6rem;"></p></details>
+</li>
+<li><p>If �∩�<em>R</em>∩<em>S</em> in S is a foreign key in S referencing R, then the number of tuples in �⋈�<em>r</em>⋈<em>s</em> &#x3D; the number of tuples in s.</p>
+</li>
+<li><p>If �∩�&#x3D;{�}<em>R</em>∩<em>S</em>&#x3D;{<em>A</em>} is not a key for R or S.<br>��∗���(�,�),��∗���(�,�)<em>n**r</em>​∗<em>V</em>(<em>A</em>,<em>s</em>)<em>n**s</em>​​,<em>n**s</em>​∗<em>V</em>(<em>A</em>,<em>r</em>)<em>n**r</em>​​.<br>以第二个为例子，站在 s 的角度，每一个 s 可以和这么多个元素连接。<br>通常我们取二者中的较小值。</p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: var(--md-admonition-fg-color); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Example</summary><p style="box-sizing: border-box; margin: 0.5em 0px;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202305272342760.png" width="60%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box; margin: 0.5em 0px 0.6rem;"></p></details></li>
+</ul>
+<h3 id="Size-Estimation-for-Other-Operations¶"><a href="#Size-Estimation-for-Other-Operations¶" class="headerlink" title="Size Estimation for Other Operations¶"></a>Size Estimation for Other Operations<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db12/#size-estimation-for-other-operations">¶</a></h3><p><img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230618231630105.png" alt="image-20230618231630105"></p>
+<p><img src="http://cdn.hobbitqia.cc/202305272344670.png" alt="img"></p>
+<p>外部连接 r, s 认为是 r s 自然连接的结果加上 r 的大小。</p>
+<h3 id="Estimation-of-Number-of-Distinct-Values¶"><a href="#Estimation-of-Number-of-Distinct-Values¶" class="headerlink" title="Estimation of Number of Distinct Values¶"></a>Estimation of Number of Distinct Values<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db12/#estimation-of-number-of-distinct-values">¶</a></h3><p>估算 V(A,r).</p>
+<p>Selections ��(�)<em>σ**θ</em>(<em>r</em>), estimate �(�,��(�))<em>V</em>(<em>A</em>,<em>σ**θ</em>(<em>r</em>))</p>
+<ul>
+<li>If �<em>θ</em> forces A to take a specified value, �(�,��(�))&#x3D;1<em>V</em>(<em>A</em>,<em>σ**θ</em>(<em>r</em>))&#x3D;1<br>*<strong>e.g.*</strong>, A &#x3D; 3</li>
+<li>If �<em>θ</em> forces A to take on one of a specified set of values: �(�,��(�))&#x3D;<em>V</em>(<em>A</em>,<em>σ**θ</em>(<em>r</em>))&#x3D; number of specified values<br>*<strong>e.g.*</strong>, (A &#x3D; 1 V A &#x3D; 3 V A &#x3D; 4)</li>
+<li>If the selection condition �<em>θ</em> is of the form A op v, �(�,��(�))&#x3D;�(�,�)∗�<em>V</em>(<em>A</em>,<em>σ**θ</em>(<em>r</em>))&#x3D;<em>V</em>(<em>A</em>,<em>r</em>)∗<em>s</em><br>利用选择率 s 计算</li>
+<li>In all the other cases, use approx1imate estimate:</li>
+</ul>
+<p>joins (r\bowtie s), estimate (V(A,r\bowtie s))</p>
+<ul>
+<li>If all attributes in A are from r, the estimated (V(A,r\bowtie s)&#x3D;\min(V(A,r), n_{r\bowtie s}))</li>
+<li>If A contains attributes A1 from r and A2 from s, then estimated (V(A,r\bowtie s)&#x3D;\min(V(A1,r)*V(A2-A1,s), V(A1-A2,r)*V(A2,s), n_{r\bowtie s}))</li>
+</ul>
+<h2 id="Choice-of-Evaluation-Plans"><a href="#Choice-of-Evaluation-Plans" class="headerlink" title="Choice of Evaluation Plans"></a>Choice of Evaluation Plans</h2><p>Must consider the <em>interaction</em> of evaluation techniques when choosing evaluation plans</p>
+<p>choosing the cheapest algorithm for each operation independently may not yield best overall algorithm<br>*<strong>e.g.*</strong> merge-join may be costlier than hash-join, but may provide a sorted output which reduces the cost for an outer level aggregation.<br>Mergejoin 代价高，但是有个好处是 join 后是有次序的，对上层操作有利。</p>
+<p>如果要找最优的执行计划，可能需要很长时间。通常按照经验规则。<br>我们主要考虑连接操作的优化。</p>
+<h3 id="Cost-Based-Join-Order-Selection¶"><a href="#Cost-Based-Join-Order-Selection¶" class="headerlink" title="Cost-Based Join-Order Selection¶"></a>Cost-Based Join-Order Selection<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db12/#cost-based-join-order-selection">¶</a></h3><p>Consider finding the best join-order for (r_1\bowtie r_2\bowtie \ldots r_n).<br>There are ((2(n – 1))!&#x2F;(n – 1)!) different join orders for above expression.</p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Example</summary><p style="box-sizing: border-box;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202305281657110.png" width="60%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box; margin-bottom: 0.6rem;"></p></details>
+
+<p>Using dynamic programming, the least-cost join order for any subset of ({r_1, r_2, \ldots r_n}) is computed only once and stored for future use.</p>
+<p>Join Order Optimization Algorithm</p>
+<p><img src="http://cdn.hobbitqia.cc/202305281658817.png" alt="img"></p>
+<p>先分解成两个小的集合 (S_1, S-S_1). 递归地细分。<br>递归到最底层就变为了对单个表的选择方法。</p>
+<p><img src="http://cdn.hobbitqia.cc/202305281700752.png" alt="img"></p>
+<h4 id="Left-Deep-Join-Trees"><a href="#Left-Deep-Join-Trees" class="headerlink" title="Left Deep Join Trees"></a>Left Deep Join Trees</h4><p>In left-deep join trees, the right-hand-side input for each join is a relation, not the result of an intermediate join.</p>
+<p><img src="http://cdn.hobbitqia.cc/202305281703232.png" alt="img"></p>
+<p>左边可以是中间结果，右边必须是一个关系。</p>
+<h4 id="Cost-of-Optimization"><a href="#Cost-of-Optimization" class="headerlink" title="Cost of Optimization"></a>Cost of Optimization</h4><ul>
+<li>With dynamic programming<ul>
+<li>time complexity of optimization with bushy trees is (O(3^n)).</li>
+<li>Space complexity is (O(2^n))</li>
+</ul>
+</li>
+<li>left-deep join tree<ul>
+<li>Time complexity of finding best join order is (O(n 2^n))</li>
+<li>Space complexity remains at (O(2^n))</li>
+</ul>
+</li>
+</ul>
+<h3 id="Heuristic-Optimization"><a href="#Heuristic-Optimization" class="headerlink" title="Heuristic Optimization"></a>Heuristic Optimization</h3><p>Cost-based optimization is expensive.<br>可以用启发式优化</p>
+<p>Heuristic optimization transforms the query-tree by using a set of rules that typically (but not in all cases) improve execution performance:</p>
+<ul>
+<li>Perform <em>selection</em> early (reduces the number of tuples)</li>
+<li>Perform <em>projection</em> early (reduces the number of attributes)</li>
+<li>Perform most restrictive selection and join operations (<strong>i.e</strong>. with smallest result size) before other similar operations.</li>
+<li>Perform left-deep join order</li>
+</ul>
+<h2 id="Additional-Optimization-Techniques¶"><a href="#Additional-Optimization-Techniques¶" class="headerlink" title="Additional Optimization Techniques¶"></a>Additional Optimization Techniques<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db12/#additional-optimization-techniques">¶</a></h2><h3 id="Nested-Subqueries¶"><a href="#Nested-Subqueries¶" class="headerlink" title="Nested Subqueries¶"></a>Nested Subqueries<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db12/#nested-subqueries">¶</a></h3><p>Nested query example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select name from instructor </span><br><span class="line">where exists </span><br><span class="line">    (select * from teaches</span><br><span class="line">    where instructor.ID = teaches.ID and teaches.year = 2022)</span><br></pre></td></tr></table></figure>
+
+<p>找出 2022 开课的老师的名字。</p>
+<p>两重循环，但是低效。</p>
+<p>Parameters are variables from outer level query that are used in the nested subquery; such variables are called <strong>correlation variables（相关变量）</strong><br>即来自外循环的变量。如果没有相关变量，我们可以先执行内部，然后再执行外部。</p>
+<p>把刚刚那个例子改为一个 select 语句，那么一个老师如果开了很多门课就会出现很多个名字。但是加上 <code>distinct</code> 关键词后又无法区分同名情况。</p>
+<p>半连接 (⋉)_\theta s$，检验 r 是否满足某个关系。<br>If a tuple (r_i) appears n times in r, it appears n times in the result of (r (⋉)_\theta s) , if there is at least one tuple (s_i) in s matching with (r_i).</p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Example</summary><p style="box-sizing: border-box;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202305281827907.png" width="60%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box; margin-bottom: 0.6rem;"></p></details>
+
+<p><img src="http://cdn.hobbitqia.cc/202305281827478.png" alt="img"></p>
+<p>The process of replacing a nested query by a query with a join&#x2F;semijoin (possibly with a temporary relation) is called <strong>decorrelation(去除相关)</strong></p>
+<p>Decorrelation of scalar aggregate subqueries can be done using groupby&#x2F;aggregation in some cases</p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Example</summary><p style="box-sizing: border-box;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202305281832208.png" width="60%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box; margin-bottom: 0.6rem;"></p></details>
+
+<h3 id="Materialized-Views¶"><a href="#Materialized-Views¶" class="headerlink" title="Materialized Views¶"></a>Materialized Views<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db12/#materialized-views">¶</a></h3><p>A <strong>materialized view</strong> is a view whose contents are computed and stored.</p>
+<p>有些数据库里把 view 实例化了，真正存储在内部的临时表。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">create view department_total_salary(dept_name, total_salary) </span><br><span class="line">as select dept_name, sum(salary) from instructor group by dept_name</span><br></pre></td></tr></table></figure>
+
+<p>Saves the effort of finding multiple tuples and adding up their amounts.<br>但是需要时刻保持这个视图和原表一致。</p>
+<p>use <strong>incremental view maintenance(增量视图维护)</strong><br>The changes (inserts and deletes) to a relation or expressions are referred to as its <strong>differential(差分)</strong></p>
+<ul>
+<li><p>join: (V^{new}&#x3D;V^{old}\cup (i_r\bowtie s), V^{new} &#x3D; V^{old}-(d_r\bowtie s))</p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: var(--md-admonition-fg-color); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">join</summary><p style="box-sizing: border-box; margin: 0.5em 0px;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202305281840366.png" width="60%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box; margin: 0.5em 0px 0.6rem;"></p></details>
+</li>
+<li><p>select: (V^{new}&#x3D;V^{old}\cup \sigma_\theta(i_r), V^{new} &#x3D; V^{old}-\sigma_\theta(d_r))</p>
+</li>
+<li><p>projection:<br>For each tuple in a projection (\Pi_A(r)), we will keep a count of how many times it was derived.</p>
+<ul>
+<li>On <em>insert</em> of a tuple to r, if the resultant tuple is already in (\Pi_A(r)) we increment its count, else we add a new tuple with count &#x3D; 1</li>
+<li>On <em>delete</em> of a tuple from r, we decrement the count of the corresponding tuple in (\Pi_A(r)) if the count becomes 0, we delete the tuple from (\Pi_A(r))</li>
+</ul>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: var(--md-admonition-fg-color); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Projection</summary><p style="box-sizing: border-box; margin: 0.5em 0px;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202305281847247.png" width="60%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box; margin: 0.5em 0px 0.6rem;"></p></details>
+</li>
+<li><p>count (v&#x3D; <em>Ag</em>{count(B)})</p>
+<ul>
+<li>insert: For each tuple r in (i_r), if the corresponding group is already present in v, we increment its count, else we add a new tuple with count &#x3D; 1</li>
+<li>delete: for each tuple t in (i_r).we look for the group t.A in v, and subtract 1 from the count for the group.<br>If the count becomes 0, we delete from v the tuple for the group t.A</li>
+</ul>
+</li>
+<li><p>sum (v&#x3D; <em>Ag</em>{sum(B)})</p>
+</li>
+<li><p>min, max</p>
+</li>
+</ul>
+<p>怎么利用这些 view?</p>
+<ul>
+<li><p>Rewriting queries to use materialized views:</p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: var(--md-admonition-fg-color); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Example</summary><p style="box-sizing: border-box; margin: 0.5em 0px;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202305281849252.png" width="60%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box; margin: 0.5em 0px 0.6rem;"></p></details>
+</li>
+<li><p>Replacing a use of a materialized view by the view definition</p>
+</li>
+</ul>
+<p>Materialized View Selection<br>有哪些查询？各种查询的比例？</p>
+<h1 id="Transactions¶"><a href="#Transactions¶" class="headerlink" title="Transactions¶"></a>Transactions<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db13/#transactions">¶</a></h1><details class="abstract" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(0, 176, 255); border-image: initial; border-radius: 0.1rem; box-shadow: none; color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(0, 176, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Abstract</summary><ul style="box-sizing: border-box; margin-bottom: 0.6rem; margin-top: 1em; list-style-type: disc; padding: 0px; margin-left: 0.625em; display: flow-root; font-size: 0.75rem;"><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0px; margin-left: 1.25em;"></li></ul></details>
+
+<h2 id="Transaction-Concept¶"><a href="#Transaction-Concept¶" class="headerlink" title="Transaction Concept¶"></a>Transaction Concept<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db13/#transaction-concept">¶</a></h2><p>A <strong>transaction</strong> is a unit of program execution that accesses and possibly updates various data items.<br>一段原子性的操作</p>
+<p>*<strong>e.g.*</strong> transaction to transfer $50 from account A to account B</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">update  account  set  balance=balance-50  where account_number=A;</span><br><span class="line">update  account  set  balance=balance+50  where account_number=B;</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="ACID-Properties¶"><a href="#ACID-Properties¶" class="headerlink" title="ACID Properties¶"></a>ACID Properties<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db13/#acid-properties">¶</a></h3><ul>
+<li><strong>Atomicity（原子性）</strong><br>全有或全无<br>由数据库恢复功能保证</li>
+<li><strong>Consistency（一致性）</strong><br>保证数据库内的内容正确性，与实际业务相符。如转账是一个人余额减少一个人增加。<br>consistency 与开发人员有关系（事务设计是否合理）</li>
+<li><strong>Isolation（隔离性）</strong><br>事务并发执行，但是相互隔离，好像是串行执行一样。<br>由数据库的并发执行来实现</li>
+<li><strong>Durability（持久性）</strong><br>事务提交后被缓存，掉电不能失去 buffer 里的内容。</li>
+</ul>
+<h2 id="A-Simple-Transaction-Model¶"><a href="#A-Simple-Transaction-Model¶" class="headerlink" title="A Simple Transaction Model¶"></a>A Simple Transaction Model<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db13/#a-simple-transaction-model">¶</a></h2><p>这个模型中，把事务对数据库的修改简化为读写两种操作。<br>Transactions access data using two operations:</p>
+<ul>
+<li><strong>read(X)</strong>, which transfers the data item X from the database to a variable, also called X， in a work area in main memory belonging to the transaction that executed the read operation.</li>
+<li><strong>write(X)</strong>, which transfers the value in the variable X in the main memory work area of the transaction that executed the write operation to the datat item X in database.</li>
+</ul>
+<p><img src="http://cdn.hobbitqia.cc/202305291009580.png" alt="img"></p>
+<p>在这个简单的模型中，我们不考虑数据读到工作区域后发生了什么操作，只考虑读写。</p>
+<p>Example of Fund Transfer</p>
+<p><img src="http://cdn.hobbitqia.cc/202305291012763.png" alt="img"></p>
+<ul>
+<li>Atomicity requirement<br>如果执行结束之后出现了问题，数据库应该要撤销之前的操作</li>
+<li>Durability requirement<br>如果事务结束了，我们就把更新同步</li>
+<li>Consistency requirement<ul>
+<li>Explicitly（显式） specified integrity constraints *<strong>e.g.*</strong> primary keys , foreign keys<br>数据库把这个定义放在内部，会自己维护</li>
+<li>Implicit （隐式） integrity constraints *<strong>e.g.*</strong> sum of balances of all accounts minus sum of loan amounts must equal value of cash-in-hand</li>
+</ul>
+</li>
+<li>Isolation requirement<br>在 step 3 6 之间，另一个事务可以访问这个被部分更新的数据库，A+B 会小于正确答案。这是因为破坏了隔离性。</li>
+</ul>
+<h3 id="Transaction-State¶"><a href="#Transaction-State¶" class="headerlink" title="Transaction State¶"></a>Transaction State<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db13/#transaction-state">¶</a></h3><ul>
+<li><p><strong>Active</strong> – the initial state; the transaction stays in this state while it is executing</p>
+</li>
+<li><p><strong>Partially committed</strong> – after the final statement has been executed.<br>语句执行完了，准备提交。能否提交取决于具体的执行。</p>
+</li>
+<li><p><strong>Failed</strong> – after the discovery that normal execution can no longer proceed.<br>不能正常提交。或者是执行过程中发现问题。</p>
+</li>
+<li><p>Aborted</p>
+<p>– after the transaction has been rolled back and the database restored to its state prior to the start of the transaction. Two options after it has been aborted:</p>
+<ul>
+<li>restart the transaction</li>
+<li>kill the transaction</li>
+</ul>
+</li>
+<li><p><strong>Committed</strong> – after successful completion.</p>
+</li>
+</ul>
+<p><img src="http://cdn.hobbitqia.cc/202305291018652.png" alt="img"></p>
+<h2 id="Concurrent-Executions¶"><a href="#Concurrent-Executions¶" class="headerlink" title="Concurrent Executions¶"></a>Concurrent Executions<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db13/#concurrent-executions">¶</a></h2><ul>
+<li>increased processor and disk utilization</li>
+<li>reduced average response time</li>
+</ul>
+<p>事务是并发执行的，如果不加以控制可能会有以下问题<br>Anomalies in Concurrent Executions</p>
+<ul>
+<li><p><strong>Lost Update（丢失修改）</strong></p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: var(--md-admonition-fg-color); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Lost Update Example</summary><p style="box-sizing: border-box; margin: 0.5em 0px;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202305291021774.png" width="60%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box; margin: 0.5em 0px;"></p><p style="box-sizing: border-box; margin: 0.5em 0px 0.6rem;">一个人订票后，另一个人读到这里第一个人还没有修改的余量。导致丢失了一次修改。</p></details>
+</li>
+<li><p><strong>Dirty Read（读脏数据）</strong></p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: var(--md-admonition-fg-color); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Dirty Read</summary><p style="box-sizing: border-box; margin: 0.5em 0px;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202305291023857.png" width="60%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box; margin: 0.5em 0px;"></p><p style="box-sizing: border-box; margin: 0.5em 0px 0.6rem;">一个人订票后，另一个人读数据后，但是第一个人放弃了，但是第二个人仍然是用的脏数据。</p></details>
+</li>
+<li><p><strong>Unrepeatable Read （不可重复读）</strong></p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: var(--md-admonition-fg-color); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Unrepeatable Read</summary><p style="box-sizing: border-box; margin: 0.5em 0px;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202305291023857.png" width="60%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box; margin: 0.5em 0px;"></p><p style="box-sizing: border-box; margin: 0.5em 0px 0.6rem;">Isolation 要求我们读到的数据应该是一样的。</p></details>
+</li>
+<li><p><strong>Phantom Problem（幽灵问题）</strong></p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: var(--md-admonition-fg-color); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Phantom Problem</summary><p style="box-sizing: border-box; margin: 0.5em 0px;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202305291026595.png" width="60%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box; margin: 0.5em 0px;"></p><p style="box-sizing: border-box; margin: 0.5em 0px 0.6rem;">unrepeatable 是针对已经存在的数据，但是数据的值不同. Phantom 是指数据数量会变多/减少。</p></details></li>
+</ul>
+<h3 id="Schedules¶"><a href="#Schedules¶" class="headerlink" title="Schedules¶"></a>Schedules<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db13/#schedules">¶</a></h3><p><strong>Schedule</strong> – a sequences of instructions that specify the chronological order in which instructions of concurrent transactions are executed.<br>事务的执顺序，可以是交叉执行。</p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Schedule Example</summary><ul style="box-sizing: border-box; margin-bottom: 0.6rem; margin-top: 1em; list-style-type: disc; padding: 0px; margin-left: 0.625em; display: flow-root;"><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"><p style="box-sizing: inherit; margin: 0.5em 0px;">串行调度<br style="box-sizing: inherit;">串行调度一定是满足隔离性的</p><div align="center" style="box-sizing: inherit;"><img src="http://cdn.hobbitqia.cc/202305291040618.png" width="50%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: inherit; margin: 0.5em 0px;"></p></li><li style="box-sizing: inherit; margin-bottom: 0px; margin-left: 1.25em;"><p style="box-sizing: inherit; margin: 0.5em 0px;">非串行调度，但等价于上面的串行调度</p><div align="center" style="box-sizing: inherit;"><img src="http://cdn.hobbitqia.cc/202305291040457.png" width="50%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: inherit; margin: 0.5em 0px;"></p><p style="box-sizing: inherit; margin: 0.5em 0px;">这里 T2 的 readA 和 T1 的 readB 可以调换时间次序，就得到了刚刚的串行调度。<br style="box-sizing: inherit;">下面这样的调度就不等价，破坏了隔离性。</p><div align="center" style="box-sizing: inherit;"><img src="http://cdn.hobbitqia.cc/202305291051997.png" width="50%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: inherit; margin: 0.5em 0px;"></p></li></ul></details>
+
+<h3 id="Serializability¶"><a href="#Serializability¶" class="headerlink" title="Serializability¶"></a>Serializability<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db13/#serializability">¶</a></h3><p>A (possibly concurrent) schedule is <strong>serializable</strong> if it is equivalent to a serial schedule.</p>
+<ul>
+<li>conflict serializability(冲突可串行化)</li>
+<li>view serializability(视图可串行化)</li>
+</ul>
+<p>串行调度一定是可串行化的，交错执行不一定。</p>
+<h4 id="Conflict-Serializability¶"><a href="#Conflict-Serializability¶" class="headerlink" title="Conflict Serializability¶"></a>Conflict Serializability<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db13/#conflict-serializability">¶</a></h4><p><img src="http://cdn.hobbitqia.cc/202305291058741.png" alt="img"></p>
+<p>注意这里针对的是同一个数据项 Q.</p>
+<p>a conflict between ��<em>l**i</em> and ��<em>l**j</em> forces a (logical) temporal order between them.</p>
+<p>If a schedule S can be transformed into a schedule S´ by a series of swaps of non-conflicting instructions, we say that S and S´ are <strong>conflict equivalent</strong>.<br>交换不冲突的指令，得到的是冲突等价的调度。<br>We say that a schedule S is <strong>conflict serializable</strong> if it is conflict equivalent to a serial schedule.<br>冲突等价于一个串行调度，那么这个调度是可串行的。</p>
+<h4 id="Testing-for-Serializability¶"><a href="#Testing-for-Serializability¶" class="headerlink" title="Testing for Serializability¶"></a>Testing for Serializability<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db13/#testing-for-serializability">¶</a></h4><p>Consider some schedule of a set of transactions �1,�2,…,��<em>T</em>1,<em>T</em>2,…,<em>T**n</em><br><strong>Precedence graph（前驱图）</strong> — a directed graph where the vertices are the transactions (names).</p>
+<p>如果 T1 要在 T2 前面（即找到一条 T1 的指令要求比 T2 中的一条指令先执行），那我们画一条从 T1-&gt;T2 的边。<br>如果找到环，说明是不可串行化的。否则可以利用拓扑排序。</p>
+<p>Example</p>
+<p><img src="http://cdn.hobbitqia.cc/202305291105161.png" alt="img"></p>
+<p>T1 的 readY 和 T2 的 writeY 冲突，所以要画一条边，如此。<br>最后有 10 种调度方式。</p>
+<p>只用于理论研究，数据库内不会这样实现。</p>
+<h4 id="View-Serializability¶"><a href="#View-Serializability¶" class="headerlink" title="View Serializability¶"></a>View Serializability<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db13/#view-serializability">¶</a></h4><p>Example</p>
+<p><img src="http://cdn.hobbitqia.cc/202305291112088.png" alt="img"></p>
+<p>初始值由同一个事务读到。中间结果是由同一个事务得到再由另一个事务读出。最终写回数据库也是由同一个事务写。</p>
+<p><img src="http://cdn.hobbitqia.cc/202305291115680.png" alt="img"></p>
+<p>A schedule S is <strong>view serializable</strong> if it is view equivalent to a serial schedule. <strong>Every conflict serializable schedule is also view serializable.</strong><br>Below is a schedule which is view-serializable but not conflict serializable.<br>冲突可串行化的都是视图可串行化的，反之不一定。</p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Example</summary><p style="box-sizing: border-box;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202305291117308.png" width="50%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box;"></p><p style="box-sizing: border-box; margin-bottom: 0.6rem;">等价于 T27-28-29. (都是 27 读初值，中间没有其他读，最后是 29 写)</p></details>
+
+<h4 id="Other-Notions-of-Serializability¶"><a href="#Other-Notions-of-Serializability¶" class="headerlink" title="Other Notions of Serializability¶"></a>Other Notions of Serializability<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db13/#other-notions-of-serializability">¶</a></h4><p>有的调度既不是冲突可串行化又不是视图可串行化，但它是可串行化的。</p>
+<p>Example</p>
+<p><img src="http://cdn.hobbitqia.cc/202305291122839.png" alt="img"></p>
+<p>等价于 T1-T5.<br>加减操作是可结合的，这里需要了解事务里具体是什么操作。但我们的简单模型对此不加以区分。</p>
+<h2 id="Recoverable-Schedules¶"><a href="#Recoverable-Schedules¶" class="headerlink" title="Recoverable Schedules¶"></a>Recoverable Schedules<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db13/#recoverable-schedules">¶</a></h2><p><strong>Recoverable schedule(可恢复调度)</strong> — if a transaction ��<em>T**j</em> reads a data item previously written by a transaction ��<em>T**i</em> , then the commit operation of ��<em>T**i</em> appears before the commit operation of ��<em>T**j</em>.</p>
+<p>Example</p>
+<p>The following schedule (Schedule 11) is not recoverable if T9 commits immediately after the read.<br>可能会读脏数据</p>
+<p><img src="http://cdn.hobbitqia.cc/202305291126165.png" alt="img"></p>
+<p>如果 T8 后续回滚, 但 T9 已经基于脏数据做了后续操作，而且已经提交了，不可恢复。</p>
+<p>如果一个事务读了另一个事务的脏数据，提交次序需要有约束，要在被读事务的后面提交。</p>
+<h3 id="Cascading-Rollbacks¶"><a href="#Cascading-Rollbacks¶" class="headerlink" title="Cascading Rollbacks¶"></a>Cascading Rollbacks<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db13/#cascading-rollbacks">¶</a></h3><p><strong>Cascading rollback</strong> – a single transaction failure leads to a series of transaction rollbacks. Consider the following schedule where none of the transactions has yet committed (so the schedule is recoverable)</p>
+<p>Example</p>
+<p>If T10 fails, T11 and T12 must also be rolled back.</p>
+<p><img src="http://cdn.hobbitqia.cc/202305291130425.png" alt="img"></p>
+<p>要有级联回滚的恢复。<br>Can lead to the undoing of a significant amount of work.<br>我们更希望用非级联的恢复，否则开销太大。</p>
+<h2 id="Transaction-Isolation-Levels¶"><a href="#Transaction-Isolation-Levels¶" class="headerlink" title="Transaction Isolation Levels¶"></a>Transaction Isolation Levels<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db13/#transaction-isolation-levels">¶</a></h2><p>A database must provide a mechanism that will ensure that all possible schedules are</p>
+<ul>
+<li>either <em>conflict or view serializable</em>, and<br>保证可串行的</li>
+<li>are <em>recoverable</em> and preferably cascadeless<br>保证可恢复的（最好是非级联）</li>
+</ul>
+<p>数据库里提供一种协议，每个事务要遵从协议，遵从协议下产生的调度一定是可串行、可恢复的。<br>这是完全的隔离，代价比较高。</p>
+<p>In SQL <code>set transaction isolation level serializable</code> 我们可以设置数据库的隔离级别。</p>
+<ul>
+<li><strong>Serializable</strong> — default<br>四种问题都要避免，代价最高。</li>
+<li><strong>Repeatable read</strong> — only committed records to be read, repeated reads of same record must return same value. However, a transaction may not be serializable – it may find some records inserted by a transaction but not find others.<br>不管幽灵问题。</li>
+<li><strong>Read committed</strong> — only committed records can be read, but successive reads of record may return different (but committed) values.<br>保证不读脏数据。</li>
+<li><strong>Read uncommitted</strong> — even uncommitted records may be read.<br>最低的隔离级别，有些数据库只是做统计任务。</li>
+</ul>
+<p>Lower degrees of consistency useful for gathering approximate information about the database</p>
+<h2 id="Concurrency-Control-Protocols¶"><a href="#Concurrency-Control-Protocols¶" class="headerlink" title="Concurrency Control Protocols¶"></a>Concurrency Control Protocols<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db13/#concurrency-control-protocols">¶</a></h2><ul>
+<li>Lock-Based Protocols<ul>
+<li>Lock on whole database vs lock on items<br>读之前要访问一个共享锁，写之前要访问一个排他锁，冲突了就要等待。通过锁就规定了一个执行的次序。</li>
+<li>How long to hold lock?</li>
+<li>Shared vs exclusive locks</li>
+</ul>
+</li>
+<li>Timestamp-Based Protocols<ul>
+<li>Transaction timestamp assigned <em><strong>e.g.</strong></em> when a transaction begins<br>事务执行时分配一个时间戳。执行次序按照时间戳排序。</li>
+<li>Data items store two timestamps<ul>
+<li>Read timestamp</li>
+<li>Write timestamp</li>
+</ul>
+</li>
+<li>Timestamps are used to detect out of order accesses</li>
+</ul>
+</li>
+<li>Validation-Based Protocols<ul>
+<li>Optimistic concurrency control</li>
+<li>Low rate of conflicts among transactions</li>
+<li>Each transaction must go through 3 phases:<br>Read phase -&gt; Validation phase -&gt; Write phase<br>事务提交的时候先去验证是否有冲突，如果没有冲突就提交，如果冲突就考虑放弃某个。</li>
+</ul>
+</li>
+</ul>
+<h1 id="Concurrency-Control¶"><a href="#Concurrency-Control¶" class="headerlink" title="Concurrency Control¶"></a>Concurrency Control<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db14/#concurrency-control">¶</a></h1><details class="abstract" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(0, 176, 255); border-image: initial; border-radius: 0.1rem; box-shadow: none; color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(0, 176, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Abstract</summary><ul style="box-sizing: border-box; margin-bottom: 0.6rem; margin-top: 1em; list-style-type: disc; padding: 0px; margin-left: 0.625em; display: flow-root; font-size: 0.75rem;"><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;"></li><li style="box-sizing: inherit; margin-bottom: 0px; margin-left: 1.25em;"></li></ul></details>
+
+<h2 id="Lock-Based-Protocols¶"><a href="#Lock-Based-Protocols¶" class="headerlink" title="Lock-Based Protocols¶"></a>Lock-Based Protocols<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db14/#lock-based-protocols">¶</a></h2><p>A lock is a mechanism to control concurrent access to a data item</p>
+<ul>
+<li>*<strong>exclusive(X)*</strong><br>Data item can be both read as well as written. X-lock is requested using <strong>lock-X</strong> instruction.</li>
+<li>*<strong>shared(X)*</strong><br>Data item can only be read. S-lock is requested using <strong>lock-S</strong> instruction.</li>
+</ul>
+<p>要写一个数据，先申请获得 X 锁；要读一个数据，先申请获得 S 锁。<br>访问结束后释放这个锁。</p>
+<p>访问数据之前必须获得对应的锁，否则需要等待。</p>
+<h3 id="The-Two-Phase-Locking-Protocol¶"><a href="#The-Two-Phase-Locking-Protocol¶" class="headerlink" title="The Two-Phase Locking Protocol¶"></a>The Two-Phase Locking Protocol<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db14/#the-two-phase-locking-protocol">¶</a></h3><p>事务的加锁和减锁分为两个阶段。</p>
+<ul>
+<li>Phase 1: Growing Phase (增长阶段)<ul>
+<li>transaction may obtain locks</li>
+<li>transaction may not release locks</li>
+</ul>
+</li>
+<li>Phase 2: Shrinking Phase(缩减阶段)<ul>
+<li>transaction may release locks</li>
+<li>transaction may not obtain locks<br>一个事务一旦开始释放锁，就不能再加锁了。</li>
+</ul>
+</li>
+</ul>
+<p>事务两个阶段的分界线(lock point), 即获得了最后一个锁（完成获得这个动作）的时间点。<br>这样每个事务都有一个 lock point, 按照这个时间排序即可得到串行化的执行顺序。</p>
+<p><img src="http://cdn.hobbitqia.cc/202306022302642.png" alt="img"></p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Example</summary><p style="box-sizing: border-box;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202306022304628.png" width="35%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box; margin-bottom: 0.6rem;"></p></details>
+
+<p><strong>Two-Phase Locking Protocol assures serializability.</strong></p>
+<p>It can be proved that the transactions can be serialized in the order of their lock points.<br>可以按 lock points 串行化，但不是只能按照这么串行化。</p>
+<p>上面基本的两阶段封锁协议无法保证事务的可恢复性。</p>
+<p>Extensions to basic two-phase locking（基本两阶段封锁） needed to ensure recoverability of freedom from cascading roll-back</p>
+<ul>
+<li><strong>Strict two-phase locking（严格两阶段封锁）</strong>: a transaction must hold all its exclusive locks till it commits&#x2F;aborts.<br>Ensures recoverability and avoids cascading roll-backs.<br>S 锁可以用完就放，但 X 锁必须到提交的时候才能释放（这样别人就不能访问了，无法读脏数据）。代价是降低并发度。</li>
+<li><strong>Rigorous two-phase locking（强两阶段封锁）</strong>: a transaction must hold all locks till commit&#x2F;abort.<br>Transactions can be serialized in the order in which they commit.</li>
+</ul>
+<p><strong>Two-phase locking is not a necessary condition for serializability.</strong></p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Example</summary><p style="box-sizing: border-box;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202306051019848.png" width="50%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202306051024853.png" width="50%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box;"></p><p style="box-sizing: border-box; margin-bottom: 0.6rem;">这里放锁了之后还获得锁了，违背了两阶段封锁协议。<br style="box-sizing: inherit;">所以不遵从两阶段封锁协议，也可以获得冲突可串行的调度。</p></details>
+
+<h3 id="2PL-Proof¶"><a href="#2PL-Proof¶" class="headerlink" title="2PL - Proof¶"></a>2PL - Proof<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db14/#2pl-proof">¶</a></h3><ul>
+<li>Proof by Contradiction<br>如果有 Ti-&gt;Tj 的有向边，那 Ti 的 lockpoint 一定小于 Tj.<br>Ti-&gt;Tj 肯定有一个冲突的访问（对同一个数据）那 Tj 在获得锁的时候 Ti 已经放锁了，得证。</li>
+</ul>
+<p><img src="http://cdn.hobbitqia.cc/202306051006510.png" alt="img"></p>
+<ul>
+<li>Proof by Induction<br>只需证明: Lock point 最小的事务，可以无障碍地交换到调度最前。<br>假如有事务拦住他了，证明这是不可能发生的。（与 lockpoint 最小矛盾）</li>
+</ul>
+<p><img src="http://cdn.hobbitqia.cc/202306051009473.png" alt="img"></p>
+<h3 id="Lock-Conversions¶"><a href="#Lock-Conversions¶" class="headerlink" title="Lock Conversions¶"></a>Lock Conversions<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db14/#lock-conversions">¶</a></h3><p>通常是先读后修改。但我们不能先得 S 锁再释放后得 X 锁（违背了两阶段协议），也不能直接用 X 锁（降低并发度）。</p>
+<p>Two-phase locking with lock conversions:</p>
+<ul>
+<li>First Phase:<ul>
+<li>can acquire a lock-S or lock-X on a data item</li>
+<li>can convert a lock-S to a lock-X (<em>lock-upgrade</em>)</li>
+</ul>
+</li>
+<li>Second Phase:<ul>
+<li>can release a lock-S or lock-X</li>
+<li>can convert a lock-X to a lock-S (<em>lock-downgrade</em>)</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://cdn.hobbitqia.cc/202306051028924.png" alt="img"></p>
+<p><strong>This protocol assures serializability.</strong></p>
+<p>申请哪个锁是由数据库内部管理决定，不是由程序员显示调用。（自动加锁）</p>
+<p><img src="http://cdn.hobbitqia.cc/202306051030757.png" alt="img"></p>
+<p>如果已经有锁了，直接读；否则申请读锁。</p>
+<h2 id="Implementation-of-Locking¶"><a href="#Implementation-of-Locking¶" class="headerlink" title="Implementation of Locking¶"></a>Implementation of Locking<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db14/#implementation-of-locking">¶</a></h2><p>A <strong>lock manager</strong> can be implemented as a separate process to which transactions send lock and unlock requests.</p>
+<h3 id="Lock-Table¶"><a href="#Lock-Table¶" class="headerlink" title="Lock Table¶"></a>Lock Table<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db14/#lock-table">¶</a></h3><p>Lock table records granted locks and waiting requests.</p>
+<p><img src="http://cdn.hobbitqia.cc/202306051035648.png" alt="img"></p>
+<p>每个记录的 id 可以放进哈希表。<br>如这里记录 123, T1、T8 获得了 S 锁，但 T2 在等待获得 X 锁。</p>
+<p>T1: lock-X(D) 通过 D 的 id 找到哈希表上的项，在对应项上增加。根据是否相容决定是获得锁还是等待。<br>unlock 类似，先找到对应的数据，拿掉对应的项。同时看后续的项是否可以获得锁。</p>
+<p>如果一个事务 commit, 需要放掉所有的锁，我们需要去找。因此我们还需要一个事务的表，标明每个事务所用的锁。</p>
+<h3 id="Deadlock-Handling¶"><a href="#Deadlock-Handling¶" class="headerlink" title="Deadlock Handling¶"></a>Deadlock Handling<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db14/#deadlock-handling">¶</a></h3><p>System is <strong>deadlocked</strong> if there is a set of transactions such that every transaction in the set is waiting for another transaction in the set.</p>
+<p><strong>Two-phase locking does not ensure freedom from deadlocks.</strong></p>
+<p><img src="http://cdn.hobbitqia.cc/202306051043773.png" alt="img"></p>
+<p>Deadlock prevention protocols ensure that the system will never enter into a deadlock state. Some prevention strategies:</p>
+<ul>
+<li><p>Require that each transaction locks all its data items before it begins execution (predeclaration).<br>执行前一次性获得所有锁。</p>
+</li>
+<li><p><strong>Impose partial ordering</strong> of all data items and require that a transaction can lock data items only in the order specified by the partial order (graph-based protocol).<br>对数据访问规定一种次序。比如规定必须先拿咖啡再拿咖啡伴侣。<br>*<strong>e.g.*</strong> T1: A-50, B+50. T2: B-10, A+10. 我们可以把第二个事务调换顺序，变为 A+10, B-10. 这样按照 partial order 能降低死锁概率。</p>
+</li>
+<li><p>Timeout-Based Schemes</p>
+<p>:</p>
+<ul>
+<li><em>a transaction waits for a lock only for a specified amount of time</em>. After that, the wait times out and the transaction is rolled back.<br>等待一会，如果还是等不到就放弃。</li>
+<li>thus deadlocks are not possible.</li>
+<li>simple to implement; but starvation is possible. Also difficult to determine good value of the timeout interval.<br>时长不好规定。但可能有事务老是申请不到自己的锁。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Deadlock-Detection¶"><a href="#Deadlock-Detection¶" class="headerlink" title="Deadlock Detection¶"></a>Deadlock Detection<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db14/#deadlock-detection">¶</a></h3><p>定期检查数据库内是否有死锁，如果有就选择一个事务将其回滚。</p>
+<p><strong>wait-for graph</strong></p>
+<p><img src="http://cdn.hobbitqia.cc/202306051109304.png" alt="img"></p>
+<p>这里的箭头表示在等待锁。如 T17-&gt;T18 表示 T17 在等待 T18 的锁。<br>如果形成了环，就说明出现了死锁。</p>
+<p>通过刚刚的 Lock Table, 我们可以得到等待关系。（后面的 waited 等待前面的 granted）</p>
+<p>When deadlock is detected :</p>
+<ul>
+<li>Some transaction will have to rolled back (made a <strong>victim</strong>) to break deadlock. Select that transaction as victim that will incur minimum cost.</li>
+<li>Rollback – determine how far to roll back transaction<ul>
+<li>Total rollback: Abort the transaction and then restart it.</li>
+<li>More effective to roll back transaction only as far as necessary to break deadlock. Starvation happens if same transaction is always chosen as victim. Include the number of rollbacks in the cost factor to avoid starvation</li>
+</ul>
+</li>
+</ul>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Example</summary><p style="box-sizing: border-box;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202306051115479.png" width="50%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box;"></p><p style="box-sizing: border-box; margin-bottom: 0.6rem;">T1 等 T2, T2 等 T6, T6 等 T1.(注意这里 T5 是等待 T6 而不是 T2)</p></details>
+
+<h3 id="Graph-Based-Protocols¶"><a href="#Graph-Based-Protocols¶" class="headerlink" title="Graph-Based Protocols¶"></a>Graph-Based Protocols<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db14/#graph-based-protocols">¶</a></h3><p>假设我们知道数据是按偏序访问的，可以有更高级的协议。<br>数据按照某种偏序关系访问。</p>
+<p><img src="http://cdn.hobbitqia.cc/202306051121990.png" alt="img"></p>
+<p>The *<strong>tree-protocol*</strong> is a simple kind of graph protocol.</p>
+<ul>
+<li><strong>Only exclusive locks</strong> are allowed.<br>只有这种锁。</li>
+<li>The first lock by Ti may be on any data item. Subsequently, a data Q can be locked by Ti only if the parent of Q is currently locked by Ti.<br>第一个锁可以放任意地方，后面的锁只能在父节点锁住时才能往下锁。</li>
+<li>Data items may be unlocked at any time.</li>
+<li>A data item that has been locked and unlocked by Ti cannot subsequently be relocked by Ti<br>放了之后不能再加锁了。</li>
+</ul>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Example</summary><p style="box-sizing: border-box;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202306062011016.png" width="50%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box;"></p><p style="box-sizing: border-box; margin-bottom: 0.6rem;">比如这里我们先锁 D, 随后锁 G, 放掉, 锁 H, 这时 D 已经没用了可以放掉。随后我们锁 J, H 也就没用了也可以放掉。最后放掉 J.</p></details>
+
+<p><strong>The tree protocol ensures conflict serializability as well as freedom from deadlock.</strong></p>
+<ul>
+<li><p>Advantages</p>
+<ul>
+<li>Unlocking may occur earlier in the tree-locking protocol than in the two-phase locking protocol.<br>shorter waiting times, and increase in concurrency<br>锁可以更早释放，不用等待第二阶段。用完就可以放，提高了并发度。</li>
+<li>protocol is <strong>deadlock-free</strong><br>no rollbacks are required</li>
+</ul>
+</li>
+<li><p>Disadvantages</p>
+<ul>
+<li><p>Protocol does <em>not guarantee recoverability</em> or cascade freedom<br>Need to introduce commit dependencies to ensure recoverability<br>早放锁，意味着可能会读脏数据，不可恢复。这就对 commit 顺序有要求。</p>
+</li>
+<li><p>Transactions may have to</p>
+<p>lock more data items</p>
+<p>than needed.</p>
+<ul>
+<li>increased locking overhead, and additional waiting time<br>比如刚刚的图中，我们访问 G, J, 需要从 D 开始访问。会锁上更多数据。</li>
+<li>potential decrease in concurrency</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Multiple-Granularity¶"><a href="#Multiple-Granularity¶" class="headerlink" title="Multiple Granularity¶"></a>Multiple Granularity<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db14/#multiple-granularity">¶</a></h2><p>可以锁在记录上(如 <code>update table set ...;</code>)，也可以锁在整个表上(如 <code>select * from table;</code>)。</p>
+<p>Granularity of locking (level in tree where locking is done):</p>
+<ul>
+<li><strong>fine granularity（细粒度）</strong> (lower in tree): high concurrency, high locking overhead</li>
+<li><strong>coarse granularity（粗粒度）</strong> (higher in tree): low locking overhead, low concurrency</li>
+</ul>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Example of Granularity Hierarchy</summary><p style="box-sizing: border-box;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202306051140017.png" width="50%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box;"></p><p style="box-sizing: border-box;">The levels, starting from the coarsest (top) level are</p><ul style="box-sizing: border-box; margin-bottom: 0.6rem; margin-top: 1em; list-style-type: disc; padding: 0px; margin-left: 0.625em; display: flow-root;"><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;">database</li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;">area</li><li style="box-sizing: inherit; margin-bottom: 0.5em; margin-left: 1.25em;">File(table)</li><li style="box-sizing: inherit; margin-bottom: 0px; margin-left: 1.25em;">record</li></ul></details>
+
+<h3 id="Intention-Lock-Modes¶"><a href="#Intention-Lock-Modes¶" class="headerlink" title="Intention Lock Modes¶"></a>Intention Lock Modes<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db14/#intention-lock-modes">¶</a></h3><p>记录和表上都可以加 S&#x2F;X 锁。但是当事务涉及到多个粒度，如何判断是否冲突，如一个表的 S 锁和一个记录的 X 锁是冲突的。<br>我们引入了其他锁，意向锁(IS, IX, SIX)</p>
+<ul>
+<li>如果一个事务要给一个记录加 S 锁，那也要在表上加 IS 锁。（意向共享锁）</li>
+<li>如果一个事务要给一个记录加 X 锁，那也要在表上加 IX 锁。（意向排他锁）</li>
+<li>SIX 锁是 S 和 IX 锁的结合。要读整个表，但可能对其中某些记录进行修改。（共享意向排他）</li>
+</ul>
+<p>这样当我们想向一个表上 S 锁时，发现表上有 IX 锁，这样我们很快就发现了冲突，需要等待。<br>IS 和 IX 是不冲突的。在表上是不冲突的，可能在记录上冲突（即对一个记录又读又写，冲突发生在记录层面而非表）。</p>
+<p><img src="http://cdn.hobbitqia.cc/202306062026763.png" alt="img"></p>
+<ul>
+<li><strong>intention-shared (IS)</strong>: indicates explicit locking at a lower level of the tree but only with shared locks.<br>在下面会加 S 锁。</li>
+<li><strong>intention-exclusive (IX)</strong>: indicates explicit locking at a lower level with exclusive or shared locks<br>在下面会加 X 锁。</li>
+<li><strong>shared and intention-exclusive (SIX)</strong>: the subtree rooted by that node is locked explicitly in shared mode and explicit locking is being done at a lower level with exclusive-mode locks.</li>
+</ul>
+<p><img src="http://cdn.hobbitqia.cc/202306062033999.png" alt="img"></p>
+<p>要符合相容矩阵。从最粗的粒度开始访问。要加锁的时候注意，对父亲的锁有要求。</p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Example</summary><p style="box-sizing: border-box;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202306062035862.png" width="50%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box;"></p><p style="box-sizing: border-box; margin-bottom: 0.6rem;">加锁是从上往下，放锁是从下往上。<br style="box-sizing: inherit;">先对 DB 加 IX, 对 A1 加 IX, 对 Fa 加 SIX, 对某些记录加 X. 其他记录就不用再加 S 锁了(因为表是 SIX).</p></details>
+
+<h2 id="Insert-and-Delete-Operations¶"><a href="#Insert-and-Delete-Operations¶" class="headerlink" title="Insert and Delete Operations¶"></a>Insert and Delete Operations<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db14/#insert-and-delete-operations">¶</a></h2><p>数据库里除了 R&#x2F;W 还有插入、删除等操作。<br>需要定义 R&#x2F;W 和插入&#x2F;删除是否冲突。</p>
+<p>If two-phase locking is used :</p>
+<ul>
+<li>A delete operation may be performed only if the transaction deleting the tuple has an exclusive lock on the tuple to be deleted.<br>删除前需要加 X 锁。</li>
+<li>A transaction that inserts a new tuple into the database is given an X-mode lock on the tuple<br>插入之前是没有这个数据的，无法先加锁。应该插入之后马上加上 X 锁。</li>
+</ul>
+<p>Insertions and deletions can lead to the <em>phantom phenomenon</em>.<br>因此只是加锁不能保证串行化。</p>
+<h3 id="Index-Locking-Protocol¶"><a href="#Index-Locking-Protocol¶" class="headerlink" title="Index Locking Protocol¶"></a>Index Locking Protocol<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db14/#index-locking-protocol">¶</a></h3><p>其实插入&#x2F;删除操作隐含地修改了信息，只是没有被表示出来。我们可以这个信息显示化，加锁。<br>如果表上有索引，我们在扫描索引的时候会在叶子修改，我们在这里进行检测。</p>
+<p><img src="http://cdn.hobbitqia.cc/202306062047538.png" alt="img"></p>
+<details class="example" open="" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: var(--md-shadow-z1); color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Index Locking on a B+ -Tree</summary><p style="box-sizing: border-box;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202306062051214.png" width="50%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box;"></p><p style="box-sizing: border-box; margin-bottom: 0.6rem;">先在叶子页加锁，再在记录上加锁。<br style="box-sizing: inherit;">如果我们要插入，比如 18. 这时插入到了 10 这页，发现这页被锁住了，无法插入，这样就确保了这个范围内无法被插入，不会有幽灵问题。</p></details>
+
+<p>也可以使用谓词锁。把这个位置锁上（比如刚刚 11 到 50 这个区间），后续如果要插入 18 落入这个区间，我们就能检查出来。但这样实现是比较复杂的。</p>
+<h3 id="Next-Key-Locking-To-Prevent-Phantoms¶"><a href="#Next-Key-Locking-To-Prevent-Phantoms¶" class="headerlink" title="Next-Key Locking To Prevent Phantoms¶"></a>Next-Key Locking To Prevent Phantoms<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db14/#next-key-locking-to-prevent-phantoms">¶</a></h3><p>刚刚的例子中, 10 不在范围内，但我们把这页都锁住了，仍然插不进去，影响了并发度。</p>
+<p>Next-key locking protocol: provides higher concurrency</p>
+<ul>
+<li>Lock all values that satisfy index lookup (match lookup value, or fall in lookup range)</li>
+<li>Also lock next key value in index<br>even for inserts&#x2F;deletes</li>
+<li>Lock mode: S for lookups, X for insert&#x2F;delete&#x2F;update</li>
+</ul>
+<p>Next-Key Locking</p>
+<p><img src="http://cdn.hobbitqia.cc/202306062100918.png" alt="img"></p>
+<p>查询 7 到 16, 我们把索引项锁起来，把下一个索引值 18 也锁起来。插入的时候要申请这个锁和比插入值大的下一个值的锁，这里插入 15 时就要申请 15 和 18 的锁，冲突无法插入。插入 7 同理。</p>
+<h1 id="Recovery-System¶"><a href="#Recovery-System¶" class="headerlink" title="Recovery System¶"></a>Recovery System<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#recovery-system">¶</a></h1><h2 id="Failure-Classification¶"><a href="#Failure-Classification¶" class="headerlink" title="Failure Classification¶"></a>Failure Classification<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#failure-classification">¶</a></h2><p><img src="http://cdn.hobbitqia.cc/202306121002428.png" alt="img"></p>
+<ul>
+<li>Database application<br>逻辑错误：比如不满足数据库约束条件（主键） 系统错误：死锁。 常用方法是撤销 undo, 把这个事件抹掉。（基于日志，在产生修改之前先记日志，故障后可以根据日志进行撤销）<br>记日志比较快（顺序访问）</li>
+<li>DBMS<br>掉电、硬件故障、软件故障<br>system crash 是全局性的，所有运行的程序都会受到影响。分为两类：一类是事务已经提交（但是数据还在缓冲区），另一类是正在执行的事务（还没有提交）。<br>已经提交的事务要 redo(数据可能没写回去), 没有完成的事务要 undo. 先记日志，现在的数据库采用 repeating history 的方法。</li>
+<li>Database<br>介质故障<br>要防止介质故障，需要做备份（拷贝或者远程）</li>
+</ul>
+<h2 id="Storage-Structure¶"><a href="#Storage-Structure¶" class="headerlink" title="Storage Structure¶"></a>Storage Structure<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#storage-structure">¶</a></h2><p>日志可能也会出故障？我们假设日志存储在 Stable storage 里。</p>
+<ul>
+<li>Volatile storage</li>
+<li>Nonvolatile storage<br>survives system crashes</li>
+<li>Stable storage:<ul>
+<li>a mythical(虚拟的) form of storage that survives all failures</li>
+<li>approximated by maintaining multiple copies on distinct nonvolatile media<br>可以近似实现</li>
+</ul>
+</li>
+</ul>
+<h3 id="Implementation¶"><a href="#Implementation¶" class="headerlink" title="Implementation¶"></a>Implementation<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#implementation">¶</a></h3><ul>
+<li>Maintain multiple copies of each block on separate disks</li>
+<li>Failure during data transfer can still result in inconsistent copies<br>修改过程中可能发生故障</li>
+<li>Protecting storage media from failure during data transfer</li>
+</ul>
+<p><img src="http://cdn.hobbitqia.cc/202306121013745.png" alt="img"></p>
+<h3 id="Database-Recovery¶"><a href="#Database-Recovery¶" class="headerlink" title="Database Recovery¶"></a>Database Recovery<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#database-recovery">¶</a></h3><p><strong>Recovery algorithms</strong> are techniques to ensure database consistency and transaction <strong>atomicity</strong> and <strong>durability</strong> despite failures.</p>
+<p>Recovery algorithms have two parts</p>
+<ul>
+<li>Actions taken during normal transaction processing to ensure enough information exists to recover from failures<br>先记日志</li>
+<li>Actions taken after a failure to recover the database contents to a state that ensures atomicity, consistency and durability</li>
+</ul>
+<p>理想的算法：恢复得很快，对事务正常操作没有影响（记录信息的时候不能消耗太多性能），即兼顾上面两个部分。恢复的过程和并行控制是相关的。</p>
+<p>We assume that strict two-phase locking ensures no dirty read.<br>使用严格两阶段封锁协议保证没有脏数据。</p>
+<p><strong>Idempotent(幂等性)</strong>: An recovery algorithm is said to be idempotent if executing it several times gives the same result as executing it once.<br>算法恢复多次的效果是一样的。（恢复过程中可能也发生 crash）</p>
+<h2 id="Log-Based-Recovery¶"><a href="#Log-Based-Recovery¶" class="headerlink" title="Log-Based Recovery¶"></a>Log-Based Recovery<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#log-based-recovery">¶</a></h2><h3 id="Log-Records¶"><a href="#Log-Records¶" class="headerlink" title="Log Records¶"></a>Log Records<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#log-records">¶</a></h3><p><img src="http://cdn.hobbitqia.cc/202306121021188.png" alt="img"></p>
+<p>A <strong>log</strong> is kept on stable storage(稳定存储器).<br>The log is a sequence of <strong>log records</strong>, and maintains a record of update activities on the database.</p>
+<ul>
+<li>When transaction Ti starts, it registers itself by writing a <strong>“start”</strong> log record: &lt;�� �����&gt;&lt;*T**i* *s**t**a**r**t*&gt;<br>事务开始. Ti 表示事务的 id.</li>
+<li>Before Ti executes write(X), writing <strong>“update</strong>” log record &lt;��,�,�1,�2&gt;&lt;*T**i*,*X*,*V*1,*V*2&gt;<br>事务把 X 数据项的值从 V1(old value) 改为 V2(new value).<br>这个就是恢复的基础. undo 就用 old value, redo 用 new value.<br>Insert 就是 old 为空, Delete 就是 new 为空。</li>
+<li>When Ti finishes it last statement, writing <strong>“commit”</strong> log record: &lt;�� ������&gt;&lt;*T**i* *co**mmi**t*&gt;</li>
+<li>When Ti complete rollback, writing <strong>“abort”</strong> log record: &lt;�� �����&gt;&lt;*T**i* *ab**or**t*&gt;</li>
+</ul>
+<p>Log Example</p>
+<p><img src="http://cdn.hobbitqia.cc/202306121024663.png" alt="img"></p>
+<p>这里当执行到 T2 回滚的时候我们会进行恢复（绿色的行表示补偿日志）比如 T2 把 C 恢复为 500, T3 把 B 恢复为 300, 最后 T2 abort. (undo 操作也会记录到日志中)<br>发生 crash 的时候 repeat history(undo 正常的操作也会重复), 随后得到并执行 undo list.(事务开始后先把事务放进去，如果提交或者回滚了就把事务移除) 只需要把 T4 undo.(假设故障前只执行到 15 行)</p>
+<h3 id="Write-Ahead-Logging¶"><a href="#Write-Ahead-Logging¶" class="headerlink" title="Write-Ahead Logging¶"></a>Write-Ahead Logging<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#write-ahead-logging">¶</a></h3><p>Before a data in main memory is output to the database, the log records pertaining to data must have been output to stable storage.<br>先写日志原则。<br>数据修改之前，和数据有关的记录要先写入日志。</p>
+<h3 id="Transaction-Commit¶"><a href="#Transaction-Commit¶" class="headerlink" title="Transaction Commit¶"></a>Transaction Commit<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#transaction-commit">¶</a></h3><p>A transaction is said to have committed when its <em>commit log record</em> is output to <em>stable storage</em><br>日志已经记录 commit, 说明事务已经提交。（因为后续可以根据这个恢复状态了）<br>但此时数据不一定已经写回到数据库里（不一定高校）<br>all previous log records of the transaction must have been output already</p>
+<p>Writes performed by a transaction may still be in the buffer when the transaction commits, and may be output later.<br>不一定在磁盘。如果立刻将 block 写回磁盘可能引起大量 I&#x2F;O 操作</p>
+<h3 id="Undo-撤销-and-Redo（重做）-Operations¶"><a href="#Undo-撤销-and-Redo（重做）-Operations¶" class="headerlink" title="Undo(撤销) and Redo（重做） Operations¶"></a>Undo(撤销) and Redo（重做） Operations<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#undo-and-redo-operations">¶</a></h3><h3 id="Checkpoints¶"><a href="#Checkpoints¶" class="headerlink" title="Checkpoints¶"></a>Checkpoints<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#checkpoints">¶</a></h3><p>Redoing&#x2F;undoing all transactions recorded in the log can be very slow.<br>Streamline recovery procedure by periodically performing checkpointing.<br>重演历史可能很长。checkpoint 是确认之前的操作都已经反映到数据库里去了，这样重演的时候就可以直接从 checkpoint 开始。</p>
+<ul>
+<li>Output all log records currently residing in main memory onto stable storage.<br>日志不是生成就往内存写，而是有一个日志缓冲区。<br>确保把日志项写到日志中去了。</li>
+<li>Output all modified buffer blocks to the disk.<br>把 buffer 里所有数据都刷写一遍。</li>
+<li>Write a log record &lt;�ℎ�������� �&gt;&lt;*c**h**ec**k**p**o**in**t* *L*&gt; onto stable storage where L is a list of all transactions active at the time of checkpoint.<br>写一个日志的标记（新的日志类型）. L 是当前正在工作的事务的表。（用来做 undo list 的初始化列表）</li>
+<li>All updates are stopped while doing checkpointing!!! 做 checkpoint 的时候其他活跃事务都要停下来。</li>
+</ul>
+<p>Log File with Checkpoint : Example</p>
+<p><img src="http://cdn.hobbitqia.cc/202306121846448.png" alt="img"></p>
+<p>重演历史从最近的 checkpoint 重演. {T2 T4} 作为 undo list 的初始化值。</p>
+<p>checkpoint 之间的间隔应该如何确定？<br>根据日志量。</p>
+<details class="example" style="box-sizing: inherit; display: flow-root; overflow: visible; padding: 0px 0.6rem; background-color: var(--md-admonition-bg-color); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgb(124, 77, 255); border-image: initial; border-radius: 0.1rem; box-shadow: none; color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; margin: 1.5625em 0px; break-inside: avoid; font-family: &quot;LXGW WenKai Screen&quot;, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; cursor: pointer; display: block; min-height: 1rem; background-color: rgba(124, 77, 255, 0.1); border-width: 0px 0px 0px 0.2rem; border-style: solid; border-color: rgba(0, 63, 136, 0); border-image: initial; font-weight: 700; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 0.6rem 0.4rem 2.2rem; position: relative; border-radius: 0.1rem; -webkit-tap-highlight-color: transparent; outline: none;">Example of Recovery</summary><p style="box-sizing: border-box;"></p><div align="center" style="box-sizing: border-box;"><img src="http://cdn.hobbitqia.cc/202306121858750.png" width="60%/" style="box-sizing: inherit; border-style: none; height: auto; max-width: 100%;"></div><p style="box-sizing: border-box; margin-bottom: 0.6rem;"></p></details>
+
+<h3 id="Log-Record-Buffering¶"><a href="#Log-Record-Buffering¶" class="headerlink" title="Log Record Buffering¶"></a>Log Record Buffering<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#log-record-buffering">¶</a></h3><p><img src="http://cdn.hobbitqia.cc/202306121859013.png" alt="img"></p>
+<p>我们在把数据 buffer 中的块写到数据库时，要先把块对应的日志先写到日志文件（直接把日志全部刷写一遍）。<br>事务提交之后有一个对日志的强制刷写。</p>
+<p><strong>Group commit</strong>: several log records can be output using a single output operation, reducing the I&#x2F;O cost. commit 可能在日志里等待一段时间, 等到 buffer 里有足够多的日志记录再写出去。</p>
+<ul>
+<li>The recovery algorithm supports the <strong>no-force policy(非强制)</strong>: <strong>i.e.</strong>, updated blocks need not be written to disk when transaction commits.<br>好的恢复算法：我事务 commit 了但不强制日志刷写出去。</li>
+<li>The recovery algorithm supports the <strong>steal policy(窃取策略)</strong>:<strong>i.e.</strong>, blocks containing updates of uncommitted transactions can be written to disk, even before the transaction commits. 事务提交之前脏数据能不能被写到磁盘里去？（同样地需要先把日志写出去）</li>
+</ul>
+<h3 id="Fuzzy-Checkpointing¶"><a href="#Fuzzy-Checkpointing¶" class="headerlink" title="Fuzzy Checkpointing¶"></a>Fuzzy Checkpointing<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#fuzzy-checkpointing">¶</a></h3><p>Fuzzy 模糊</p>
+<p>做 checkpoint 的时候我们如果要求其他活跃事务都停下来，一次性把脏数据都刷写出去，吞吐率会忽高忽低，系统的可用性就比较差。<br>记录脏数据，在后面不 check 的时候慢慢写。</p>
+<ul>
+<li>Temporarily stop all updates by transactions</li>
+<li>Write a &lt;�ℎ�������� �&gt;&lt;*c**h**ec**k**p**o**in**t* *L*&gt; log record and force log to stable storage</li>
+<li>Note list M of modified buffer blocks</li>
+<li>Now permit transactions to proceed with their actions</li>
+<li>Output to disk all modified buffer blocks in list M</li>
+</ul>
+<p><img src="http://cdn.hobbitqia.cc/202306121916858.png" alt="img"></p>
+<p>在把所有脏数据都写回磁盘后，我们会认定这个 checkpoint. 有一个指针指向最近一次成功的 checkpoint.<br>这样 checkpoint 的时候就只需要记录一下，不用一下子写脏数据了。</p>
+<h3 id="Failure-with-Loss-of-Nonvolatile-Storage¶"><a href="#Failure-with-Loss-of-Nonvolatile-Storage¶" class="headerlink" title="Failure with Loss of Nonvolatile Storage¶"></a>Failure with Loss of Nonvolatile Storage<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#failure-with-loss-of-nonvolatile-storage">¶</a></h3><p><img src="http://cdn.hobbitqia.cc/202306121918751.png" alt="img"></p>
+<p>Can be extended to allow transactions to be active during dump; known as fuzzy dump or online dump.<br>类似于 checkpoint, 不是完全备份，而是记录一下，随后慢慢备份。</p>
+<h2 id="Recovery-with-Early-Lock-Release-and-Logical-Undo-Operations¶"><a href="#Recovery-with-Early-Lock-Release-and-Logical-Undo-Operations¶" class="headerlink" title="Recovery with Early Lock Release and Logical Undo Operations¶"></a>Recovery with Early Lock Release and Logical Undo Operations<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#recovery-with-early-lock-release-and-logical-undo-operations">¶</a></h2><h3 id="Logical-Undo-Logging¶"><a href="#Logical-Undo-Logging¶" class="headerlink" title="Logical Undo Logging¶"></a>Logical Undo Logging<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#logical-undo-logging">¶</a></h3><p>如果早放锁，后续恢复为 old value 可能没有意义。比如存款 100, 转入 100. 那么我们恢复为 100(物理撤销) 就没有意义。这个时候应该采用逻辑撤销，即如果 <code>a+=100</code>, 恢复时就应该 <code>a-=100</code>.</p>
+<p><img src="http://cdn.hobbitqia.cc/202306121925529.png" alt="img"></p>
+<p>如 B+ 树的插入和删除操作。<br>我们需要对逻辑操作记日志。</p>
+<p>Transaction Rollback with Logical Undo</p>
+<p><img src="http://cdn.hobbitqia.cc/202306121928688.png" alt="img"></p>
+<p>需要把每个操作的日志项记录下来（开始和结束）. C 表示自加操作。这里在 end 时会记录 logical undo 的操作(减法撤销对应加法)<br>注意我们是在 end 的时候记录逻辑撤销的方法，如果这个操作还没有结束，那么我们只能物理撤销。<br>这里我们早放锁了，没有遵循严格两阶段放锁协议。在 T0 还没有提交的时候 T1 就对数据进行了修改.<br>恢复中做的是物理撤销(old+new), begin&#x2F;end 这些日志就不需要记录了。</p>
+<p>Failure Recovery with Logical Undo</p>
+<p><img src="http://cdn.hobbitqia.cc/202306121935921.png" alt="img"></p>
+<p>这里还没有 T2 end, 因此物理撤销。</p>
+<h2 id="ARIES-Recovery-Algorithm¶"><a href="#ARIES-Recovery-Algorithm¶" class="headerlink" title="ARIES Recovery Algorithm¶"></a>ARIES Recovery Algorithm<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#aries-recovery-algorithm">¶</a></h2><p>ARIES is a state of the art recovery method.</p>
+<p>每个日志都有一个日志编号 <strong>log sequence number (LSN)</strong><br>每个数据块里都会记一个 LSN, 表示这个块反应了最近哪个日志的操作。</p>
+<h3 id="ARIES-Data-Structures¶"><a href="#ARIES-Data-Structures¶" class="headerlink" title="ARIES Data Structures¶"></a>ARIES Data Structures<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#aries-data-structures">¶</a></h3><ul>
+<li><p>Log sequence number (LSN)</p>
+<p>identifies each log record</p>
+<ul>
+<li>Must be sequentially increasing</li>
+</ul>
+</li>
+<li><p><strong>Page LSN</strong><br>每个页(块的 LSN)</p>
+</li>
+<li><p><strong>Log records of several different types</strong></p>
+</li>
+<li><p><strong>Dirty page table</strong><br>脏页表要记录在日志中。</p>
+</li>
+</ul>
+<p>Log Record</p>
+<p><img src="http://cdn.hobbitqia.cc/202306121951678.png" alt="img"></p>
+<p>日志记录通过 UndoNextLSN 串起来，提高恢复效率。</p>
+<p>DirtyPage Table</p>
+<ul>
+<li>PageLSN of the page</li>
+<li>RecLSN is an LSN such that log records before this LSN have already been applied to the page version on disk 每一页都有 PageLSN 和 RecLSN, Rec 反应的是最近的被反映到数据库的日志。</li>
+</ul>
+<p>ARIES Data Structures</p>
+<p><img src="http://cdn.hobbitqia.cc/202306121955805.png" alt="img"></p>
+<p>这里 4894.1 表示这个块里的第一个数据。 RecLSN 表示 7564 开始数据就没有反映到数据库中去了。</p>
+<ul>
+<li>Checkpoint log record<ul>
+<li>Contains:<ul>
+<li>DirtyPageTable and list of active transactions</li>
+<li>For each active transaction, LastLSN, the LSN of the last log record written by the transaction<br>要记最近的事务项（从哪里开始恢复）</li>
+</ul>
+</li>
+<li>Fixed position on disk notes LSN of last completed checkpoint log record</li>
+</ul>
+</li>
+<li>Dirty pages are not written out at checkpoint time<br>Instead, they are flushed out continuously, in the background<br>脏页不会在 check 的时候写出去。</li>
+<li>Checkpoint is thus very low overhead can be done frequently</li>
+</ul>
+<h3 id="ARIES-Recovery-Algorithm¶-1"><a href="#ARIES-Recovery-Algorithm¶-1" class="headerlink" title="ARIES Recovery Algorithm¶"></a>ARIES Recovery Algorithm<a target="_blank" rel="noopener" href="https://note.hobbitqia.cc/DB/db15/#aries-recovery-algorithm_1">¶</a></h3><ul>
+<li>Analysis pass<ul>
+<li>Which transactions to undo (undo-list)</li>
+<li>Which pages were dirty (disk version not up to date) at time of crash<br>得到 dirty page table.</li>
+<li>RedoLSN: LSN from which redo should start<br>真正的 redo 要从哪里开始(RecLSN 的最小值就是 redo 的起点)</li>
+</ul>
+</li>
+<li>Redo pass<br>从 RedoLSN 开始重演<br><strong>RecLSN</strong> and <strong>PageLSNs</strong> are used to avoid redoing actions already reflected on page.<br>用来优化，有些日志不用 redo(没有意义)</li>
+<li>Undo pass<br>把 undolist 进行撤销操作。</li>
+</ul>
+<p>Example</p>
+<p><img src="http://cdn.hobbitqia.cc/202306122017889.png" alt="img"></p>
+<p><img src="http://cdn.hobbitqia.cc/202306122025645.png" alt="img"></p>
+<p>crash 之后，得到上页的 Dirty Page Table 和 Active TXN Table 以及磁盘里的日志。</p>
+<p>Example</p>
+<p><img src="http://cdn.hobbitqia.cc/202306122028882.png" alt="img"></p>
+<p>要把 2390 加到表里去。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/05/30/DB%E5%90%8E%E7%AF%87/" data-id="clj2mxxkw0001wgu2feom1phh" data-title="DB后篇" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Study/" rel="tag">Study</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/05/30/OOP%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          OOP Note
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/05/30/OOP%E8%A1%A5%E5%85%85/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">oop补充</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Study/" rel="tag">Study</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Study/" style="font-size: 10px;">Study</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">June 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/06/05/%E8%AE%A4%E7%9F%A5%E7%A5%9E%E7%BB%8F%E7%A7%91%E5%AD%A6%E5%AF%BC%E8%AE%BA/">认知神经科学导论笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/05/30/C++%E5%B7%A5%E7%A8%8B%E8%A7%84%E8%8C%83/">C++ Project Norm</a>
+          </li>
+        
+          <li>
+            <a href="/2023/05/30/OOP%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">OOP Note</a>
+          </li>
+        
+          <li>
+            <a href="/2023/05/30/DB%E5%90%8E%E7%AF%87/">DB后篇</a>
+          </li>
+        
+          <li>
+            <a href="/2023/05/30/OOP%E8%A1%A5%E5%85%85/">oop补充</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 LesterYu<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

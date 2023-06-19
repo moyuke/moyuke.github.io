@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>认知神经科学导论笔记 | Moyuke&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Lec 1-绪论 课程简介 本课程注重计算机科学、 计算神经科学、脑科学和⼈⼯智能等多学科的交叉和融合。 ⾸先介绍脑启发⼈⼯智能的基本概念和进展，进⼀步讲解基于⼤脑结构和信息处理机制的神经元、突触以及由神经元和突触构成的⽹络， 并着重介绍相关的计算模型和算法。 课程将从⽣物神经元模型和信息处理机制、⼤脑的结构和功能、感知原理及模型、学习机制及学习算法、脉冲神经⽹络等⽅⾯进⾏展开。 通过这门课程的学">
+<meta property="og:type" content="article">
+<meta property="og:title" content="认知神经科学导论笔记">
+<meta property="og:url" content="http://example.com/2023/06/05/%E8%AE%A4%E7%9F%A5%E7%A5%9E%E7%BB%8F%E7%A7%91%E5%AD%A6%E5%AF%BC%E8%AE%BA/index.html">
+<meta property="og:site_name" content="Moyuke&#39;s blog">
+<meta property="og:description" content="Lec 1-绪论 课程简介 本课程注重计算机科学、 计算神经科学、脑科学和⼈⼯智能等多学科的交叉和融合。 ⾸先介绍脑启发⼈⼯智能的基本概念和进展，进⼀步讲解基于⼤脑结构和信息处理机制的神经元、突触以及由神经元和突触构成的⽹络， 并着重介绍相关的计算模型和算法。 课程将从⽣物神经元模型和信息处理机制、⼤脑的结构和功能、感知原理及模型、学习机制及学习算法、脉冲神经⽹络等⽅⾯进⾏展开。 通过这门课程的学">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230606103903660.png">
+<meta property="article:published_time" content="2023-06-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-06T04:25:39.035Z">
+<meta property="article:author" content="LesterYu">
+<meta property="article:tag" content="Study">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230606103903660.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Moyuke's blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Moyuke&#39;s blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-认知神经科学导论" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/06/05/%E8%AE%A4%E7%9F%A5%E7%A5%9E%E7%BB%8F%E7%A7%91%E5%AD%A6%E5%AF%BC%E8%AE%BA/" class="article-date">
+  <time class="dt-published" datetime="2023-06-04T16:00:00.000Z" itemprop="datePublished">2023-06-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      认知神经科学导论笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="Lec-1-绪论"><a href="#Lec-1-绪论" class="headerlink" title="Lec 1-绪论"></a>Lec 1-绪论</h2><ul>
+<li>课程简介<ul>
+<li>本课程注重计算机科学、 计算神经科学、脑科学和⼈⼯智能等多<br>学科的交叉和融合。</li>
+<li>⾸先介绍脑启发⼈⼯智能的基本概念和进展，进⼀步讲解基于⼤<br>脑结构和信息处理机制的神经元、突触以及由神经元和突触构成<br>的⽹络， 并着重介绍相关的计算模型和算法。</li>
+<li>课程将从⽣物神经元模型和信息处理机制、⼤脑的结构和功能、<br>感知原理及模型、学习机制及学习算法、脉冲神经⽹络等⽅⾯进<br>⾏展开。</li>
+<li>通过这门课程的学习，学⽣可以掌握神经科学关于神经元、神经<br>系统的基本机制和模型，以及感知、学习、记忆等功能，启发同<br>学们对脑科学、神经科学、信息技术交叉领域的研究思路，培养<br>掌握新⼀代信息技术的专业⼈才。</li>
+<li>掌握大脑神经信息处理和计算的基本机制；<br>掌握神经元的基本计算模型及算法；<br>掌握不同输入对神经活动的影响；<br>掌握主要神经可塑性模型；<br>掌握代表性学习算法；<br>理解基本的大脑感知和认知机制。</li>
+</ul>
+</li>
+<li>认知神经科学三个层次：<ul>
+<li>神经元（ Neurons）</li>
+<li>神经环路（ Neuron Circuits）</li>
+<li>脑的⾼级功能和⾏为（ Behavior）</li>
+</ul>
+</li>
+</ul>
+<h2 id="Lec2-神经生理学基础"><a href="#Lec2-神经生理学基础" class="headerlink" title="Lec2-神经生理学基础"></a>Lec2-神经生理学基础</h2><ul>
+<li><p>神经计算系统的基本特征 (Characteristics of Neural Computation Systems)</p>
+<ul>
+<li>基本计算单元：Neurons</li>
+<li>信号传递：Signaling is organized in the same way in all neurons</li>
+<li>神经元的多样性：Neurons differ most at the molecular level</li>
+<li>神经可塑性：<ul>
+<li>Neuron carefully selects to connect each other;</li>
+<li>Neural connections can be modified by experience</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>神经元形态 (Neural Morphology)</p>
+<ul>
+<li>形态分类： Morphology<ul>
+<li>多极（multipolar） 神经元：有多个树突和一个轴突的神经元，如大多数的神经元。</li>
+<li>双极（bipolar） 神经元：只有一个树突和一个轴突的神经元，如视网膜的感光神经元。</li>
+<li>单极（unipolar） 神经元： 只有一个突起，从细胞体分离出来后会分为两个末端，一个连接到感觉器官，另一个连接到中枢神经系统，主要负责传递感觉信号。</li>
+</ul>
+</li>
+<li>功能分类： Function<ul>
+<li>感觉（sensory） 神经元：传递感觉信息。</li>
+<li>运动（motor） 神经元：控制肌肉运动。</li>
+<li>中间神经元（interneurons）：在感觉神经元和运动神经元之间传递信息。</li>
+</ul>
+</li>
+<li>突触分类： Synapses<ul>
+<li>兴奋性神经元（excitatory neurons）</li>
+<li>抑制性神经元（inhibitory neurons）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>神经元结构 (Neural Structure)</p>
+<ul>
+<li>Dendrites (树突) Input component</li>
+<li>Soma (胞体) Generate an Action Potential</li>
+<li>Axon (轴突) Conductive component propagates AP</li>
+<li>Axon-end (轴突终端) Output component interact with other neurons</li>
+</ul>
+</li>
+<li><p>信息传递：输入-&gt;整合-&gt;传导-&gt;输出</p>
+<ul>
+<li>方向性（Direction）：沿着轴突向下游传递， 不能反向传播。</li>
+<li>全或无法则（all or nothing principle）： 神经元反应的强弱不随外界刺激的强弱而改变， 信息在传递途中不会变得越来越微弱。</li>
+<li>一致性（Non-Degrading）：沿轴突传递的活动强度一致</li>
+</ul>
+</li>
+<li><p>离子通道 (Ion channels)</p>
+<ul>
+<li>Rapid signaling in the neuron depends on ion channels </li>
+<li>Currents through single ion channels can be recorded </li>
+<li>神经元的细胞膜具有双层膜结构，由绝缘良好的磷脂构成，是水溶性分子的屏障。</li>
+<li>离子通道按门控方式可以分为四类：<br>电压门控离子通道（Voltage-gated ion channels）<br>配合基门控离子通道（Ligand-gated ion channels）<br>磷酸化门控离子通道（Phosphorylation-gated ion channels）<br>机械门控离子通道（Mechanically-gated ion channels）<br>常见的电压门控离子通道有钠离子通道和钾离子通道。</li>
+</ul>
+</li>
+<li><p>神经元的电学特性及膜电位 (Electrical properties and Membrane Potential)</p>
+<ul>
+<li>膜电位：$ V_m &#x3D; V_{in} - V_{out} $</li>
+<li>静膜电位(Resting membrane potential)：$ V_r &#x3D; V_{in} $</li>
+</ul>
+</li>
+<li><p>神经递质 （Neurotransmitter）</p>
+</li>
+</ul>
+<h2 id="Lec3-神经信号与突触"><a href="#Lec3-神经信号与突触" class="headerlink" title="Lec3-神经信号与突触"></a>Lec3-神经信号与突触</h2><ul>
+<li><p>AP动作电位（Action Potential）：离子快速跨膜时引起的细胞内和细胞外的电势差，是神经元信息处理能力的基础。 </p>
+</li>
+<li><p>静息电位——极化<br>当神经细胞处于静息状态时， K+通道开放（Na+通道关闭），这时K+会从浓度高的膜内向浓度低的膜外运动，使膜外带正电，膜内带负电。膜外正电的产生阻止了膜内K+离子的继续外流，使膜电位不再发生变化，此时膜电位称为静息电位。</p>
+</li>
+<li><p>动作电位（脉冲）——去极化</p>
+<p>当神经细胞受到刺激后， Na+通道开放，这样， Na+在很短的时间内会大量涌入细胞内，从而使细胞处于膜内带正电，膜外相对带负电的兴奋状态。此时膜电位称为动作电位，是细胞兴奋的主要表现。</p>
+</li>
+<li><p>未受刺激的时候，电势外正内负，假设膜电位为-45，这叫“静息电位”，也<br>叫“极化”状态；受刺激后电压上升一段，这叫“去极化”；当突触后电位叠加<br>达到阈值电位时，突触后神经元产生动作电位（即发放脉冲），之后电压会<br>下降一段，这叫“复极化”；复极化超过静息电位的部分叫“超极化”，之后恢<br>复静息电位。</p>
+</li>
+</ul>
+<img src="C:\Users\86133\AppData\Roaming\Typora\typora-user-images\image-20230606103903660.png" alt="image-20230606103903660" style="zoom: 67%;" />
+
+<ul>
+<li>突触传递（ Synaptic Transmission）  <ul>
+<li>突触前神经元的轴突，与突触后神经元的树突或胞体接触的部位被称为突触；</li>
+<li>最普遍的突触类型是化学突触（ Chemical Synapse） ,通过一系列生化反应传递信号：突触前神经元发放神经递质，接触缝隙（ cleft）后端的突触后神经元的接收器与神经递质结合并打开离子通道（ Ion Channel），从而导致突触后神经元膜电位的变化，化学信号转变为电信号；突触后神经元对突触前AP的响应被定义为突触后电位（ postsynaptic potential），简称PSP(postsynaptic potential)。  </li>
+<li>电突触（ Electrical Synapse） :神经元之间通过特定膜蛋白直接进行电连接，电突触可能和神经元间的的同步（ synchronization）相关。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Lec4-神经元模型"><a href="#Lec4-神经元模型" class="headerlink" title="Lec4-神经元模型"></a>Lec4-神经元模型</h2><ul>
+<li><p>脉冲（Spike）：同AP，神经元信息传递的基本单位</p>
+</li>
+<li><p>脉冲序列（ Spike Train） :一个神经元发放的一系列脉冲。</p>
+</li>
+<li><p>脉冲序列中的任意脉冲之间都有一定的时间间隔，两个脉冲之间的最短间隔定义了神经元的<strong>不应期（ Refractory Period）</strong>；不应期内接收到信号也很难或不能发放新的脉冲。  </p>
+</li>
+<li><p>LIF神经元模型：(Leaky Integrate-and-Fire Model)  </p>
+<ul>
+<li><p>一个神经元被一个很好的绝缘体—细胞膜包围。如果一个短的电流脉冲I(t)注入到神经元中，它将会给细胞膜充电，细胞膜因此像电容C。</p>
+</li>
+<li><p>因为这个绝缘体并不完美，随着时间的推移，电荷会慢慢通过细胞膜渗漏出来。因此，细胞膜可以被看做有限的泄露电阻R。  </p>
+</li>
+<li><p>利用电流守恒定律，将驱动电流<code>I(t)</code>分为两个部分：</p>
+<ul>
+<li><p>$ I(t) &#x3D; I_R + I_C $</p>
+</li>
+<li><p>其中：<br>$ I_R&#x3D;u_R &#x2F; R &#x3D; (u(t) - u_{rest}) &#x2F; R $<br>$ I_C &#x3D; dq &#x2F; dt &#x3D; Cdu &#x2F; dt $</p>
+</li>
+<li><p>Leaky Integrate and Fire (LIF) 膜电压变化满足:</p>
+</li>
+</ul>
+<p>  $ \tau_m \frac{du(t)}{dt} &#x3D; -[u(t) - u_{rest}] + R_mI(t) $ : 膜电压动力学方程</p>
+<ul>
+<li><p>$ \tau_m $: Membrane time constant</p>
+</li>
+<li><p>$ u(t) $：Membrane potential</p>
+</li>
+<li><p>$ u_{rest} $： Resting potential</p>
+</li>
+<li><p>$ R_m $: Membrane resistance</p>
+</li>
+<li><p>$ I(t) $: Total input current </p>
+</li>
+<li><p>恒定电流时：$  \frac{du(t)}{dt} + \frac{1}{\tau_m}u(t) &#x3D;  \frac{1}{\tau_m}u_{rest} + \frac{1}{\tau_m}R_mI $ </p>
+</li>
+<li><p>假设$ u(0) &#x3D; u_{rest} &#x3D; 0 $，最终得到：$ u(t) &#x3D; RI(1 - e^{-\frac{t}{\tau_m}}) $</p>
+</li>
+<li><p>脉冲发放周期：$ T &#x3D; \tau_mln\frac{RI}{RI - V_{th}} $</p>
+</li>
+</ul>
+</li>
+<li><p>定义神经元𝑖的膜电压为𝑢(𝑡)，其静息态膜电压为$𝑢_{rest} $；</p>
+</li>
+<li><p>𝑡 &#x3D; 0,突触前神经元𝑗发放一个脉冲， 𝑡 &gt; 0 突触后电位(PSP)<br>$ 𝜀_{ij}(𝑡) &#x3D; 𝑢<em>i(𝑡) - 𝑢</em>{rest} $</p>
+</li>
+<li><p>如果PSP是正的，定义为兴奋型（ Excitatory PSP），简称EPSP；反之定义为抑制型（ Inhibitory PSP），简称IPSP。 </p>
+</li>
+<li><p>膜电压计算公式：$ 𝑢<em>i(𝑡) &#x3D; \sum</em>{j}\sum_{f}𝜀_{ij}(𝑡 - t_j^{(f)}) + 𝑢_{rest} $</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Lec5-神经信息编码"><a href="#Lec5-神经信息编码" class="headerlink" title="Lec5-神经信息编码"></a>Lec5-神经信息编码</h2><ul>
+<li>Rate Coding<ul>
+<li>It is the firing rate of neurons, not the precise firing time which carries information  </li>
+<li>Set an encoding time window T and count the number of spikes within it.  </li>
+<li>The temporal average of spike times is defined as the mean firing rate by the following equation:  $ r &#x3D; \frac{n_{sp}}{T} &#x3D; \frac1{T} \int_0^Ts(t)dt$</li>
+<li>r：发放率，T：时间窗口长度，n(T)：时间窗口内脉冲数</li>
+</ul>
+</li>
+<li>Temporal Coding<ul>
+<li>The precise firing time of neurons carries information</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/06/05/%E8%AE%A4%E7%9F%A5%E7%A5%9E%E7%BB%8F%E7%A7%91%E5%AD%A6%E5%AF%BC%E8%AE%BA/" data-id="clj2mxxkt0000wgu2eqnf2rid" data-title="认知神经科学导论笔记" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Study/" rel="tag">Study</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/05/30/C++%E5%B7%A5%E7%A8%8B%E8%A7%84%E8%8C%83/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">C++ Project Norm</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Study/" rel="tag">Study</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Study/" style="font-size: 10px;">Study</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">June 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/06/05/%E8%AE%A4%E7%9F%A5%E7%A5%9E%E7%BB%8F%E7%A7%91%E5%AD%A6%E5%AF%BC%E8%AE%BA/">认知神经科学导论笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/05/30/C++%E5%B7%A5%E7%A8%8B%E8%A7%84%E8%8C%83/">C++ Project Norm</a>
+          </li>
+        
+          <li>
+            <a href="/2023/05/30/OOP%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">OOP Note</a>
+          </li>
+        
+          <li>
+            <a href="/2023/05/30/DB%E5%90%8E%E7%AF%87/">DB后篇</a>
+          </li>
+        
+          <li>
+            <a href="/2023/05/30/OOP%E8%A1%A5%E5%85%85/">oop补充</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 LesterYu<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
