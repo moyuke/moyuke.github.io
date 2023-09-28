@@ -1,97 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>C++ Project Norm</title>
-    <url>/2023/05/30/C++%E5%B7%A5%E7%A8%8B%E8%A7%84%E8%8C%83/</url>
-    <content><![CDATA[<h2 id="File-design："><a href="#File-design：" class="headerlink" title="File design："></a>File design：</h2><blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">├── main.cpp</span><br><span class="line">├── database.h // declaration</span><br><span class="line">├── database.cpp // defination</span><br><span class="line">├── tuple.h // type</span><br><span class="line">├── tuple.cpp</span><br><span class="line">├── writer.h // superclass</span><br><span class="line">├── writer.cpp</span><br><span class="line">├── adiwriter.h // subclass</span><br><span class="line">├── adiwriter.cpp</span><br><span class="line">├── Makefile</span><br><span class="line">├── test.bat // the batch file</span><br><span class="line">├── READNE.md</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h2 id="Declaration-h"><a href="#Declaration-h" class="headerlink" title="Declaration (.h)"></a>Declaration (.h)</h2><blockquote>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _DATABASE_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _DATABASE_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;tuple.h&quot;</span> <span class="comment">// 只需调用声明</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;adiwriter.h&quot;</span> <span class="comment">// 只需调用实际用到的子类</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;set&gt;</span></span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Database</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::set&lt;tuple&gt; records;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Database</span>();</span><br><span class="line">    <span class="built_in">Database</span>(std::string filename);</span><br><span class="line">    ~<span class="built_in">Database</span>();</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-</blockquote>
-<ul>
-<li>ifndef：防止嵌套调用时出现反复调用的情况。</li>
-</ul>
-<h2 id="类型定义"><a href="#类型定义" class="headerlink" title="类型定义"></a>类型定义</h2><blockquote>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">tuple</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    std::string primaryKey;</span><br><span class="line">    std::map&lt;std::string, <span class="type">int</span>&gt; keytypes;</span><br><span class="line">    std::map&lt;std::string, std::string&gt; values;</span><br><span class="line">    <span class="built_in">tuple</span>();</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">setPrimaryKey</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="keyword">friend</span> <span class="type">bool</span> <span class="keyword">operator</span> &lt;(<span class="type">const</span> tuple &amp;a, <span class="type">const</span> tuple &amp;b);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<ul>
-<li>重载运算符：用于排序与比较。</li>
-<li>类型定义后使用同struct（不如说就是一个东西）</li>
-</ul>
-<h2 id="继承类应用"><a href="#继承类应用" class="headerlink" title="继承类应用"></a>继承类应用</h2><blockquote>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Writer</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Writer</span>();</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">Writer</span>();</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">adiWriter</span> : <span class="keyword">public</span> Writer</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h2 id="namespace使用"><a href="#namespace使用" class="headerlink" title="namespace使用"></a>namespace使用</h2><ul>
-<li>namespace命名空间，包含多种关键字，std为常用的命名空间，cin，cout即为其中的关键字</li>
-<li>若只想使用其中一个：<code>using std::sort;</code></li>
-<li>在一个代码块内如果有和命名空间相同的变量名，那么使用<code>using namespace</code>是无效的。</li>
-<li>自定义namespace：</li>
-</ul>
-<blockquote>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">namespace</span> NM1</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> zero = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">sum</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x + y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> NM1;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">sum</span>(<span class="number">3</span>, <span class="number">4</span>) &lt;&lt; zero;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<ul>
-<li>跨文件使用：同class，不过用<code>using namespace</code>调用</li>
-</ul>
-<h2 id="读写"><a href="#读写" class="headerlink" title="读写"></a>读写</h2><ul>
-<li><code>argc</code> 和 <code>argv</code>：命令行参数<ul>
-<li>第一个参数<code>argc</code>，用于参数计数，其值等于命令行中参数的个数；第二个参数<code>argv</code>，用于参数向量，是一个指向字符串数组的指针。</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&gt;输入：./main.o 123 456</span><br><span class="line">&gt;argc = 3</span><br><span class="line">&gt;argv[0] = &quot;./main.o&quot;</span><br><span class="line">&gt;argv[1] = &quot;123&quot;</span><br><span class="line">&gt;argv[2] = &quot;456&quot;</span><br><span class="line">&gt;// 直接运行程序则argc = 1(运行程序而传入的命令)</span><br></pre></td></tr></table></figure>
-</blockquote>
-<p>​		下面的代码用于读入输入的命令（因为要用batch，所以这样读）</p>
-<blockquote>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span>&#123;</span><br><span class="line">    std::string command;</span><br><span class="line">    <span class="keyword">if</span>(argc == <span class="number">1</span>)&#123; <span class="comment">// 单条完整命令</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="built_in">getline</span>(std::cin, command))</span><br><span class="line">            db.<span class="built_in">processCommand</span>(command);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123; <span class="comment">// 命令被空格分开</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt; argc; i++)</span><br><span class="line">            command = command + argv[i] + <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">        db.<span class="built_in">processCommand</span>(command);</span><br><span class="line">    &#125;</span><br><span class="line">    db.<span class="built_in">exportDatabase</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<ul>
-<li><p><code>iostream</code>：标准读写流</p>
-<ul>
-<li><code>cin</code>，<code>cout</code>分别是<code>istream</code>，<code>ostream</code>的对象，我们可以自己创造其他<code>istream</code>，<code>ostream</code>的对象。</li>
-<li><code>freopen(&quot;test.txt&quot;,&quot;w&quot;,stdout)</code>将标准输出重定向到<code>test.txt</code>。</li>
-</ul>
-</li>
-<li><p><code>fstream</code>：文件读写流</p>
-<blockquote>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">std::ofstream fout;</span><br><span class="line">fout.<span class="built_in">open</span>(<span class="string">&quot;test.txt&quot;</span>);</span><br><span class="line">fout &lt;&lt; <span class="string">&quot;Hello&quot;</span> &lt;&lt; endl;</span><br><span class="line">fout.<span class="built_in">close</span>();</span><br></pre></td></tr></table></figure></blockquote>
-</li>
-</ul>
-<h2 id="Makefile使用"><a href="#Makefile使用" class="headerlink" title="Makefile使用"></a>Makefile使用</h2><blockquote>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Declare compiler variable</span></span><br><span class="line">CXX=g++</span><br><span class="line"><span class="comment"># Declare compilation options</span></span><br><span class="line">CXXFLAGS=-Wall -g --std=c++11</span><br><span class="line"><span class="comment"># Declare linking options</span></span><br><span class="line">LDFLAGS=</span><br><span class="line"><span class="comment"># Declare source code files</span></span><br><span class="line">SRCS=main.cpp tuple.cpp writer.cpp adiwriter.cpp database.cpp</span><br><span class="line"><span class="comment"># Convert source code files to a list of object files</span></span><br><span class="line">OBJS=$(SRCS:.cpp=.o)</span><br><span class="line"><span class="comment"># Declare executable name</span></span><br><span class="line">TARGET=adif</span><br><span class="line"><span class="comment"># Default target</span></span><br><span class="line"><span class="section">all: <span class="variable">$(TARGET)</span></span></span><br><span class="line"><span class="comment"># Dependencies</span></span><br><span class="line"><span class="variable">$(TARGET)</span>: <span class="variable">$(OBJS)</span></span><br><span class="line">	<span class="variable">$(CXX)</span> <span class="variable">$(LDFLAGS)</span> -o <span class="variable">$(TARGET)</span> <span class="variable">$(OBJS)</span></span><br><span class="line"><span class="comment"># Automatically generate dependencies</span></span><br><span class="line"><span class="section">.depend: <span class="variable">$(SRCS)</span></span></span><br><span class="line">	rm -f ./.depend</span><br><span class="line">	<span class="variable">$(CXX)</span> <span class="variable">$(CXXFLAGS)</span> -MM <span class="variable">$^</span> &gt; ./.depend</span><br><span class="line"><span class="comment"># Include dependencies</span></span><br><span class="line"><span class="keyword">-include</span> .depend</span><br><span class="line"><span class="comment"># Clean</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm -f <span class="variable">$(OBJS)</span> <span class="variable">$(TARGET)</span> .depend</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h2 id="batch文件"><a href="#batch文件" class="headerlink" title="batch文件"></a>batch文件</h2><ul>
-<li><p><code>make.bat</code></p>
-<ul>
-<li>窗口交互型</li>
-<li>没有Makefile，用于编译与生成可执行文件Main</li>
-</ul>
-<blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">g++ -c main.cpp -std=c++11 -o main.o</span><br><span class="line">g++ -c database.cpp -std=c++11 -o database.o</span><br><span class="line">...</span><br><span class="line">g++ -o Main main.o Maze.o Player.o</span><br></pre></td></tr></table></figure>
-</blockquote>
-</li>
-<li><p><code>test.bat</code></p>
-<ul>
-<li>指令测试型</li>
-<li>有Makefile，用于调用Makefile编译以及输入命令测试。</li>
-<li>echo为回显在屏幕上的内容</li>
-<li>没有echo的为输入的指令，<code>mingw32-make</code>调用Makefile</li>
-<li>pause后，需按任意键才会输入下一条指令</li>
-</ul>
-<blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@echo off</span><br><span class="line">echo The version of C++ is C++11</span><br><span class="line">mingw32-make</span><br><span class="line">echo Compile successfully.</span><br><span class="line">pause</span><br><span class="line"></span><br><span class="line">echo ./adif -i a.adi</span><br><span class="line">adif -i a.adi</span><br><span class="line">pause</span><br><span class="line"></span><br><span class="line">echo ./adif -s BD8GK</span><br><span class="line">adif -s BD8GK</span><br><span class="line">pause</span><br><span class="line"></span><br><span class="line">echo ./adif -o test.adi</span><br><span class="line">adif -o test.adi</span><br><span class="line">pause</span><br></pre></td></tr></table></figure></blockquote>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Study</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ADS后篇</title>
     <url>/2023/07/01/ADS%E5%90%8E%E7%AF%87/</url>
     <content><![CDATA[<h1 id="NP完全"><a href="#NP完全" class="headerlink" title="NP完全"></a>NP完全</h1><ul>
@@ -392,504 +301,94 @@
       </tags>
   </entry>
   <entry>
-    <title>LaTeX Formula</title>
-    <url>/2023/06/30/LaTeX%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F/</url>
-    <content><![CDATA[<h2 id="上标、下标与组合"><a href="#上标、下标与组合" class="headerlink" title="上标、下标与组合"></a>上标、下标与组合</h2><ol>
-<li>上标符号，符号：<code>^</code>，如：<img src="https://math.jianshu.com/math?formula=x%5E4" alt="x^4"></li>
-<li>下标符号，符号：<code>_</code>，如：<img src="https://math.jianshu.com/math?formula=x_1" alt="x_1"></li>
-<li>组合符号，符号：<code>&#123;&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%7B16%7D_%7B8%7DO%7B2+%7D_%7B2%7D" alt="{16}_{8}O{2+}_{2}"></li>
-</ol>
-<h2 id="汉字、字体与格式"><a href="#汉字、字体与格式" class="headerlink" title="汉字、字体与格式"></a>汉字、字体与格式</h2><ol>
-<li>汉字形式，符号：<code>\mbox&#123;&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=V_%7B%5Cmbox%7B%E5%88%9D%E5%A7%8B%7D%7D" alt="V_{\mbox{初始}}"></li>
-<li>字体控制，符号：<code>\displaystyle</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cdisplaystyle%20%5Cfrac%7Bx+y%7D%7By+z%7D" alt="\displaystyle \frac{x+y}{y+z}"></li>
-<li>下划线符号，符号：<code>\underline</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cunderline%7Bx+y%7D" alt="\underline{x+y}"></li>
-<li>标签，符号<code>\tag&#123;数字&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Ctag%7B11%7D" alt="\tag{11}"></li>
-<li>上大括号，符号：<code>\overbrace&#123;算式&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Coverbrace%7Ba+b+c+d%7D%5E%7B2.0%7D" alt="\overbrace{a+b+c+d}^{2.0}"></li>
-<li>下大括号，符号：<code>\underbrace&#123;算式&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=a+%5Cunderbrace%7Bb+c%7D_%7B1.0%7D+d" alt="a+\underbrace{b+c}_{1.0}+d"></li>
-<li>上位符号，符号：<code>\stacrel&#123;上位符号&#125;&#123;基位符号&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cvec%7Bx%7D%5Cstackrel%7B%5Cmathrm%7Bdef%7D%7D%7B=%7D%7Bx_1,%5Cdots,x_n%7D" alt="\vec{x}\stackrel{\mathrm{def}}{=}{x_1,\dots,x_n}"></li>
-</ol>
-<h2 id="占位符"><a href="#占位符" class="headerlink" title="占位符"></a>占位符</h2><ol>
-<li>两个quad空格，符号：<code>\qquad</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cqquad%20y" alt="x \qquad y"></li>
-<li>quad空格，符号：<code>\quad</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cquad%20y" alt="x \quad y"></li>
-<li>大空格，符号<code>\</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5C%20y" alt="x \ y"></li>
-<li>中空格，符号<code>\:</code>，如：<img src="https://math.jianshu.com/math?formula=x%20:%20y" alt="x : y"></li>
-<li>小空格，符号<code>\,</code>，如：<img src="https://math.jianshu.com/math?formula=x%20,%20y" alt="x , y"></li>
-<li>没有空格，符号&#96;&#96;，如：<img src="https://math.jianshu.com/math?formula=xy" alt="xy"></li>
-<li>紧贴，符号<code>\!</code>，如：<img src="https://math.jianshu.com/math?formula=x%20!%20y" alt="x ! y"></li>
-</ol>
-<h2 id="定界符与组合"><a href="#定界符与组合" class="headerlink" title="定界符与组合"></a>定界符与组合</h2><ol>
-<li>括号，符号：<code>（）\big(\big) \Big(\Big) \bigg(\bigg) \Bigg(\Bigg)</code>，如：<img src="https://math.jianshu.com/math?formula=%EF%BC%88%EF%BC%89%5Cbig(%5Cbig)%20%5CBig(%5CBig)%20%5Cbigg(%5Cbigg)%20%5CBigg(%5CBigg)" alt="（）\big(\big) \Big(\Big) \bigg(\bigg) \Bigg(\Bigg)"></li>
-<li>中括号，符号：<code>[]</code>，如：<img src="https://math.jianshu.com/math?formula=%5Bx+y%5D" alt="[x+y]"></li>
-<li>大括号，符号：<code>\&#123; \&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%7Bx+y%7D" alt="{x+y}"></li>
-<li>自适应括号，符号：<code>\left \right</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cleft(x%5Cright)" alt="\left(x\right)">，<img src="https://math.jianshu.com/math?formula=%5Cleft(x%7Byz%7D%5Cright)" alt="\left(x{yz}\right)"></li>
-<li>组合公式，符号：<code>&#123;上位公式 \choose 下位公式&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%7Bn+1%20%5Cchoose%20k%7D=%7Bn%20%5Cchoose%20k%7D+%7Bn%20%5Cchoose%20k-1%7D" alt="{n+1 \choose k}={n \choose k}+{n \choose k-1}"></li>
-<li>组合公式，符号：<code>&#123;上位公式 \atop 下位公式&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Csum_%7Bk_0,k_1,%5Cldots%3E0%20%5Catop%20k_0+k_1+%5Ccdots=n%7DA_%7Bk_0%7DA_%7Bk_1%7D%5Ccdots" alt="\sum_{k_0,k_1,\ldots&gt;0 \atop k_0+k_1+\cdots=n}A_{k_0}A_{k_1}\cdots"></li>
-</ol>
-<h2 id="四则运算"><a href="#四则运算" class="headerlink" title="四则运算"></a>四则运算</h2><ol>
-<li>加法运算，符号：<code>+</code>，如：<img src="https://math.jianshu.com/math?formula=x+y=z" alt="x+y=z"></li>
-<li>减法运算，符号：<code>-</code>，如：<img src="https://math.jianshu.com/math?formula=x-y=z" alt="x-y=z"></li>
-<li>加减运算，符号：<code>\pm</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cpm%20y=z" alt="x \pm y=z"></li>
-<li>减甲运算，符号：<code>\mp</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cmp%20y=z" alt="x \mp y=z"></li>
-<li>乘法运算，符号：<code>\times</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Ctimes%20y=z" alt="x \times y=z"></li>
-<li>点乘运算，符号：<code>\cdot</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Ccdot%20y=z" alt="x \cdot y=z"></li>
-<li>星乘运算，符号：<code>\ast</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cast%20y=z" alt="x \ast y=z"></li>
-<li>除法运算，符号：<code>\div</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cdiv%20y=z" alt="x \div y=z"></li>
-<li>斜法运算，符号：<code>/</code>，如：<img src="https://math.jianshu.com/math?formula=x/y=z" alt="x/y=z"></li>
-<li>分式表示，符号：<code>\frac&#123;分子&#125;&#123;分母&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cfrac%7Bx+y%7D%7By+z%7D" alt="\frac{x+y}{y+z}"></li>
-<li>分式表示，符号：<code>&#123;分子&#125; \voer &#123;分母&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%7Bx+y%7D%20%5Cover%20%7By+z%7D" alt="{x+y} \over {y+z}"></li>
-<li>绝对值表示，符号：<code>||</code>，如：<img src="https://math.jianshu.com/math?formula=%7Cx+y%7C" alt="|x+y|"></li>
-</ol>
-<h2 id="高级运算"><a href="#高级运算" class="headerlink" title="高级运算"></a>高级运算</h2><ol>
-<li>平均数运算，符号：<code>\overline&#123;算式&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Coverline%7Bxyz%7D" alt="\overline{xyz}"></li>
-<li>开二次方运算，符号：<code>\sqrt</code>，如：<img src="https://math.jianshu.com/math?formula=%5Csqrt%20x" alt="\sqrt x"></li>
-<li>开方运算，符号：<code>\sqrt[开方数]&#123;被开方数&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Csqrt%5B3%5D%7Bx+y%7D" alt="\sqrt[3]{x+y}"></li>
-<li>对数运算，符号：<code>\log</code>，如：<img src="https://math.jianshu.com/math?formula=%5Clog(x)" alt="\log(x)"></li>
-<li>极限运算，符号：<code>\lim</code>，如：<img src="https://math.jianshu.com/math?formula=%5Clim%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D" alt="\lim^{x \to \infty}_{y \to 0}{\frac{x}{y}}"></li>
-<li>极限运算，符号：<code>\displaystyle \lim</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cdisplaystyle%20%5Clim%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D" alt="\displaystyle \lim^{x \to \infty}_{y \to 0}{\frac{x}{y}}"></li>
-<li>求和运算，符号：<code>\sum</code>，如：<img src="https://math.jianshu.com/math?formula=%5Csum%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D" alt="\sum^{x \to \infty}_{y \to 0}{\frac{x}{y}}"></li>
-<li>求和运算，符号：<code>\displaystyle \sum</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cdisplaystyle%20%5Csum%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D" alt="\displaystyle \sum^{x \to \infty}_{y \to 0}{\frac{x}{y}}"></li>
-<li>积分运算，符号：<code>\int</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cint%5E%7B%5Cinfty%7D_%7B0%7D%7Bxdx%7D" alt="\int^{\infty}_{0}{xdx}"></li>
-<li>积分运算，符号：<code>\displaystyle \int</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cdisplaystyle%20%5Cint%5E%7B%5Cinfty%7D_%7B0%7D%7Bxdx%7D" alt="\displaystyle \int^{\infty}_{0}{xdx}"></li>
-<li>微分运算，符号：<code>\partial</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cfrac%7B%5Cpartial%20x%7D%7B%5Cpartial%20y%7D" alt="\frac{\partial x}{\partial y}"></li>
-<li>矩阵表示，符号：<code>\begin&#123;matrix&#125; \end&#123;matrix&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cleft%5B%20%5Cbegin%7Bmatrix%7D%201%20&2%20&%5Ccdots%20&4%5C5%20&6%20&%5Ccdots%20&8%5C%5Cvdots%20&%5Cvdots%20&%5Cddots%20&%5Cvdots%5C13%20&14%20&%5Ccdots%20&16%5Cend%7Bmatrix%7D%20%5Cright%5D" alt="\left[ \begin{matrix} 1 &amp;2 &amp;\cdots &amp;4\5 &amp;6 &amp;\cdots &amp;8\\vdots &amp;\vdots &amp;\ddots &amp;\vdots\13 &amp;14 &amp;\cdots &amp;16\end{matrix} \right]"></li>
-</ol>
-<h2 id="逻辑运算"><a href="#逻辑运算" class="headerlink" title="逻辑运算"></a>逻辑运算</h2><ol>
-<li>等于运算，符号：<code>=</code>，如：<img src="https://math.jianshu.com/math?formula=x+y=z" alt="x+y=z"></li>
-<li>大于运算，符号：<code>&gt;</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%3Ez" alt="x+y&gt;z"></li>
-<li>小于运算，符号：<code>&lt;</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%3Cz" alt="x+y&lt;z"></li>
-<li>大于等于运算，符号：<code>\geq</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Cgeq%20z" alt="x+y \geq z"></li>
-<li>小于等于运算，符号：<code>\leq</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Cleq%20z" alt="x+y \leq z"></li>
-<li>不等于运算，符号：<code>\neq</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Cneq%20z" alt="x+y \neq z"></li>
-<li>不大于等于运算，符号：<code>\ngeq</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Cngeq%20z" alt="x+y \ngeq z"></li>
-<li>不大于等于运算，符号：<code>\not\geq</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Cnot%5Cgeq%20z" alt="x+y \not\geq z"></li>
-<li>不小于等于运算，符号：<code>\nleq</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Cnleq%20z" alt="x+y \nleq z"></li>
-<li>不小于等于运算，符号：<code>\not\leq</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Cnot%5Cleq%20z" alt="x+y \not\leq z"></li>
-<li>约等于运算，符号：<code>\approx</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Capprox%20z" alt="x+y \approx z"></li>
-<li>恒定等于运算，符号：<code>\equiv</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Cequiv%20z" alt="x+y \equiv z"></li>
-</ol>
-<h2 id="集合运算"><a href="#集合运算" class="headerlink" title="集合运算"></a>集合运算</h2><ol>
-<li>属于运算，符号：<code>\in</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cin%20y" alt="x \in y"></li>
-<li>不属于运算，符号：<code>\notin</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cnotin%20y" alt="x \notin y"></li>
-<li>不属于运算，符号：<code>\not\in</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cnot%5Cin%20y" alt="x \not\in y"></li>
-<li>子集运算，符号：<code>\subset</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Csubset%20y" alt="x \subset y"></li>
-<li>子集运算，符号：<code>\supset</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Csupset%20y" alt="x \supset y"></li>
-<li>真子集运算，符号：<code>\subseteq</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Csubseteq%20y" alt="x \subseteq y"></li>
-<li>非真子集运算，符号：<code>\subsetneq</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Csubsetneq%20y" alt="x \subsetneq y"></li>
-<li>真子集运算，符号：<code>\supseteq</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Csupseteq%20y" alt="x \supseteq y"></li>
-<li>非真子集运算，符号：<code>\supsetneq</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Csupsetneq%20y" alt="x \supsetneq y"></li>
-<li>非子集运算，符号：<code>\not\subset</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cnot%5Csubset%20y" alt="x \not\subset y"></li>
-<li>非子集运算，符号：<code>\not\supset</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cnot%5Csupset%20y" alt="x \not\supset y"></li>
-<li>并集运算，符号：<code>\cup</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Ccup%20y" alt="x \cup y"></li>
-<li>交集运算，符号：<code>\cap</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Ccap%20y" alt="x \cap y"></li>
-<li>差集运算，符号：<code>\setminus</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Csetminus%20y" alt="x \setminus y"></li>
-<li>同或运算，符号：<code>\bigodot</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cbigodot%20y" alt="x \bigodot y"></li>
-<li>同与运算，符号：<code>\bigotimes</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cbigotimes%20y" alt="x \bigotimes y"></li>
-<li>实数集合，符号：<code>\mathbb&#123;R&#125;</code>，如：<code>\mathbb&#123;R&#125;</code></li>
-<li>自然数集合，符号：<code>\mathbb&#123;Z&#125;</code>，如：<code>\mathbb&#123;Z&#125;</code></li>
-<li>空集，符号：<code>\emptyset</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cemptyset" alt="\emptyset"></li>
-</ol>
-<h2 id="数学符号"><a href="#数学符号" class="headerlink" title="数学符号"></a>数学符号</h2><ol>
-<li>无穷，符号：<code>\infty</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cinfty" alt="\infty"></li>
-<li>虚数，符号：<code>\imath</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cimath" alt="\imath"></li>
-<li>虚数，符号：<code>\jmath</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cjmath" alt="\jmath"></li>
-<li>数学符号，符号<code>\hat&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Chat%7Ba%7D" alt="\hat{a}"></li>
-<li>数学符号，符号<code>\check&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Ccheck%7Ba%7D" alt="\check{a}"></li>
-<li>数学符号，符号<code>\breve&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cbreve%7Ba%7D" alt="\breve{a}"></li>
-<li>数学符号，符号<code>\tilde&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Ctilde%7Ba%7D" alt="\tilde{a}"></li>
-<li>数学符号，符号<code>\bar&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cbar%7Ba%7D" alt="\bar{a}"></li>
-<li>矢量符号，符号<code>\vec&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cvec%7Ba%7D" alt="\vec{a}"></li>
-<li>数学符号，符号<code>\acute&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cacute%7Ba%7D" alt="\acute{a}"></li>
-<li>数学符号，符号<code>\grave&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cgrave%7Ba%7D" alt="\grave{a}"></li>
-<li>数学符号，符号<code>\mathring&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cmathring%7Ba%7D" alt="\mathring{a}"></li>
-<li>一阶导数符号，符号<code>\dot&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cdot%7Ba%7D" alt="\dot{a}"></li>
-<li>二阶导数符号，符号<code>\ddot&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cddot%7Ba%7D" alt="\ddot{a}"></li>
-<li>上箭头，符号：<code>\uparrow</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cuparrow" alt="\uparrow"></li>
-<li>上箭头，符号：<code>\Uparrow</code>，如：<img src="https://math.jianshu.com/math?formula=%5CUparrow" alt="\Uparrow"></li>
-<li>下箭头，符号：<code>\downarrow</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cdownarrow" alt="\downarrow"></li>
-<li>下箭头，符号：<code>\Downarrow</code>，如：<img src="https://math.jianshu.com/math?formula=%5CDownarrow" alt="\Downarrow"></li>
-<li>左箭头，符号：<code>\leftarrow</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cleftarrow" alt="\leftarrow"></li>
-<li>左箭头，符号：<code>\Leftarrow</code>，如：<img src="https://math.jianshu.com/math?formula=%5CLeftarrow" alt="\Leftarrow"></li>
-<li>右箭头，符号：<code>\rightarrow</code>，如：<img src="https://math.jianshu.com/math?formula=%5Crightarrow" alt="\rightarrow"></li>
-<li>右箭头，符号：<code>\Rightarrow</code>，如：<img src="https://math.jianshu.com/math?formula=%5CRightarrow" alt="\Rightarrow"></li>
-<li>底端对齐的省略号，符号：<code>\ldots</code>，如：<img src="https://math.jianshu.com/math?formula=1,2,%5Cldots,n" alt="1,2,\ldots,n"></li>
-<li>中线对齐的省略号，符号：<code>\cdots</code>，如：<img src="https://math.jianshu.com/math?formula=x_1%5E2%20+%20x_2%5E2%20+%20%5Ccdots%20+%20x_n%5E2" alt="x_1^2 + x_2^2 + \cdots + x_n^2"></li>
-<li>竖直对齐的省略号，符号：<code>\vdots</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cvdots" alt="\vdots"></li>
-<li>斜对齐的省略号，符号：<code>\ddots</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cddots" alt="\ddots"></li>
-</ol>
-<h2 id="希腊字母"><a href="#希腊字母" class="headerlink" title="希腊字母"></a>希腊字母</h2><table>
-<thead>
-<tr>
-<th>字母</th>
-<th>实现</th>
-<th>字母</th>
-<th>实现</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>A</td>
-<td><code>A</code></td>
-<td>α</td>
-<td><code>\alhpa</code></td>
-</tr>
-<tr>
-<td>B</td>
-<td><code>B</code></td>
-<td>β</td>
-<td><code>\beta</code></td>
-</tr>
-<tr>
-<td>Γ</td>
-<td><code>\Gamma</code></td>
-<td>γ</td>
-<td><code>\gamma</code></td>
-</tr>
-<tr>
-<td>Δ</td>
-<td><code>\Delta</code></td>
-<td>δ</td>
-<td><code>\delta</code></td>
-</tr>
-<tr>
-<td>E</td>
-<td><code>E</code></td>
-<td>ϵ</td>
-<td><code>\epsilon</code></td>
-</tr>
-<tr>
-<td>Z</td>
-<td><code>Z</code></td>
-<td>ζ</td>
-<td><code>\zeta</code></td>
-</tr>
-<tr>
-<td>H</td>
-<td><code>H</code></td>
-<td>η</td>
-<td><code>\eta</code></td>
-</tr>
-<tr>
-<td>Θ</td>
-<td><code>\Theta</code></td>
-<td>θ</td>
-<td><code>\theta</code></td>
-</tr>
-<tr>
-<td>I</td>
-<td><code>I</code></td>
-<td>ι</td>
-<td><code>\iota</code></td>
-</tr>
-<tr>
-<td>K</td>
-<td><code>K</code></td>
-<td>κ</td>
-<td><code>\kappa</code></td>
-</tr>
-<tr>
-<td>Λ</td>
-<td><code>\Lambda</code></td>
-<td>λ</td>
-<td><code>\lambda</code></td>
-</tr>
-<tr>
-<td>M</td>
-<td><code>M</code></td>
-<td>μ</td>
-<td><code>\mu</code></td>
-</tr>
-<tr>
-<td>N</td>
-<td><code>N</code></td>
-<td>ν</td>
-<td><code>\nu</code></td>
-</tr>
-<tr>
-<td>Ξ</td>
-<td><code>\Xi</code></td>
-<td>ξ</td>
-<td><code>\xi</code></td>
-</tr>
-<tr>
-<td>O</td>
-<td><code>O</code></td>
-<td>ο</td>
-<td><code>\omicron</code></td>
-</tr>
-<tr>
-<td>Π</td>
-<td><code>\Pi</code></td>
-<td>π</td>
-<td><code>\pi</code></td>
-</tr>
-<tr>
-<td>P</td>
-<td><code>P</code></td>
-<td>ρ</td>
-<td><code>\rho</code></td>
-</tr>
-<tr>
-<td>Σ</td>
-<td><code>\Sigma</code></td>
-<td>σ</td>
-<td><code>\sigma</code></td>
-</tr>
-<tr>
-<td>T</td>
-<td><code>T</code></td>
-<td>τ</td>
-<td><code>\tau</code></td>
-</tr>
-<tr>
-<td>Υ</td>
-<td><code>\Upsilon</code></td>
-<td>υ</td>
-<td><code>\upsilon</code></td>
-</tr>
-<tr>
-<td>Φ</td>
-<td><code>\Phi</code></td>
-<td>ϕ</td>
-<td><code>\phi</code></td>
-</tr>
-<tr>
-<td>X</td>
-<td><code>X</code></td>
-<td>χ</td>
-<td><code>\chi</code></td>
-</tr>
-<tr>
-<td>Ψ</td>
-<td><code>\Psi</code></td>
-<td>ψ</td>
-<td><code>\psi</code></td>
-</tr>
-<tr>
-<td>Ω</td>
-<td><code>\v</code></td>
-<td>ω</td>
-<td><code>\omega</code></td>
-</tr>
-</tbody></table>
+    <title>C++ Project Norm</title>
+    <url>/2023/05/30/C++%E5%B7%A5%E7%A8%8B%E8%A7%84%E8%8C%83/</url>
+    <content><![CDATA[<h2 id="File-design："><a href="#File-design：" class="headerlink" title="File design："></a>File design：</h2><blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">├── main.cpp</span><br><span class="line">├── database.h // declaration</span><br><span class="line">├── database.cpp // defination</span><br><span class="line">├── tuple.h // type</span><br><span class="line">├── tuple.cpp</span><br><span class="line">├── writer.h // superclass</span><br><span class="line">├── writer.cpp</span><br><span class="line">├── adiwriter.h // subclass</span><br><span class="line">├── adiwriter.cpp</span><br><span class="line">├── Makefile</span><br><span class="line">├── test.bat // the batch file</span><br><span class="line">├── READNE.md</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="Declaration-h"><a href="#Declaration-h" class="headerlink" title="Declaration (.h)"></a>Declaration (.h)</h2><blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _DATABASE_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _DATABASE_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;tuple.h&quot;</span> <span class="comment">// 只需调用声明</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;adiwriter.h&quot;</span> <span class="comment">// 只需调用实际用到的子类</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;set&gt;</span></span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Database</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::set&lt;tuple&gt; records;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Database</span>();</span><br><span class="line">    <span class="built_in">Database</span>(std::string filename);</span><br><span class="line">    ~<span class="built_in">Database</span>();</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<ul>
+<li>ifndef：防止嵌套调用时出现反复调用的情况。</li>
+</ul>
+<h2 id="类型定义"><a href="#类型定义" class="headerlink" title="类型定义"></a>类型定义</h2><blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">tuple</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    std::string primaryKey;</span><br><span class="line">    std::map&lt;std::string, <span class="type">int</span>&gt; keytypes;</span><br><span class="line">    std::map&lt;std::string, std::string&gt; values;</span><br><span class="line">    <span class="built_in">tuple</span>();</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">setPrimaryKey</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="keyword">friend</span> <span class="type">bool</span> <span class="keyword">operator</span> &lt;(<span class="type">const</span> tuple &amp;a, <span class="type">const</span> tuple &amp;b);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<ul>
+<li>重载运算符：用于排序与比较。</li>
+<li>类型定义后使用同struct（不如说就是一个东西）</li>
+</ul>
+<h2 id="继承类应用"><a href="#继承类应用" class="headerlink" title="继承类应用"></a>继承类应用</h2><blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Writer</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Writer</span>();</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">Writer</span>();</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">adiWriter</span> : <span class="keyword">public</span> Writer</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="namespace使用"><a href="#namespace使用" class="headerlink" title="namespace使用"></a>namespace使用</h2><ul>
+<li>namespace命名空间，包含多种关键字，std为常用的命名空间，cin，cout即为其中的关键字</li>
+<li>若只想使用其中一个：<code>using std::sort;</code></li>
+<li>在一个代码块内如果有和命名空间相同的变量名，那么使用<code>using namespace</code>是无效的。</li>
+<li>自定义namespace：</li>
+</ul>
+<blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">namespace</span> NM1</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> zero = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">sum</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x + y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> NM1;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">sum</span>(<span class="number">3</span>, <span class="number">4</span>) &lt;&lt; zero;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<ul>
+<li>跨文件使用：同class，不过用<code>using namespace</code>调用</li>
+</ul>
+<h2 id="读写"><a href="#读写" class="headerlink" title="读写"></a>读写</h2><ul>
+<li><code>argc</code> 和 <code>argv</code>：命令行参数<ul>
+<li>第一个参数<code>argc</code>，用于参数计数，其值等于命令行中参数的个数；第二个参数<code>argv</code>，用于参数向量，是一个指向字符串数组的指针。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&gt;输入：./main.o 123 456</span><br><span class="line">&gt;argc = 3</span><br><span class="line">&gt;argv[0] = &quot;./main.o&quot;</span><br><span class="line">&gt;argv[1] = &quot;123&quot;</span><br><span class="line">&gt;argv[2] = &quot;456&quot;</span><br><span class="line">&gt;// 直接运行程序则argc = 1(运行程序而传入的命令)</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>​		下面的代码用于读入输入的命令（因为要用batch，所以这样读）</p>
+<blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span>&#123;</span><br><span class="line">    std::string command;</span><br><span class="line">    <span class="keyword">if</span>(argc == <span class="number">1</span>)&#123; <span class="comment">// 单条完整命令</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="built_in">getline</span>(std::cin, command))</span><br><span class="line">            db.<span class="built_in">processCommand</span>(command);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123; <span class="comment">// 命令被空格分开</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt; argc; i++)</span><br><span class="line">            command = command + argv[i] + <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">        db.<span class="built_in">processCommand</span>(command);</span><br><span class="line">    &#125;</span><br><span class="line">    db.<span class="built_in">exportDatabase</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<ul>
+<li><p><code>iostream</code>：标准读写流</p>
+<ul>
+<li><code>cin</code>，<code>cout</code>分别是<code>istream</code>，<code>ostream</code>的对象，我们可以自己创造其他<code>istream</code>，<code>ostream</code>的对象。</li>
+<li><code>freopen(&quot;test.txt&quot;,&quot;w&quot;,stdout)</code>将标准输出重定向到<code>test.txt</code>。</li>
+</ul>
+</li>
+<li><p><code>fstream</code>：文件读写流</p>
+<blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">std::ofstream fout;</span><br><span class="line">fout.<span class="built_in">open</span>(<span class="string">&quot;test.txt&quot;</span>);</span><br><span class="line">fout &lt;&lt; <span class="string">&quot;Hello&quot;</span> &lt;&lt; endl;</span><br><span class="line">fout.<span class="built_in">close</span>();</span><br></pre></td></tr></table></figure></blockquote>
+</li>
+</ul>
+<h2 id="Makefile使用"><a href="#Makefile使用" class="headerlink" title="Makefile使用"></a>Makefile使用</h2><blockquote>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Declare compiler variable</span></span><br><span class="line">CXX=g++</span><br><span class="line"><span class="comment"># Declare compilation options</span></span><br><span class="line">CXXFLAGS=-Wall -g --std=c++11</span><br><span class="line"><span class="comment"># Declare linking options</span></span><br><span class="line">LDFLAGS=</span><br><span class="line"><span class="comment"># Declare source code files</span></span><br><span class="line">SRCS=main.cpp tuple.cpp writer.cpp adiwriter.cpp database.cpp</span><br><span class="line"><span class="comment"># Convert source code files to a list of object files</span></span><br><span class="line">OBJS=$(SRCS:.cpp=.o)</span><br><span class="line"><span class="comment"># Declare executable name</span></span><br><span class="line">TARGET=adif</span><br><span class="line"><span class="comment"># Default target</span></span><br><span class="line"><span class="section">all: <span class="variable">$(TARGET)</span></span></span><br><span class="line"><span class="comment"># Dependencies</span></span><br><span class="line"><span class="variable">$(TARGET)</span>: <span class="variable">$(OBJS)</span></span><br><span class="line">	<span class="variable">$(CXX)</span> <span class="variable">$(LDFLAGS)</span> -o <span class="variable">$(TARGET)</span> <span class="variable">$(OBJS)</span></span><br><span class="line"><span class="comment"># Automatically generate dependencies</span></span><br><span class="line"><span class="section">.depend: <span class="variable">$(SRCS)</span></span></span><br><span class="line">	rm -f ./.depend</span><br><span class="line">	<span class="variable">$(CXX)</span> <span class="variable">$(CXXFLAGS)</span> -MM <span class="variable">$^</span> &gt; ./.depend</span><br><span class="line"><span class="comment"># Include dependencies</span></span><br><span class="line"><span class="keyword">-include</span> .depend</span><br><span class="line"><span class="comment"># Clean</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm -f <span class="variable">$(OBJS)</span> <span class="variable">$(TARGET)</span> .depend</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="batch文件"><a href="#batch文件" class="headerlink" title="batch文件"></a>batch文件</h2><ul>
+<li><p><code>make.bat</code></p>
+<ul>
+<li>窗口交互型</li>
+<li>没有Makefile，用于编译与生成可执行文件Main</li>
+</ul>
+<blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">g++ -c main.cpp -std=c++11 -o main.o</span><br><span class="line">g++ -c database.cpp -std=c++11 -o database.o</span><br><span class="line">...</span><br><span class="line">g++ -o Main main.o Maze.o Player.o</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p><code>test.bat</code></p>
+<ul>
+<li>指令测试型</li>
+<li>有Makefile，用于调用Makefile编译以及输入命令测试。</li>
+<li>echo为回显在屏幕上的内容</li>
+<li>没有echo的为输入的指令，<code>mingw32-make</code>调用Makefile</li>
+<li>pause后，需按任意键才会输入下一条指令</li>
+</ul>
+<blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@echo off</span><br><span class="line">echo The version of C++ is C++11</span><br><span class="line">mingw32-make</span><br><span class="line">echo Compile successfully.</span><br><span class="line">pause</span><br><span class="line"></span><br><span class="line">echo ./adif -i a.adi</span><br><span class="line">adif -i a.adi</span><br><span class="line">pause</span><br><span class="line"></span><br><span class="line">echo ./adif -s BD8GK</span><br><span class="line">adif -s BD8GK</span><br><span class="line">pause</span><br><span class="line"></span><br><span class="line">echo ./adif -o test.adi</span><br><span class="line">adif -o test.adi</span><br><span class="line">pause</span><br></pre></td></tr></table></figure></blockquote>
+</li>
+</ul>
 ]]></content>
       <tags>
         <tag>Study</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>oop后篇</title>
-    <url>/2023/06/30/OOP%E5%90%8E%E7%AF%87/</url>
-    <content><![CDATA[<h1 id="C-文件和流"><a href="#C-文件和流" class="headerlink" title="C++ 文件和流"></a>C++ 文件和流</h1><p>到目前为止，我们已经使用了 <strong>iostream</strong> 标准库，它提供了 <strong>cin</strong> 和 <strong>cout</strong> 方法分别用于从标准输入读取流和向标准输出写入流。</p>
-<p>本教程介绍如何从文件读取流和向文件写入流。这就需要用到 C++ 中另一个标准库 <strong>fstream</strong>，它定义了三个新的数据类型：</p>
-<table>
-<thead>
-<tr>
-<th align="left">数据类型</th>
-<th align="left">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">ofstream</td>
-<td align="left">该数据类型表示输出文件流，用于创建文件并向文件写入信息。</td>
-</tr>
-<tr>
-<td align="left">ifstream</td>
-<td align="left">该数据类型表示输入文件流，用于从文件读取信息。</td>
-</tr>
-<tr>
-<td align="left">fstream</td>
-<td align="left">该数据类型通常表示文件流，且同时具有 ofstream 和 ifstream 两种功能，这意味着它可以创建文件，向文件写入信息，从文件读取信息。</td>
-</tr>
-</tbody></table>
-<p>要在 C++ 中进行文件处理，必须在 C++ 源代码文件中包含头文件 <iostream> 和 <fstream>。</p>
-<h2 id="打开文件"><a href="#打开文件" class="headerlink" title="打开文件"></a>打开文件</h2><p>在从文件读取信息或者向文件写入信息之前，必须先打开文件。<strong>ofstream</strong> 和 <strong>fstream</strong> 对象都可以用来打开文件进行写操作，如果只需要打开文件进行读操作，则使用 <strong>ifstream</strong> 对象。</p>
-<p>下面是 open() 函数的标准语法，open() 函数是 fstream、ifstream 和 ofstream 对象的一个成员。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void open(const char *filename, ios::openmode mode);</span><br></pre></td></tr></table></figure>
-
-<p>在这里，<strong>open()</strong> 成员函数的第一参数指定要打开的文件的名称和位置，第二个参数定义文件被打开的模式。</p>
-<table>
-<thead>
-<tr>
-<th align="left">模式标志</th>
-<th align="left">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">ios::app</td>
-<td align="left">追加模式。所有写入都追加到文件末尾。</td>
-</tr>
-<tr>
-<td align="left">ios::ate</td>
-<td align="left">文件打开后定位到文件末尾。</td>
-</tr>
-<tr>
-<td align="left">ios::in</td>
-<td align="left">打开文件用于读取。</td>
-</tr>
-<tr>
-<td align="left">ios::out</td>
-<td align="left">打开文件用于写入。</td>
-</tr>
-<tr>
-<td align="left">ios::trunc</td>
-<td align="left">如果该文件已经存在，其内容将在打开文件之前被截断，即把文件长度设为 0。</td>
-</tr>
-</tbody></table>
-<p>您可以把以上两种或两种以上的模式结合使用。例如，如果您想要以写入模式打开文件，并希望截断文件，以防文件已存在，那么您可以使用下面的语法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ofstream outfile;</span><br><span class="line">outfile.open(&quot;file.dat&quot;, ios::out | ios::trunc );</span><br></pre></td></tr></table></figure>
-
-<p>类似地，您如果想要打开一个文件用于读写，可以使用下面的语法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ifstream  afile;</span><br><span class="line">afile.open(&quot;file.dat&quot;, ios::out | ios::in );</span><br></pre></td></tr></table></figure>
-
-<h2 id="关闭文件"><a href="#关闭文件" class="headerlink" title="关闭文件"></a>关闭文件</h2><p>当 C++ 程序终止时，它会自动关闭刷新所有流，释放所有分配的内存，并关闭所有打开的文件。但程序员应该养成一个好习惯，在程序终止前关闭所有打开的文件。</p>
-<p>下面是 close() 函数的标准语法，close() 函数是 fstream、ifstream 和 ofstream 对象的一个成员。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void close();</span><br></pre></td></tr></table></figure>
-
-<h2 id="写入文件"><a href="#写入文件" class="headerlink" title="写入文件"></a>写入文件</h2><p>在 C++ 编程中，我们使用流插入运算符（ &lt;&lt; ）向文件写入信息，就像使用该运算符输出信息到屏幕上一样。唯一不同的是，在这里您使用的是 <strong>ofstream</strong> 或 <strong>fstream</strong> 对象，而不是 <strong>cout</strong> 对象。</p>
-<h2 id="读取文件"><a href="#读取文件" class="headerlink" title="读取文件"></a>读取文件</h2><p>在 C++ 编程中，我们使用流提取运算符（ &gt;&gt; ）从文件读取信息，就像使用该运算符从键盘输入信息一样。唯一不同的是，在这里您使用的是 <strong>ifstream</strong> 或 <strong>fstream</strong> 对象，而不是 <strong>cin</strong> 对象。</p>
-<h2 id="读取-amp-写入实例"><a href="#读取-amp-写入实例" class="headerlink" title="读取 &amp; 写入实例"></a>读取 &amp; 写入实例</h2><p>下面的 C++ 程序以读写模式打开一个文件。在向文件 afile.dat 写入用户输入的信息之后，程序从文件读取信息，并将其输出到屏幕上：</p>
-<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span> <span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">   <span class="type">char</span> data[<span class="number">100</span>];</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// 以写模式打开文件</span></span><br><span class="line">   ofstream outfile;</span><br><span class="line">   outfile.<span class="built_in">open</span>(<span class="string">&quot;afile.dat&quot;</span>);</span><br><span class="line"> </span><br><span class="line">   cout &lt;&lt; <span class="string">&quot;Writing to the file&quot;</span> &lt;&lt; endl;</span><br><span class="line">   cout &lt;&lt; <span class="string">&quot;Enter your name: &quot;</span>; </span><br><span class="line">   cin.<span class="built_in">getline</span>(data, <span class="number">100</span>);</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// 向文件写入用户输入的数据</span></span><br><span class="line">   outfile &lt;&lt; data &lt;&lt; endl;</span><br><span class="line"> </span><br><span class="line">   cout &lt;&lt; <span class="string">&quot;Enter your age: &quot;</span>; </span><br><span class="line">   cin &gt;&gt; data;</span><br><span class="line">   cin.<span class="built_in">ignore</span>();</span><br><span class="line">   </span><br><span class="line">   <span class="comment">// 再次向文件写入用户输入的数据</span></span><br><span class="line">   outfile &lt;&lt; data &lt;&lt; endl;</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// 关闭打开的文件</span></span><br><span class="line">   outfile.<span class="built_in">close</span>();</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// 以读模式打开文件</span></span><br><span class="line">   ifstream infile; </span><br><span class="line">   infile.<span class="built_in">open</span>(<span class="string">&quot;afile.dat&quot;</span>); </span><br><span class="line"> </span><br><span class="line">   cout &lt;&lt; <span class="string">&quot;Reading from the file&quot;</span> &lt;&lt; endl; </span><br><span class="line">   infile &gt;&gt; data; </span><br><span class="line"> </span><br><span class="line">   <span class="comment">// 在屏幕上写入数据</span></span><br><span class="line">   cout &lt;&lt; data &lt;&lt; endl;</span><br><span class="line">   </span><br><span class="line">   <span class="comment">// 再次从文件读取数据，并显示它</span></span><br><span class="line">   infile &gt;&gt; data; </span><br><span class="line">   cout &lt;&lt; data &lt;&lt; endl; </span><br><span class="line"> </span><br><span class="line">   <span class="comment">// 关闭打开的文件</span></span><br><span class="line">   infile.<span class="built_in">close</span>();</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>当上面的代码被编译和执行时，它会产生下列输入和输出：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$./a.out</span><br><span class="line">Writing to the file</span><br><span class="line">Enter your name: Zara</span><br><span class="line">Enter your age: 9</span><br><span class="line">Reading from the file</span><br><span class="line">Zara</span><br><span class="line">9</span><br></pre></td></tr></table></figure>
-
-<p>上面的实例中使用了 cin 对象的附加函数，比如 getline()函数从外部读取一行，ignore() 函数会忽略掉之前读语句留下的多余字符。</p>
-<h2 id="文件位置指针"><a href="#文件位置指针" class="headerlink" title="文件位置指针"></a>文件位置指针</h2><p><strong>istream</strong> 和 <strong>ostream</strong> 都提供了用于重新定位文件位置指针的成员函数。这些成员函数包括关于 istream 的 <strong>seekg</strong>（”seek get”）和关于 ostream 的 <strong>seekp</strong>（”seek put”）。</p>
-<p>seekg 和 seekp 的参数通常是一个长整型。第二个参数可以用于指定查找方向。查找方向可以是 <strong>ios::beg</strong>（默认的，从流的开头开始定位），也可以是 <strong>ios::cur</strong>（从流的当前位置开始定位），也可以是 <strong>ios::end</strong>（从流的末尾开始定位）。</p>
-<p>文件位置指针是一个整数值，指定了从文件的起始位置到指针所在位置的字节数。下面是关于定位 “get” 文件位置指针的实例：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 定位到 fileObject 的第 n 个字节（假设是 ios::beg）</span></span><br><span class="line">fileObject.<span class="built_in">seekg</span>( n );</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 把文件的读指针从 fileObject 当前位置向后移 n 个字节</span></span><br><span class="line">fileObject.<span class="built_in">seekg</span>( n, ios::cur );</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 把文件的读指针从 fileObject 末尾往回移 n 个字节</span></span><br><span class="line">fileObject.<span class="built_in">seekg</span>( n, ios::end );</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 定位到 fileObject 的末尾</span></span><br><span class="line">fileObject.<span class="built_in">seekg</span>( <span class="number">0</span>, ios::end );</span><br></pre></td></tr></table></figure>
-
-<h1 id="C-异常处理"><a href="#C-异常处理" class="headerlink" title="C++ 异常处理"></a>C++ 异常处理</h1><p>异常是程序在执行期间产生的问题。C++ 异常是指在程序运行时发生的特殊情况，比如尝试除以零的操作。</p>
-<p>异常提供了一种转移程序控制权的方式。C++ 异常处理涉及到三个关键字：<strong>try、catch、throw</strong>。</p>
-<ul>
-<li><strong>throw:</strong> 当问题出现时，程序会抛出一个异常。这是通过使用 <strong>throw</strong> 关键字来完成的。</li>
-<li><strong>catch:</strong> 在您想要处理问题的地方，通过异常处理程序捕获异常。<strong>catch</strong> 关键字用于捕获异常。</li>
-<li><strong>try:</strong> <strong>try</strong> 块中的代码标识将被激活的特定异常。它后面通常跟着一个或多个 catch 块。</li>
-</ul>
-<p>如果有一个块抛出一个异常，捕获异常的方法会使用 <strong>try</strong> 和 <strong>catch</strong> 关键字。try 块中放置可能抛出异常的代码，try 块中的代码被称为保护代码。使用 try&#x2F;catch 语句的语法如下所示：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// 保护代码</span></span><br><span class="line">&#125;<span class="built_in">catch</span>( ExceptionName e1 )</span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// catch 块</span></span><br><span class="line">&#125;<span class="built_in">catch</span>( ExceptionName e2 )</span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// catch 块</span></span><br><span class="line">&#125;<span class="built_in">catch</span>( ExceptionName eN )</span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// catch 块</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如果 <strong>try</strong> 块在不同的情境下会抛出不同的异常，这个时候可以尝试罗列多个 <strong>catch</strong> 语句，用于捕获不同类型的异常。</p>
-<h2 id="抛出异常"><a href="#抛出异常" class="headerlink" title="抛出异常"></a>抛出异常</h2><p>您可以使用 <strong>throw</strong> 语句在代码块中的任何地方抛出异常。throw 语句的操作数可以是任意的表达式，表达式的结果的类型决定了抛出的异常的类型。</p>
-<p>以下是尝试除以零时抛出异常的实例：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">double</span> <span class="title">division</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">if</span>( b == <span class="number">0</span> )</span><br><span class="line">   &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="string">&quot;Division by zero condition!&quot;</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> (a/b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="捕获异常"><a href="#捕获异常" class="headerlink" title="捕获异常"></a>捕获异常</h2><p><strong>catch</strong> 块跟在 <strong>try</strong> 块后面，用于捕获异常。您可以指定想要捕捉的异常类型，这是由 catch 关键字后的括号内的异常声明决定的。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// 保护代码</span></span><br><span class="line">&#125;<span class="built_in">catch</span>( ExceptionName e )</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 处理 ExceptionName 异常的代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面的代码会捕获一个类型为 <strong>ExceptionName</strong> 的异常。如果您想让 catch 块能够处理 try 块抛出的任何类型的异常，则必须在异常声明的括号内使用省略号 …，如下所示：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// 保护代码</span></span><br><span class="line">&#125;<span class="built_in">catch</span>(...)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 能处理任何异常的代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>下面是一个实例，抛出一个除以零的异常，并在 catch 块中捕获该异常。</p>
-<h2 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">division</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">if</span>( b == <span class="number">0</span> )</span><br><span class="line">   &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="string">&quot;Division by zero condition!&quot;</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> (a/b);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span> <span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="type">int</span> x = <span class="number">50</span>;</span><br><span class="line">   <span class="type">int</span> y = <span class="number">0</span>;</span><br><span class="line">   <span class="type">double</span> z = <span class="number">0</span>;</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">     z = <span class="built_in">division</span>(x, y);</span><br><span class="line">     cout &lt;&lt; z &lt;&lt; endl;</span><br><span class="line">   &#125;<span class="built_in">catch</span> (<span class="type">const</span> <span class="type">char</span>* msg) &#123;</span><br><span class="line">     cerr &lt;&lt; msg &lt;&lt; endl;</span><br><span class="line">   &#125;</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>由于我们抛出了一个类型为 <strong>const char*</strong> 的异常，因此，当捕获该异常时，我们必须在 catch 块中使用 const char*。当上面的代码被编译和执行时，它会产生下列结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Division by zero condition!</span><br></pre></td></tr></table></figure>
-
-<h2 id="C-标准的异常"><a href="#C-标准的异常" class="headerlink" title="C++ 标准的异常"></a>C++ 标准的异常</h2><p>C++ 提供了一系列标准的异常，定义在 <strong><exception></strong> 中，我们可以在程序中使用这些标准的异常。它们是以父子类层次结构组织起来的，如下所示：</p>
-<p><img src="https://www.runoob.com/wp-content/uploads/2015/05/exceptions_in_cpp.png" alt="C++ 异常的层次结构"></p>
-<p>下表是对上面层次结构中出现的每个异常的说明：</p>
-<table>
-<thead>
-<tr>
-<th align="left">异常</th>
-<th align="left">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><strong>std::exception</strong></td>
-<td align="left">该异常是所有标准 C++ 异常的父类。</td>
-</tr>
-<tr>
-<td align="left">std::bad_alloc</td>
-<td align="left">该异常可以通过 <strong>new</strong> 抛出。</td>
-</tr>
-<tr>
-<td align="left">std::bad_cast</td>
-<td align="left">该异常可以通过 <strong>dynamic_cast</strong> 抛出。</td>
-</tr>
-<tr>
-<td align="left">std::bad_typeid</td>
-<td align="left">该异常可以通过 <strong>typeid</strong> 抛出。</td>
-</tr>
-<tr>
-<td align="left">std::bad_exception</td>
-<td align="left">这在处理 C++ 程序中无法预期的异常时非常有用。</td>
-</tr>
-<tr>
-<td align="left"><strong>std::logic_error</strong></td>
-<td align="left">理论上可以通过读取代码来检测到的异常。</td>
-</tr>
-<tr>
-<td align="left">std::domain_error</td>
-<td align="left">当使用了一个无效的数学域时，会抛出该异常。</td>
-</tr>
-<tr>
-<td align="left">std::invalid_argument</td>
-<td align="left">当使用了无效的参数时，会抛出该异常。</td>
-</tr>
-<tr>
-<td align="left">std::length_error</td>
-<td align="left">当创建了太长的 std::string 时，会抛出该异常。</td>
-</tr>
-<tr>
-<td align="left">std::out_of_range</td>
-<td align="left">该异常可以通过方法抛出，例如 std::vector 和 std::bitset&lt;&gt;::operator<a href=""></a>。</td>
-</tr>
-<tr>
-<td align="left"><strong>std::runtime_error</strong></td>
-<td align="left">理论上不可以通过读取代码来检测到的异常。</td>
-</tr>
-<tr>
-<td align="left">std::overflow_error</td>
-<td align="left">当发生数学上溢时，会抛出该异常。</td>
-</tr>
-<tr>
-<td align="left">std::range_error</td>
-<td align="left">当尝试存储超出范围的值时，会抛出该异常。</td>
-</tr>
-<tr>
-<td align="left">std::underflow_error</td>
-<td align="left">当发生数学下溢时，会抛出该异常。</td>
-</tr>
-</tbody></table>
-<h2 id="定义新的异常"><a href="#定义新的异常" class="headerlink" title="定义新的异常"></a>定义新的异常</h2><p>您可以通过继承和重载 <strong>exception</strong> 类来定义新的异常。下面的实例演示了如何使用 std::exception 类来实现自己的异常：</p>
-<h2 id="实例-2"><a href="#实例-2" class="headerlink" title="实例"></a>实例</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;exception&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">MyException</span> : <span class="keyword">public</span> exception</span><br><span class="line">&#123;</span><br><span class="line">  <span class="function"><span class="type">const</span> <span class="type">char</span> * <span class="title">what</span> <span class="params">()</span> <span class="type">const</span> <span class="title">throw</span> <span class="params">()</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;C++ Exception&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">try</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="built_in">MyException</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">catch</span>(MyException&amp; e)</span><br><span class="line">  &#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;MyException caught&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; e.<span class="built_in">what</span>() &lt;&lt; std::endl;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">catch</span>(std::exception&amp; e)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">//其他的错误</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这将产生以下结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MyException caught</span><br><span class="line">C++ Exception</span><br></pre></td></tr></table></figure>
-
-<p>在这里，<strong>what()</strong> 是异常类提供的一个公共方法，它已被所有子异常类重载。这将返回异常产生的原因。</p>
-<p>异常规范声明：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">ERROR</span>&#123;UnderFlow,OverFlow&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="C-模板"><a href="#C-模板" class="headerlink" title="C++ 模板"></a>C++ 模板</h1><p>模板是泛型编程的基础，泛型编程即以一种独立于任何特定类型的方式编写代码。</p>
-<p>模板是创建泛型类或函数的蓝图或公式。库容器，比如迭代器和算法，都是泛型编程的例子，它们都使用了模板的概念。</p>
-<p>每个容器都有一个单一的定义，比如 <strong>向量</strong>，我们可以定义许多不同类型的向量，比如 <strong>vector <int></strong> 或 **vector <string>**。</p>
-<p>您可以使用模板来定义函数和类，接下来让我们一起来看看如何使用。</p>
-<h2 id="函数模板"><a href="#函数模板" class="headerlink" title="函数模板"></a>函数模板</h2><p>模板函数定义的一般形式如下所示：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> type&gt; ret-type func-<span class="built_in">name</span>(parameter list) </span><br><span class="line">&#123;   </span><br><span class="line">	<span class="comment">// 函数的主体 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在这里，type 是函数所使用的数据类型的占位符名称。这个名称可以在函数定义中使用。</p>
-<p>下面是函数模板的实例，返回两个数中的最大值：</p>
-<h2 id="实例-3"><a href="#实例-3" class="headerlink" title="实例"></a>实例</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> T <span class="type">const</span>&amp; <span class="title">Max</span> <span class="params">(T <span class="type">const</span>&amp; a, T <span class="type">const</span>&amp; b)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    <span class="keyword">return</span> a &lt; b ? b:a; </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span> <span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="type">int</span> i = <span class="number">39</span>;</span><br><span class="line">    <span class="type">int</span> j = <span class="number">20</span>;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Max(i, j): &quot;</span> &lt;&lt; <span class="built_in">Max</span>(i, j) &lt;&lt; endl; </span><br><span class="line"> </span><br><span class="line">    <span class="type">double</span> f1 = <span class="number">13.5</span>; </span><br><span class="line">    <span class="type">double</span> f2 = <span class="number">20.7</span>; </span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Max(f1, f2): &quot;</span> &lt;&lt; <span class="built_in">Max</span>(f1, f2) &lt;&lt; endl; </span><br><span class="line"> </span><br><span class="line">    string s1 = <span class="string">&quot;Hello&quot;</span>; </span><br><span class="line">    string s2 = <span class="string">&quot;World&quot;</span>; </span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Max(s1, s2): &quot;</span> &lt;&lt; <span class="built_in">Max</span>(s1, s2) &lt;&lt; endl; </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>当上面的代码被编译和执行时，它会产生下列结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Max(i, j): 39</span><br><span class="line">Max(f1, f2): 20.7</span><br><span class="line">Max(s1, s2): World</span><br></pre></td></tr></table></figure>
-
-<h2 id="类模板"><a href="#类模板" class="headerlink" title="类模板"></a>类模板</h2><p>正如我们定义函数模板一样，我们也可以定义类模板。泛型类声明的一般形式如下所示：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">template &lt;class type&gt; class class-name &#123;</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在这里，<strong>type</strong> 是占位符类型名称，可以在类被实例化的时候进行指定。您可以使用一个逗号分隔的列表来定义多个泛型数据类型。</p>
-<p>下面的实例定义了类 Stack&lt;&gt;，并实现了泛型方法来对元素进行入栈出栈操作：</p>
-<h2 id="实例-4"><a href="#实例-4" class="headerlink" title="实例"></a>实例</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdexcept&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Stack</span> &#123; </span><br><span class="line">  <span class="keyword">private</span>: </span><br><span class="line">    vector&lt;T&gt; elems;     <span class="comment">// 元素 </span></span><br><span class="line"> </span><br><span class="line">  <span class="keyword">public</span>: </span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">push</span><span class="params">(T <span class="type">const</span>&amp;)</span></span>;  <span class="comment">// 入栈</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">pop</span><span class="params">()</span></span>;               <span class="comment">// 出栈</span></span><br><span class="line">    <span class="function">T <span class="title">top</span><span class="params">()</span> <span class="type">const</span></span>;            <span class="comment">// 返回栈顶元素</span></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">empty</span><span class="params">()</span> <span class="type">const</span></span>&#123;       <span class="comment">// 如果为空则返回真。</span></span><br><span class="line">        <span class="keyword">return</span> elems.<span class="built_in">empty</span>(); </span><br><span class="line">    &#125; </span><br><span class="line">&#125;; </span><br><span class="line"> </span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="type">void</span> Stack&lt;T&gt;::<span class="built_in">push</span> (T <span class="type">const</span>&amp; elem) </span><br><span class="line">&#123; </span><br><span class="line">    <span class="comment">// 追加传入元素的副本</span></span><br><span class="line">    elems.<span class="built_in">push_back</span>(elem);    </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="type">void</span> Stack&lt;T&gt;::<span class="built_in">pop</span> () </span><br><span class="line">&#123; </span><br><span class="line">    <span class="keyword">if</span> (elems.<span class="built_in">empty</span>()) &#123; </span><br><span class="line">        <span class="keyword">throw</span> <span class="built_in">out_of_range</span>(<span class="string">&quot;Stack&lt;&gt;::pop(): empty stack&quot;</span>); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 删除最后一个元素</span></span><br><span class="line">    elems.<span class="built_in">pop_back</span>();         </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line">T Stack&lt;T&gt;::<span class="built_in">top</span> () <span class="type">const</span> </span><br><span class="line">&#123; </span><br><span class="line">    <span class="keyword">if</span> (elems.<span class="built_in">empty</span>()) &#123; </span><br><span class="line">        <span class="keyword">throw</span> <span class="built_in">out_of_range</span>(<span class="string">&quot;Stack&lt;&gt;::top(): empty stack&quot;</span>); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 返回最后一个元素的副本 </span></span><br><span class="line">    <span class="keyword">return</span> elems.<span class="built_in">back</span>();      </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    <span class="keyword">try</span> &#123; </span><br><span class="line">        Stack&lt;<span class="type">int</span>&gt;         intStack;  <span class="comment">// int 类型的栈 </span></span><br><span class="line">        Stack&lt;string&gt; stringStack;    <span class="comment">// string 类型的栈 </span></span><br><span class="line"> </span><br><span class="line">        <span class="comment">// 操作 int 类型的栈 </span></span><br><span class="line">        intStack.<span class="built_in">push</span>(<span class="number">7</span>); </span><br><span class="line">        cout &lt;&lt; intStack.<span class="built_in">top</span>() &lt;&lt;endl; </span><br><span class="line"> </span><br><span class="line">        <span class="comment">// 操作 string 类型的栈 </span></span><br><span class="line">        stringStack.<span class="built_in">push</span>(<span class="string">&quot;hello&quot;</span>); </span><br><span class="line">        cout &lt;&lt; stringStack.<span class="built_in">top</span>() &lt;&lt; std::endl; </span><br><span class="line">        stringStack.<span class="built_in">pop</span>(); </span><br><span class="line">        stringStack.<span class="built_in">pop</span>(); </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="built_in">catch</span> (exception <span class="type">const</span>&amp; ex) &#123; </span><br><span class="line">        cerr &lt;&lt; <span class="string">&quot;Exception: &quot;</span> &lt;&lt; ex.<span class="built_in">what</span>() &lt;&lt;endl; </span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>当上面的代码被编译和执行时，它会产生下列结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">7</span><br><span class="line">hello</span><br><span class="line">Exception: Stack&lt;&gt;::pop(): empty stack</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>class</tag>
       </tags>
   </entry>
   <entry>
@@ -1470,6 +969,290 @@
 ]]></content>
       <tags>
         <tag>class</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LaTeX Formula</title>
+    <url>/2023/06/30/LaTeX%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F/</url>
+    <content><![CDATA[<h2 id="上标、下标与组合"><a href="#上标、下标与组合" class="headerlink" title="上标、下标与组合"></a>上标、下标与组合</h2><ol>
+<li>上标符号，符号：<code>^</code>，如：<img src="https://math.jianshu.com/math?formula=x%5E4" alt="x^4"></li>
+<li>下标符号，符号：<code>_</code>，如：<img src="https://math.jianshu.com/math?formula=x_1" alt="x_1"></li>
+<li>组合符号，符号：<code>&#123;&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%7B16%7D_%7B8%7DO%7B2+%7D_%7B2%7D" alt="{16}_{8}O{2+}_{2}"></li>
+</ol>
+<h2 id="汉字、字体与格式"><a href="#汉字、字体与格式" class="headerlink" title="汉字、字体与格式"></a>汉字、字体与格式</h2><ol>
+<li>汉字形式，符号：<code>\mbox&#123;&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=V_%7B%5Cmbox%7B%E5%88%9D%E5%A7%8B%7D%7D" alt="V_{\mbox{初始}}"></li>
+<li>字体控制，符号：<code>\displaystyle</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cdisplaystyle%20%5Cfrac%7Bx+y%7D%7By+z%7D" alt="\displaystyle \frac{x+y}{y+z}"></li>
+<li>下划线符号，符号：<code>\underline</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cunderline%7Bx+y%7D" alt="\underline{x+y}"></li>
+<li>标签，符号<code>\tag&#123;数字&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Ctag%7B11%7D" alt="\tag{11}"></li>
+<li>上大括号，符号：<code>\overbrace&#123;算式&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Coverbrace%7Ba+b+c+d%7D%5E%7B2.0%7D" alt="\overbrace{a+b+c+d}^{2.0}"></li>
+<li>下大括号，符号：<code>\underbrace&#123;算式&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=a+%5Cunderbrace%7Bb+c%7D_%7B1.0%7D+d" alt="a+\underbrace{b+c}_{1.0}+d"></li>
+<li>上位符号，符号：<code>\stacrel&#123;上位符号&#125;&#123;基位符号&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cvec%7Bx%7D%5Cstackrel%7B%5Cmathrm%7Bdef%7D%7D%7B=%7D%7Bx_1,%5Cdots,x_n%7D" alt="\vec{x}\stackrel{\mathrm{def}}{=}{x_1,\dots,x_n}"></li>
+</ol>
+<h2 id="占位符"><a href="#占位符" class="headerlink" title="占位符"></a>占位符</h2><ol>
+<li>两个quad空格，符号：<code>\qquad</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cqquad%20y" alt="x \qquad y"></li>
+<li>quad空格，符号：<code>\quad</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cquad%20y" alt="x \quad y"></li>
+<li>大空格，符号<code>\</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5C%20y" alt="x \ y"></li>
+<li>中空格，符号<code>\:</code>，如：<img src="https://math.jianshu.com/math?formula=x%20:%20y" alt="x : y"></li>
+<li>小空格，符号<code>\,</code>，如：<img src="https://math.jianshu.com/math?formula=x%20,%20y" alt="x , y"></li>
+<li>没有空格，符号&#96;&#96;，如：<img src="https://math.jianshu.com/math?formula=xy" alt="xy"></li>
+<li>紧贴，符号<code>\!</code>，如：<img src="https://math.jianshu.com/math?formula=x%20!%20y" alt="x ! y"></li>
+</ol>
+<h2 id="定界符与组合"><a href="#定界符与组合" class="headerlink" title="定界符与组合"></a>定界符与组合</h2><ol>
+<li>括号，符号：<code>（）\big(\big) \Big(\Big) \bigg(\bigg) \Bigg(\Bigg)</code>，如：<img src="https://math.jianshu.com/math?formula=%EF%BC%88%EF%BC%89%5Cbig(%5Cbig)%20%5CBig(%5CBig)%20%5Cbigg(%5Cbigg)%20%5CBigg(%5CBigg)" alt="（）\big(\big) \Big(\Big) \bigg(\bigg) \Bigg(\Bigg)"></li>
+<li>中括号，符号：<code>[]</code>，如：<img src="https://math.jianshu.com/math?formula=%5Bx+y%5D" alt="[x+y]"></li>
+<li>大括号，符号：<code>\&#123; \&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%7Bx+y%7D" alt="{x+y}"></li>
+<li>自适应括号，符号：<code>\left \right</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cleft(x%5Cright)" alt="\left(x\right)">，<img src="https://math.jianshu.com/math?formula=%5Cleft(x%7Byz%7D%5Cright)" alt="\left(x{yz}\right)"></li>
+<li>组合公式，符号：<code>&#123;上位公式 \choose 下位公式&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%7Bn+1%20%5Cchoose%20k%7D=%7Bn%20%5Cchoose%20k%7D+%7Bn%20%5Cchoose%20k-1%7D" alt="{n+1 \choose k}={n \choose k}+{n \choose k-1}"></li>
+<li>组合公式，符号：<code>&#123;上位公式 \atop 下位公式&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Csum_%7Bk_0,k_1,%5Cldots%3E0%20%5Catop%20k_0+k_1+%5Ccdots=n%7DA_%7Bk_0%7DA_%7Bk_1%7D%5Ccdots" alt="\sum_{k_0,k_1,\ldots&gt;0 \atop k_0+k_1+\cdots=n}A_{k_0}A_{k_1}\cdots"></li>
+</ol>
+<h2 id="四则运算"><a href="#四则运算" class="headerlink" title="四则运算"></a>四则运算</h2><ol>
+<li>加法运算，符号：<code>+</code>，如：<img src="https://math.jianshu.com/math?formula=x+y=z" alt="x+y=z"></li>
+<li>减法运算，符号：<code>-</code>，如：<img src="https://math.jianshu.com/math?formula=x-y=z" alt="x-y=z"></li>
+<li>加减运算，符号：<code>\pm</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cpm%20y=z" alt="x \pm y=z"></li>
+<li>减甲运算，符号：<code>\mp</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cmp%20y=z" alt="x \mp y=z"></li>
+<li>乘法运算，符号：<code>\times</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Ctimes%20y=z" alt="x \times y=z"></li>
+<li>点乘运算，符号：<code>\cdot</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Ccdot%20y=z" alt="x \cdot y=z"></li>
+<li>星乘运算，符号：<code>\ast</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cast%20y=z" alt="x \ast y=z"></li>
+<li>除法运算，符号：<code>\div</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cdiv%20y=z" alt="x \div y=z"></li>
+<li>斜法运算，符号：<code>/</code>，如：<img src="https://math.jianshu.com/math?formula=x/y=z" alt="x/y=z"></li>
+<li>分式表示，符号：<code>\frac&#123;分子&#125;&#123;分母&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cfrac%7Bx+y%7D%7By+z%7D" alt="\frac{x+y}{y+z}"></li>
+<li>分式表示，符号：<code>&#123;分子&#125; \voer &#123;分母&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%7Bx+y%7D%20%5Cover%20%7By+z%7D" alt="{x+y} \over {y+z}"></li>
+<li>绝对值表示，符号：<code>||</code>，如：<img src="https://math.jianshu.com/math?formula=%7Cx+y%7C" alt="|x+y|"></li>
+</ol>
+<h2 id="高级运算"><a href="#高级运算" class="headerlink" title="高级运算"></a>高级运算</h2><ol>
+<li>平均数运算，符号：<code>\overline&#123;算式&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Coverline%7Bxyz%7D" alt="\overline{xyz}"></li>
+<li>开二次方运算，符号：<code>\sqrt</code>，如：<img src="https://math.jianshu.com/math?formula=%5Csqrt%20x" alt="\sqrt x"></li>
+<li>开方运算，符号：<code>\sqrt[开方数]&#123;被开方数&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Csqrt%5B3%5D%7Bx+y%7D" alt="\sqrt[3]{x+y}"></li>
+<li>对数运算，符号：<code>\log</code>，如：<img src="https://math.jianshu.com/math?formula=%5Clog(x)" alt="\log(x)"></li>
+<li>极限运算，符号：<code>\lim</code>，如：<img src="https://math.jianshu.com/math?formula=%5Clim%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D" alt="\lim^{x \to \infty}_{y \to 0}{\frac{x}{y}}"></li>
+<li>极限运算，符号：<code>\displaystyle \lim</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cdisplaystyle%20%5Clim%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D" alt="\displaystyle \lim^{x \to \infty}_{y \to 0}{\frac{x}{y}}"></li>
+<li>求和运算，符号：<code>\sum</code>，如：<img src="https://math.jianshu.com/math?formula=%5Csum%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D" alt="\sum^{x \to \infty}_{y \to 0}{\frac{x}{y}}"></li>
+<li>求和运算，符号：<code>\displaystyle \sum</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cdisplaystyle%20%5Csum%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D" alt="\displaystyle \sum^{x \to \infty}_{y \to 0}{\frac{x}{y}}"></li>
+<li>积分运算，符号：<code>\int</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cint%5E%7B%5Cinfty%7D_%7B0%7D%7Bxdx%7D" alt="\int^{\infty}_{0}{xdx}"></li>
+<li>积分运算，符号：<code>\displaystyle \int</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cdisplaystyle%20%5Cint%5E%7B%5Cinfty%7D_%7B0%7D%7Bxdx%7D" alt="\displaystyle \int^{\infty}_{0}{xdx}"></li>
+<li>微分运算，符号：<code>\partial</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cfrac%7B%5Cpartial%20x%7D%7B%5Cpartial%20y%7D" alt="\frac{\partial x}{\partial y}"></li>
+<li>矩阵表示，符号：<code>\begin&#123;matrix&#125; \end&#123;matrix&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cleft%5B%20%5Cbegin%7Bmatrix%7D%201%20&2%20&%5Ccdots%20&4%5C5%20&6%20&%5Ccdots%20&8%5C%5Cvdots%20&%5Cvdots%20&%5Cddots%20&%5Cvdots%5C13%20&14%20&%5Ccdots%20&16%5Cend%7Bmatrix%7D%20%5Cright%5D" alt="\left[ \begin{matrix} 1 &amp;2 &amp;\cdots &amp;4\5 &amp;6 &amp;\cdots &amp;8\\vdots &amp;\vdots &amp;\ddots &amp;\vdots\13 &amp;14 &amp;\cdots &amp;16\end{matrix} \right]"></li>
+</ol>
+<h2 id="逻辑运算"><a href="#逻辑运算" class="headerlink" title="逻辑运算"></a>逻辑运算</h2><ol>
+<li>等于运算，符号：<code>=</code>，如：<img src="https://math.jianshu.com/math?formula=x+y=z" alt="x+y=z"></li>
+<li>大于运算，符号：<code>&gt;</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%3Ez" alt="x+y&gt;z"></li>
+<li>小于运算，符号：<code>&lt;</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%3Cz" alt="x+y&lt;z"></li>
+<li>大于等于运算，符号：<code>\geq</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Cgeq%20z" alt="x+y \geq z"></li>
+<li>小于等于运算，符号：<code>\leq</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Cleq%20z" alt="x+y \leq z"></li>
+<li>不等于运算，符号：<code>\neq</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Cneq%20z" alt="x+y \neq z"></li>
+<li>不大于等于运算，符号：<code>\ngeq</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Cngeq%20z" alt="x+y \ngeq z"></li>
+<li>不大于等于运算，符号：<code>\not\geq</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Cnot%5Cgeq%20z" alt="x+y \not\geq z"></li>
+<li>不小于等于运算，符号：<code>\nleq</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Cnleq%20z" alt="x+y \nleq z"></li>
+<li>不小于等于运算，符号：<code>\not\leq</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Cnot%5Cleq%20z" alt="x+y \not\leq z"></li>
+<li>约等于运算，符号：<code>\approx</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Capprox%20z" alt="x+y \approx z"></li>
+<li>恒定等于运算，符号：<code>\equiv</code>，如：<img src="https://math.jianshu.com/math?formula=x+y%20%5Cequiv%20z" alt="x+y \equiv z"></li>
+</ol>
+<h2 id="集合运算"><a href="#集合运算" class="headerlink" title="集合运算"></a>集合运算</h2><ol>
+<li>属于运算，符号：<code>\in</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cin%20y" alt="x \in y"></li>
+<li>不属于运算，符号：<code>\notin</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cnotin%20y" alt="x \notin y"></li>
+<li>不属于运算，符号：<code>\not\in</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cnot%5Cin%20y" alt="x \not\in y"></li>
+<li>子集运算，符号：<code>\subset</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Csubset%20y" alt="x \subset y"></li>
+<li>子集运算，符号：<code>\supset</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Csupset%20y" alt="x \supset y"></li>
+<li>真子集运算，符号：<code>\subseteq</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Csubseteq%20y" alt="x \subseteq y"></li>
+<li>非真子集运算，符号：<code>\subsetneq</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Csubsetneq%20y" alt="x \subsetneq y"></li>
+<li>真子集运算，符号：<code>\supseteq</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Csupseteq%20y" alt="x \supseteq y"></li>
+<li>非真子集运算，符号：<code>\supsetneq</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Csupsetneq%20y" alt="x \supsetneq y"></li>
+<li>非子集运算，符号：<code>\not\subset</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cnot%5Csubset%20y" alt="x \not\subset y"></li>
+<li>非子集运算，符号：<code>\not\supset</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cnot%5Csupset%20y" alt="x \not\supset y"></li>
+<li>并集运算，符号：<code>\cup</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Ccup%20y" alt="x \cup y"></li>
+<li>交集运算，符号：<code>\cap</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Ccap%20y" alt="x \cap y"></li>
+<li>差集运算，符号：<code>\setminus</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Csetminus%20y" alt="x \setminus y"></li>
+<li>同或运算，符号：<code>\bigodot</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cbigodot%20y" alt="x \bigodot y"></li>
+<li>同与运算，符号：<code>\bigotimes</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cbigotimes%20y" alt="x \bigotimes y"></li>
+<li>实数集合，符号：<code>\mathbb&#123;R&#125;</code>，如：<code>\mathbb&#123;R&#125;</code></li>
+<li>自然数集合，符号：<code>\mathbb&#123;Z&#125;</code>，如：<code>\mathbb&#123;Z&#125;</code></li>
+<li>空集，符号：<code>\emptyset</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cemptyset" alt="\emptyset"></li>
+</ol>
+<h2 id="数学符号"><a href="#数学符号" class="headerlink" title="数学符号"></a>数学符号</h2><ol>
+<li>无穷，符号：<code>\infty</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cinfty" alt="\infty"></li>
+<li>虚数，符号：<code>\imath</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cimath" alt="\imath"></li>
+<li>虚数，符号：<code>\jmath</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cjmath" alt="\jmath"></li>
+<li>数学符号，符号<code>\hat&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Chat%7Ba%7D" alt="\hat{a}"></li>
+<li>数学符号，符号<code>\check&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Ccheck%7Ba%7D" alt="\check{a}"></li>
+<li>数学符号，符号<code>\breve&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cbreve%7Ba%7D" alt="\breve{a}"></li>
+<li>数学符号，符号<code>\tilde&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Ctilde%7Ba%7D" alt="\tilde{a}"></li>
+<li>数学符号，符号<code>\bar&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cbar%7Ba%7D" alt="\bar{a}"></li>
+<li>矢量符号，符号<code>\vec&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cvec%7Ba%7D" alt="\vec{a}"></li>
+<li>数学符号，符号<code>\acute&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cacute%7Ba%7D" alt="\acute{a}"></li>
+<li>数学符号，符号<code>\grave&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cgrave%7Ba%7D" alt="\grave{a}"></li>
+<li>数学符号，符号<code>\mathring&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cmathring%7Ba%7D" alt="\mathring{a}"></li>
+<li>一阶导数符号，符号<code>\dot&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cdot%7Ba%7D" alt="\dot{a}"></li>
+<li>二阶导数符号，符号<code>\ddot&#123;a&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cddot%7Ba%7D" alt="\ddot{a}"></li>
+<li>上箭头，符号：<code>\uparrow</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cuparrow" alt="\uparrow"></li>
+<li>上箭头，符号：<code>\Uparrow</code>，如：<img src="https://math.jianshu.com/math?formula=%5CUparrow" alt="\Uparrow"></li>
+<li>下箭头，符号：<code>\downarrow</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cdownarrow" alt="\downarrow"></li>
+<li>下箭头，符号：<code>\Downarrow</code>，如：<img src="https://math.jianshu.com/math?formula=%5CDownarrow" alt="\Downarrow"></li>
+<li>左箭头，符号：<code>\leftarrow</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cleftarrow" alt="\leftarrow"></li>
+<li>左箭头，符号：<code>\Leftarrow</code>，如：<img src="https://math.jianshu.com/math?formula=%5CLeftarrow" alt="\Leftarrow"></li>
+<li>右箭头，符号：<code>\rightarrow</code>，如：<img src="https://math.jianshu.com/math?formula=%5Crightarrow" alt="\rightarrow"></li>
+<li>右箭头，符号：<code>\Rightarrow</code>，如：<img src="https://math.jianshu.com/math?formula=%5CRightarrow" alt="\Rightarrow"></li>
+<li>底端对齐的省略号，符号：<code>\ldots</code>，如：<img src="https://math.jianshu.com/math?formula=1,2,%5Cldots,n" alt="1,2,\ldots,n"></li>
+<li>中线对齐的省略号，符号：<code>\cdots</code>，如：<img src="https://math.jianshu.com/math?formula=x_1%5E2%20+%20x_2%5E2%20+%20%5Ccdots%20+%20x_n%5E2" alt="x_1^2 + x_2^2 + \cdots + x_n^2"></li>
+<li>竖直对齐的省略号，符号：<code>\vdots</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cvdots" alt="\vdots"></li>
+<li>斜对齐的省略号，符号：<code>\ddots</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cddots" alt="\ddots"></li>
+</ol>
+<h2 id="希腊字母"><a href="#希腊字母" class="headerlink" title="希腊字母"></a>希腊字母</h2><table>
+<thead>
+<tr>
+<th>字母</th>
+<th>实现</th>
+<th>字母</th>
+<th>实现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td><code>A</code></td>
+<td>α</td>
+<td><code>\alhpa</code></td>
+</tr>
+<tr>
+<td>B</td>
+<td><code>B</code></td>
+<td>β</td>
+<td><code>\beta</code></td>
+</tr>
+<tr>
+<td>Γ</td>
+<td><code>\Gamma</code></td>
+<td>γ</td>
+<td><code>\gamma</code></td>
+</tr>
+<tr>
+<td>Δ</td>
+<td><code>\Delta</code></td>
+<td>δ</td>
+<td><code>\delta</code></td>
+</tr>
+<tr>
+<td>E</td>
+<td><code>E</code></td>
+<td>ϵ</td>
+<td><code>\epsilon</code></td>
+</tr>
+<tr>
+<td>Z</td>
+<td><code>Z</code></td>
+<td>ζ</td>
+<td><code>\zeta</code></td>
+</tr>
+<tr>
+<td>H</td>
+<td><code>H</code></td>
+<td>η</td>
+<td><code>\eta</code></td>
+</tr>
+<tr>
+<td>Θ</td>
+<td><code>\Theta</code></td>
+<td>θ</td>
+<td><code>\theta</code></td>
+</tr>
+<tr>
+<td>I</td>
+<td><code>I</code></td>
+<td>ι</td>
+<td><code>\iota</code></td>
+</tr>
+<tr>
+<td>K</td>
+<td><code>K</code></td>
+<td>κ</td>
+<td><code>\kappa</code></td>
+</tr>
+<tr>
+<td>Λ</td>
+<td><code>\Lambda</code></td>
+<td>λ</td>
+<td><code>\lambda</code></td>
+</tr>
+<tr>
+<td>M</td>
+<td><code>M</code></td>
+<td>μ</td>
+<td><code>\mu</code></td>
+</tr>
+<tr>
+<td>N</td>
+<td><code>N</code></td>
+<td>ν</td>
+<td><code>\nu</code></td>
+</tr>
+<tr>
+<td>Ξ</td>
+<td><code>\Xi</code></td>
+<td>ξ</td>
+<td><code>\xi</code></td>
+</tr>
+<tr>
+<td>O</td>
+<td><code>O</code></td>
+<td>ο</td>
+<td><code>\omicron</code></td>
+</tr>
+<tr>
+<td>Π</td>
+<td><code>\Pi</code></td>
+<td>π</td>
+<td><code>\pi</code></td>
+</tr>
+<tr>
+<td>P</td>
+<td><code>P</code></td>
+<td>ρ</td>
+<td><code>\rho</code></td>
+</tr>
+<tr>
+<td>Σ</td>
+<td><code>\Sigma</code></td>
+<td>σ</td>
+<td><code>\sigma</code></td>
+</tr>
+<tr>
+<td>T</td>
+<td><code>T</code></td>
+<td>τ</td>
+<td><code>\tau</code></td>
+</tr>
+<tr>
+<td>Υ</td>
+<td><code>\Upsilon</code></td>
+<td>υ</td>
+<td><code>\upsilon</code></td>
+</tr>
+<tr>
+<td>Φ</td>
+<td><code>\Phi</code></td>
+<td>ϕ</td>
+<td><code>\phi</code></td>
+</tr>
+<tr>
+<td>X</td>
+<td><code>X</code></td>
+<td>χ</td>
+<td><code>\chi</code></td>
+</tr>
+<tr>
+<td>Ψ</td>
+<td><code>\Psi</code></td>
+<td>ψ</td>
+<td><code>\psi</code></td>
+</tr>
+<tr>
+<td>Ω</td>
+<td><code>\v</code></td>
+<td>ω</td>
+<td><code>\omega</code></td>
+</tr>
+</tbody></table>
+]]></content>
+      <tags>
+        <tag>Study</tag>
       </tags>
   </entry>
   <entry>
@@ -2297,6 +2080,281 @@
       </tags>
   </entry>
   <entry>
+    <title>Hello World</title>
+    <url>/2019/06/19/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>oop后篇</title>
+    <url>/2023/06/30/OOP%E5%90%8E%E7%AF%87/</url>
+    <content><![CDATA[<h1 id="C-文件和流"><a href="#C-文件和流" class="headerlink" title="C++ 文件和流"></a>C++ 文件和流</h1><p>到目前为止，我们已经使用了 <strong>iostream</strong> 标准库，它提供了 <strong>cin</strong> 和 <strong>cout</strong> 方法分别用于从标准输入读取流和向标准输出写入流。</p>
+<p>本教程介绍如何从文件读取流和向文件写入流。这就需要用到 C++ 中另一个标准库 <strong>fstream</strong>，它定义了三个新的数据类型：</p>
+<table>
+<thead>
+<tr>
+<th align="left">数据类型</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ofstream</td>
+<td align="left">该数据类型表示输出文件流，用于创建文件并向文件写入信息。</td>
+</tr>
+<tr>
+<td align="left">ifstream</td>
+<td align="left">该数据类型表示输入文件流，用于从文件读取信息。</td>
+</tr>
+<tr>
+<td align="left">fstream</td>
+<td align="left">该数据类型通常表示文件流，且同时具有 ofstream 和 ifstream 两种功能，这意味着它可以创建文件，向文件写入信息，从文件读取信息。</td>
+</tr>
+</tbody></table>
+<p>要在 C++ 中进行文件处理，必须在 C++ 源代码文件中包含头文件 <iostream> 和 <fstream>。</p>
+<h2 id="打开文件"><a href="#打开文件" class="headerlink" title="打开文件"></a>打开文件</h2><p>在从文件读取信息或者向文件写入信息之前，必须先打开文件。<strong>ofstream</strong> 和 <strong>fstream</strong> 对象都可以用来打开文件进行写操作，如果只需要打开文件进行读操作，则使用 <strong>ifstream</strong> 对象。</p>
+<p>下面是 open() 函数的标准语法，open() 函数是 fstream、ifstream 和 ofstream 对象的一个成员。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void open(const char *filename, ios::openmode mode);</span><br></pre></td></tr></table></figure>
+
+<p>在这里，<strong>open()</strong> 成员函数的第一参数指定要打开的文件的名称和位置，第二个参数定义文件被打开的模式。</p>
+<table>
+<thead>
+<tr>
+<th align="left">模式标志</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ios::app</td>
+<td align="left">追加模式。所有写入都追加到文件末尾。</td>
+</tr>
+<tr>
+<td align="left">ios::ate</td>
+<td align="left">文件打开后定位到文件末尾。</td>
+</tr>
+<tr>
+<td align="left">ios::in</td>
+<td align="left">打开文件用于读取。</td>
+</tr>
+<tr>
+<td align="left">ios::out</td>
+<td align="left">打开文件用于写入。</td>
+</tr>
+<tr>
+<td align="left">ios::trunc</td>
+<td align="left">如果该文件已经存在，其内容将在打开文件之前被截断，即把文件长度设为 0。</td>
+</tr>
+</tbody></table>
+<p>您可以把以上两种或两种以上的模式结合使用。例如，如果您想要以写入模式打开文件，并希望截断文件，以防文件已存在，那么您可以使用下面的语法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ofstream outfile;</span><br><span class="line">outfile.open(&quot;file.dat&quot;, ios::out | ios::trunc );</span><br></pre></td></tr></table></figure>
+
+<p>类似地，您如果想要打开一个文件用于读写，可以使用下面的语法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ifstream  afile;</span><br><span class="line">afile.open(&quot;file.dat&quot;, ios::out | ios::in );</span><br></pre></td></tr></table></figure>
+
+<h2 id="关闭文件"><a href="#关闭文件" class="headerlink" title="关闭文件"></a>关闭文件</h2><p>当 C++ 程序终止时，它会自动关闭刷新所有流，释放所有分配的内存，并关闭所有打开的文件。但程序员应该养成一个好习惯，在程序终止前关闭所有打开的文件。</p>
+<p>下面是 close() 函数的标准语法，close() 函数是 fstream、ifstream 和 ofstream 对象的一个成员。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void close();</span><br></pre></td></tr></table></figure>
+
+<h2 id="写入文件"><a href="#写入文件" class="headerlink" title="写入文件"></a>写入文件</h2><p>在 C++ 编程中，我们使用流插入运算符（ &lt;&lt; ）向文件写入信息，就像使用该运算符输出信息到屏幕上一样。唯一不同的是，在这里您使用的是 <strong>ofstream</strong> 或 <strong>fstream</strong> 对象，而不是 <strong>cout</strong> 对象。</p>
+<h2 id="读取文件"><a href="#读取文件" class="headerlink" title="读取文件"></a>读取文件</h2><p>在 C++ 编程中，我们使用流提取运算符（ &gt;&gt; ）从文件读取信息，就像使用该运算符从键盘输入信息一样。唯一不同的是，在这里您使用的是 <strong>ifstream</strong> 或 <strong>fstream</strong> 对象，而不是 <strong>cin</strong> 对象。</p>
+<h2 id="读取-amp-写入实例"><a href="#读取-amp-写入实例" class="headerlink" title="读取 &amp; 写入实例"></a>读取 &amp; 写入实例</h2><p>下面的 C++ 程序以读写模式打开一个文件。在向文件 afile.dat 写入用户输入的信息之后，程序从文件读取信息，并将其输出到屏幕上：</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span> <span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">   <span class="type">char</span> data[<span class="number">100</span>];</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// 以写模式打开文件</span></span><br><span class="line">   ofstream outfile;</span><br><span class="line">   outfile.<span class="built_in">open</span>(<span class="string">&quot;afile.dat&quot;</span>);</span><br><span class="line"> </span><br><span class="line">   cout &lt;&lt; <span class="string">&quot;Writing to the file&quot;</span> &lt;&lt; endl;</span><br><span class="line">   cout &lt;&lt; <span class="string">&quot;Enter your name: &quot;</span>; </span><br><span class="line">   cin.<span class="built_in">getline</span>(data, <span class="number">100</span>);</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// 向文件写入用户输入的数据</span></span><br><span class="line">   outfile &lt;&lt; data &lt;&lt; endl;</span><br><span class="line"> </span><br><span class="line">   cout &lt;&lt; <span class="string">&quot;Enter your age: &quot;</span>; </span><br><span class="line">   cin &gt;&gt; data;</span><br><span class="line">   cin.<span class="built_in">ignore</span>();</span><br><span class="line">   </span><br><span class="line">   <span class="comment">// 再次向文件写入用户输入的数据</span></span><br><span class="line">   outfile &lt;&lt; data &lt;&lt; endl;</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// 关闭打开的文件</span></span><br><span class="line">   outfile.<span class="built_in">close</span>();</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// 以读模式打开文件</span></span><br><span class="line">   ifstream infile; </span><br><span class="line">   infile.<span class="built_in">open</span>(<span class="string">&quot;afile.dat&quot;</span>); </span><br><span class="line"> </span><br><span class="line">   cout &lt;&lt; <span class="string">&quot;Reading from the file&quot;</span> &lt;&lt; endl; </span><br><span class="line">   infile &gt;&gt; data; </span><br><span class="line"> </span><br><span class="line">   <span class="comment">// 在屏幕上写入数据</span></span><br><span class="line">   cout &lt;&lt; data &lt;&lt; endl;</span><br><span class="line">   </span><br><span class="line">   <span class="comment">// 再次从文件读取数据，并显示它</span></span><br><span class="line">   infile &gt;&gt; data; </span><br><span class="line">   cout &lt;&lt; data &lt;&lt; endl; </span><br><span class="line"> </span><br><span class="line">   <span class="comment">// 关闭打开的文件</span></span><br><span class="line">   infile.<span class="built_in">close</span>();</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当上面的代码被编译和执行时，它会产生下列输入和输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$./a.out</span><br><span class="line">Writing to the file</span><br><span class="line">Enter your name: Zara</span><br><span class="line">Enter your age: 9</span><br><span class="line">Reading from the file</span><br><span class="line">Zara</span><br><span class="line">9</span><br></pre></td></tr></table></figure>
+
+<p>上面的实例中使用了 cin 对象的附加函数，比如 getline()函数从外部读取一行，ignore() 函数会忽略掉之前读语句留下的多余字符。</p>
+<h2 id="文件位置指针"><a href="#文件位置指针" class="headerlink" title="文件位置指针"></a>文件位置指针</h2><p><strong>istream</strong> 和 <strong>ostream</strong> 都提供了用于重新定位文件位置指针的成员函数。这些成员函数包括关于 istream 的 <strong>seekg</strong>（”seek get”）和关于 ostream 的 <strong>seekp</strong>（”seek put”）。</p>
+<p>seekg 和 seekp 的参数通常是一个长整型。第二个参数可以用于指定查找方向。查找方向可以是 <strong>ios::beg</strong>（默认的，从流的开头开始定位），也可以是 <strong>ios::cur</strong>（从流的当前位置开始定位），也可以是 <strong>ios::end</strong>（从流的末尾开始定位）。</p>
+<p>文件位置指针是一个整数值，指定了从文件的起始位置到指针所在位置的字节数。下面是关于定位 “get” 文件位置指针的实例：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 定位到 fileObject 的第 n 个字节（假设是 ios::beg）</span></span><br><span class="line">fileObject.<span class="built_in">seekg</span>( n );</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 把文件的读指针从 fileObject 当前位置向后移 n 个字节</span></span><br><span class="line">fileObject.<span class="built_in">seekg</span>( n, ios::cur );</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 把文件的读指针从 fileObject 末尾往回移 n 个字节</span></span><br><span class="line">fileObject.<span class="built_in">seekg</span>( n, ios::end );</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 定位到 fileObject 的末尾</span></span><br><span class="line">fileObject.<span class="built_in">seekg</span>( <span class="number">0</span>, ios::end );</span><br></pre></td></tr></table></figure>
+
+<h1 id="C-异常处理"><a href="#C-异常处理" class="headerlink" title="C++ 异常处理"></a>C++ 异常处理</h1><p>异常是程序在执行期间产生的问题。C++ 异常是指在程序运行时发生的特殊情况，比如尝试除以零的操作。</p>
+<p>异常提供了一种转移程序控制权的方式。C++ 异常处理涉及到三个关键字：<strong>try、catch、throw</strong>。</p>
+<ul>
+<li><strong>throw:</strong> 当问题出现时，程序会抛出一个异常。这是通过使用 <strong>throw</strong> 关键字来完成的。</li>
+<li><strong>catch:</strong> 在您想要处理问题的地方，通过异常处理程序捕获异常。<strong>catch</strong> 关键字用于捕获异常。</li>
+<li><strong>try:</strong> <strong>try</strong> 块中的代码标识将被激活的特定异常。它后面通常跟着一个或多个 catch 块。</li>
+</ul>
+<p>如果有一个块抛出一个异常，捕获异常的方法会使用 <strong>try</strong> 和 <strong>catch</strong> 关键字。try 块中放置可能抛出异常的代码，try 块中的代码被称为保护代码。使用 try&#x2F;catch 语句的语法如下所示：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// 保护代码</span></span><br><span class="line">&#125;<span class="built_in">catch</span>( ExceptionName e1 )</span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// catch 块</span></span><br><span class="line">&#125;<span class="built_in">catch</span>( ExceptionName e2 )</span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// catch 块</span></span><br><span class="line">&#125;<span class="built_in">catch</span>( ExceptionName eN )</span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// catch 块</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果 <strong>try</strong> 块在不同的情境下会抛出不同的异常，这个时候可以尝试罗列多个 <strong>catch</strong> 语句，用于捕获不同类型的异常。</p>
+<h2 id="抛出异常"><a href="#抛出异常" class="headerlink" title="抛出异常"></a>抛出异常</h2><p>您可以使用 <strong>throw</strong> 语句在代码块中的任何地方抛出异常。throw 语句的操作数可以是任意的表达式，表达式的结果的类型决定了抛出的异常的类型。</p>
+<p>以下是尝试除以零时抛出异常的实例：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">double</span> <span class="title">division</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">if</span>( b == <span class="number">0</span> )</span><br><span class="line">   &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="string">&quot;Division by zero condition!&quot;</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> (a/b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="捕获异常"><a href="#捕获异常" class="headerlink" title="捕获异常"></a>捕获异常</h2><p><strong>catch</strong> 块跟在 <strong>try</strong> 块后面，用于捕获异常。您可以指定想要捕捉的异常类型，这是由 catch 关键字后的括号内的异常声明决定的。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// 保护代码</span></span><br><span class="line">&#125;<span class="built_in">catch</span>( ExceptionName e )</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 处理 ExceptionName 异常的代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码会捕获一个类型为 <strong>ExceptionName</strong> 的异常。如果您想让 catch 块能够处理 try 块抛出的任何类型的异常，则必须在异常声明的括号内使用省略号 …，如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="comment">// 保护代码</span></span><br><span class="line">&#125;<span class="built_in">catch</span>(...)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 能处理任何异常的代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面是一个实例，抛出一个除以零的异常，并在 catch 块中捕获该异常。</p>
+<h2 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">division</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">if</span>( b == <span class="number">0</span> )</span><br><span class="line">   &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="string">&quot;Division by zero condition!&quot;</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> (a/b);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span> <span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="type">int</span> x = <span class="number">50</span>;</span><br><span class="line">   <span class="type">int</span> y = <span class="number">0</span>;</span><br><span class="line">   <span class="type">double</span> z = <span class="number">0</span>;</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">     z = <span class="built_in">division</span>(x, y);</span><br><span class="line">     cout &lt;&lt; z &lt;&lt; endl;</span><br><span class="line">   &#125;<span class="built_in">catch</span> (<span class="type">const</span> <span class="type">char</span>* msg) &#123;</span><br><span class="line">     cerr &lt;&lt; msg &lt;&lt; endl;</span><br><span class="line">   &#125;</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于我们抛出了一个类型为 <strong>const char*</strong> 的异常，因此，当捕获该异常时，我们必须在 catch 块中使用 const char*。当上面的代码被编译和执行时，它会产生下列结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Division by zero condition!</span><br></pre></td></tr></table></figure>
+
+<h2 id="C-标准的异常"><a href="#C-标准的异常" class="headerlink" title="C++ 标准的异常"></a>C++ 标准的异常</h2><p>C++ 提供了一系列标准的异常，定义在 <strong><exception></strong> 中，我们可以在程序中使用这些标准的异常。它们是以父子类层次结构组织起来的，如下所示：</p>
+<p><img src="https://www.runoob.com/wp-content/uploads/2015/05/exceptions_in_cpp.png" alt="C++ 异常的层次结构"></p>
+<p>下表是对上面层次结构中出现的每个异常的说明：</p>
+<table>
+<thead>
+<tr>
+<th align="left">异常</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>std::exception</strong></td>
+<td align="left">该异常是所有标准 C++ 异常的父类。</td>
+</tr>
+<tr>
+<td align="left">std::bad_alloc</td>
+<td align="left">该异常可以通过 <strong>new</strong> 抛出。</td>
+</tr>
+<tr>
+<td align="left">std::bad_cast</td>
+<td align="left">该异常可以通过 <strong>dynamic_cast</strong> 抛出。</td>
+</tr>
+<tr>
+<td align="left">std::bad_typeid</td>
+<td align="left">该异常可以通过 <strong>typeid</strong> 抛出。</td>
+</tr>
+<tr>
+<td align="left">std::bad_exception</td>
+<td align="left">这在处理 C++ 程序中无法预期的异常时非常有用。</td>
+</tr>
+<tr>
+<td align="left"><strong>std::logic_error</strong></td>
+<td align="left">理论上可以通过读取代码来检测到的异常。</td>
+</tr>
+<tr>
+<td align="left">std::domain_error</td>
+<td align="left">当使用了一个无效的数学域时，会抛出该异常。</td>
+</tr>
+<tr>
+<td align="left">std::invalid_argument</td>
+<td align="left">当使用了无效的参数时，会抛出该异常。</td>
+</tr>
+<tr>
+<td align="left">std::length_error</td>
+<td align="left">当创建了太长的 std::string 时，会抛出该异常。</td>
+</tr>
+<tr>
+<td align="left">std::out_of_range</td>
+<td align="left">该异常可以通过方法抛出，例如 std::vector 和 std::bitset&lt;&gt;::operator<a href=""></a>。</td>
+</tr>
+<tr>
+<td align="left"><strong>std::runtime_error</strong></td>
+<td align="left">理论上不可以通过读取代码来检测到的异常。</td>
+</tr>
+<tr>
+<td align="left">std::overflow_error</td>
+<td align="left">当发生数学上溢时，会抛出该异常。</td>
+</tr>
+<tr>
+<td align="left">std::range_error</td>
+<td align="left">当尝试存储超出范围的值时，会抛出该异常。</td>
+</tr>
+<tr>
+<td align="left">std::underflow_error</td>
+<td align="left">当发生数学下溢时，会抛出该异常。</td>
+</tr>
+</tbody></table>
+<h2 id="定义新的异常"><a href="#定义新的异常" class="headerlink" title="定义新的异常"></a>定义新的异常</h2><p>您可以通过继承和重载 <strong>exception</strong> 类来定义新的异常。下面的实例演示了如何使用 std::exception 类来实现自己的异常：</p>
+<h2 id="实例-2"><a href="#实例-2" class="headerlink" title="实例"></a>实例</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;exception&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">MyException</span> : <span class="keyword">public</span> exception</span><br><span class="line">&#123;</span><br><span class="line">  <span class="function"><span class="type">const</span> <span class="type">char</span> * <span class="title">what</span> <span class="params">()</span> <span class="type">const</span> <span class="title">throw</span> <span class="params">()</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;C++ Exception&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">try</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="built_in">MyException</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">catch</span>(MyException&amp; e)</span><br><span class="line">  &#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;MyException caught&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; e.<span class="built_in">what</span>() &lt;&lt; std::endl;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">catch</span>(std::exception&amp; e)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">//其他的错误</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这将产生以下结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MyException caught</span><br><span class="line">C++ Exception</span><br></pre></td></tr></table></figure>
+
+<p>在这里，<strong>what()</strong> 是异常类提供的一个公共方法，它已被所有子异常类重载。这将返回异常产生的原因。</p>
+<p>异常规范声明：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">ERROR</span>&#123;UnderFlow,OverFlow&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="C-模板"><a href="#C-模板" class="headerlink" title="C++ 模板"></a>C++ 模板</h1><p>模板是泛型编程的基础，泛型编程即以一种独立于任何特定类型的方式编写代码。</p>
+<p>模板是创建泛型类或函数的蓝图或公式。库容器，比如迭代器和算法，都是泛型编程的例子，它们都使用了模板的概念。</p>
+<p>每个容器都有一个单一的定义，比如 <strong>向量</strong>，我们可以定义许多不同类型的向量，比如 <strong>vector <int></strong> 或 **vector <string>**。</p>
+<p>您可以使用模板来定义函数和类，接下来让我们一起来看看如何使用。</p>
+<h2 id="函数模板"><a href="#函数模板" class="headerlink" title="函数模板"></a>函数模板</h2><p>模板函数定义的一般形式如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> type&gt; ret-type func-<span class="built_in">name</span>(parameter list) </span><br><span class="line">&#123;   </span><br><span class="line">	<span class="comment">// 函数的主体 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这里，type 是函数所使用的数据类型的占位符名称。这个名称可以在函数定义中使用。</p>
+<p>下面是函数模板的实例，返回两个数中的最大值：</p>
+<h2 id="实例-3"><a href="#实例-3" class="headerlink" title="实例"></a>实例</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> T <span class="type">const</span>&amp; <span class="title">Max</span> <span class="params">(T <span class="type">const</span>&amp; a, T <span class="type">const</span>&amp; b)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    <span class="keyword">return</span> a &lt; b ? b:a; </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span> <span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="type">int</span> i = <span class="number">39</span>;</span><br><span class="line">    <span class="type">int</span> j = <span class="number">20</span>;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Max(i, j): &quot;</span> &lt;&lt; <span class="built_in">Max</span>(i, j) &lt;&lt; endl; </span><br><span class="line"> </span><br><span class="line">    <span class="type">double</span> f1 = <span class="number">13.5</span>; </span><br><span class="line">    <span class="type">double</span> f2 = <span class="number">20.7</span>; </span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Max(f1, f2): &quot;</span> &lt;&lt; <span class="built_in">Max</span>(f1, f2) &lt;&lt; endl; </span><br><span class="line"> </span><br><span class="line">    string s1 = <span class="string">&quot;Hello&quot;</span>; </span><br><span class="line">    string s2 = <span class="string">&quot;World&quot;</span>; </span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Max(s1, s2): &quot;</span> &lt;&lt; <span class="built_in">Max</span>(s1, s2) &lt;&lt; endl; </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当上面的代码被编译和执行时，它会产生下列结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Max(i, j): 39</span><br><span class="line">Max(f1, f2): 20.7</span><br><span class="line">Max(s1, s2): World</span><br></pre></td></tr></table></figure>
+
+<h2 id="类模板"><a href="#类模板" class="headerlink" title="类模板"></a>类模板</h2><p>正如我们定义函数模板一样，我们也可以定义类模板。泛型类声明的一般形式如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">template &lt;class type&gt; class class-name &#123;</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这里，<strong>type</strong> 是占位符类型名称，可以在类被实例化的时候进行指定。您可以使用一个逗号分隔的列表来定义多个泛型数据类型。</p>
+<p>下面的实例定义了类 Stack&lt;&gt;，并实现了泛型方法来对元素进行入栈出栈操作：</p>
+<h2 id="实例-4"><a href="#实例-4" class="headerlink" title="实例"></a>实例</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdexcept&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Stack</span> &#123; </span><br><span class="line">  <span class="keyword">private</span>: </span><br><span class="line">    vector&lt;T&gt; elems;     <span class="comment">// 元素 </span></span><br><span class="line"> </span><br><span class="line">  <span class="keyword">public</span>: </span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">push</span><span class="params">(T <span class="type">const</span>&amp;)</span></span>;  <span class="comment">// 入栈</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">pop</span><span class="params">()</span></span>;               <span class="comment">// 出栈</span></span><br><span class="line">    <span class="function">T <span class="title">top</span><span class="params">()</span> <span class="type">const</span></span>;            <span class="comment">// 返回栈顶元素</span></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">empty</span><span class="params">()</span> <span class="type">const</span></span>&#123;       <span class="comment">// 如果为空则返回真。</span></span><br><span class="line">        <span class="keyword">return</span> elems.<span class="built_in">empty</span>(); </span><br><span class="line">    &#125; </span><br><span class="line">&#125;; </span><br><span class="line"> </span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="type">void</span> Stack&lt;T&gt;::<span class="built_in">push</span> (T <span class="type">const</span>&amp; elem) </span><br><span class="line">&#123; </span><br><span class="line">    <span class="comment">// 追加传入元素的副本</span></span><br><span class="line">    elems.<span class="built_in">push_back</span>(elem);    </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="type">void</span> Stack&lt;T&gt;::<span class="built_in">pop</span> () </span><br><span class="line">&#123; </span><br><span class="line">    <span class="keyword">if</span> (elems.<span class="built_in">empty</span>()) &#123; </span><br><span class="line">        <span class="keyword">throw</span> <span class="built_in">out_of_range</span>(<span class="string">&quot;Stack&lt;&gt;::pop(): empty stack&quot;</span>); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 删除最后一个元素</span></span><br><span class="line">    elems.<span class="built_in">pop_back</span>();         </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line">T Stack&lt;T&gt;::<span class="built_in">top</span> () <span class="type">const</span> </span><br><span class="line">&#123; </span><br><span class="line">    <span class="keyword">if</span> (elems.<span class="built_in">empty</span>()) &#123; </span><br><span class="line">        <span class="keyword">throw</span> <span class="built_in">out_of_range</span>(<span class="string">&quot;Stack&lt;&gt;::top(): empty stack&quot;</span>); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 返回最后一个元素的副本 </span></span><br><span class="line">    <span class="keyword">return</span> elems.<span class="built_in">back</span>();      </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    <span class="keyword">try</span> &#123; </span><br><span class="line">        Stack&lt;<span class="type">int</span>&gt;         intStack;  <span class="comment">// int 类型的栈 </span></span><br><span class="line">        Stack&lt;string&gt; stringStack;    <span class="comment">// string 类型的栈 </span></span><br><span class="line"> </span><br><span class="line">        <span class="comment">// 操作 int 类型的栈 </span></span><br><span class="line">        intStack.<span class="built_in">push</span>(<span class="number">7</span>); </span><br><span class="line">        cout &lt;&lt; intStack.<span class="built_in">top</span>() &lt;&lt;endl; </span><br><span class="line"> </span><br><span class="line">        <span class="comment">// 操作 string 类型的栈 </span></span><br><span class="line">        stringStack.<span class="built_in">push</span>(<span class="string">&quot;hello&quot;</span>); </span><br><span class="line">        cout &lt;&lt; stringStack.<span class="built_in">top</span>() &lt;&lt; std::endl; </span><br><span class="line">        stringStack.<span class="built_in">pop</span>(); </span><br><span class="line">        stringStack.<span class="built_in">pop</span>(); </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="built_in">catch</span> (exception <span class="type">const</span>&amp; ex) &#123; </span><br><span class="line">        cerr &lt;&lt; <span class="string">&quot;Exception: &quot;</span> &lt;&lt; ex.<span class="built_in">what</span>() &lt;&lt;endl; </span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当上面的代码被编译和执行时，它会产生下列结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">7</span><br><span class="line">hello</span><br><span class="line">Exception: Stack&lt;&gt;::pop(): empty stack</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>class</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Deep Learning Note</title>
+    <url>/2023/07/03/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h2 id="Day1：深度学习基础"><a href="#Day1：深度学习基础" class="headerlink" title="Day1：深度学习基础"></a>Day1：深度学习基础</h2><ul>
+<li>深度学习 &#x3D; 人工神经网络 + 训练学习基础</li>
+</ul>
+<h3 id="人工神经网络"><a href="#人工神经网络" class="headerlink" title="人工神经网络"></a>人工神经网络</h3><ul>
+<li>多层感知机 MLP</li>
+<li>卷积神经网络 CNN</li>
+<li>循环神经网络 RNN</li>
+<li>Transformer</li>
+<li>图网络 GNN</li>
+</ul>
+<h3 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h3><ul>
+<li>一维：文本、声音</li>
+<li>二维：图像</li>
+<li>三维：点云视频</li>
+</ul>
+<h3 id="图像"><a href="#图像" class="headerlink" title="图像"></a>图像</h3><ul>
+<li><p>每个网格用一个像素表示，规则有序</p>
+</li>
+<li><p>$ I \in R^{H\times W\times C} $</p>
+<ul>
+<li><p>H：height，W：width</p>
+</li>
+<li><p>C：channel通道数，RGB&#x3D;3</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="文本"><a href="#文本" class="headerlink" title="文本"></a>文本</h3><ul>
+<li>构建词典</li>
+<li>转化为数字序列(1,2,3)，再转化为vector([1,0,0],[0,1,0],[0,0,1])</li>
+<li>word embedding转化</li>
+</ul>
+<h3 id="点云"><a href="#点云" class="headerlink" title="点云"></a>点云</h3>]]></content>
+      <tags>
+        <tag>Study</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Makedown Node</title>
     <url>/2023/05/29/makedown%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h1 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h1><h2 id="Subtitle"><a href="#Subtitle" class="headerlink" title="Subtitle"></a>Subtitle</h2><ul>
@@ -2354,64 +2412,6 @@
       <tags>
         <tag>Study</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Deep Learning Note</title>
-    <url>/2023/07/03/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h2 id="Day1：深度学习基础"><a href="#Day1：深度学习基础" class="headerlink" title="Day1：深度学习基础"></a>Day1：深度学习基础</h2><ul>
-<li>深度学习 &#x3D; 人工神经网络 + 训练学习基础</li>
-</ul>
-<h3 id="人工神经网络"><a href="#人工神经网络" class="headerlink" title="人工神经网络"></a>人工神经网络</h3><ul>
-<li>多层感知机 MLP</li>
-<li>卷积神经网络 CNN</li>
-<li>循环神经网络 RNN</li>
-<li>Transformer</li>
-<li>图网络 GNN</li>
-</ul>
-<h3 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h3><ul>
-<li>一维：文本、声音</li>
-<li>二维：图像</li>
-<li>三维：点云视频</li>
-</ul>
-<h3 id="图像"><a href="#图像" class="headerlink" title="图像"></a>图像</h3><ul>
-<li><p>每个网格用一个像素表示，规则有序</p>
-</li>
-<li><p>$ I \in R^{H\times W\times C} $</p>
-<ul>
-<li><p>H：height，W：width</p>
-</li>
-<li><p>C：channel通道数，RGB&#x3D;3</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="文本"><a href="#文本" class="headerlink" title="文本"></a>文本</h3><ul>
-<li>构建词典</li>
-<li>转化为数字序列(1,2,3)，再转化为vector([1,0,0],[0,1,0],[0,0,1])</li>
-<li>word embedding转化</li>
-</ul>
-<h3 id="点云"><a href="#点云" class="headerlink" title="点云"></a>点云</h3>]]></content>
-      <tags>
-        <tag>Study</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2019/06/19/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
   </entry>
   <entry>
     <title>认科导笔记</title>
